@@ -5,5 +5,6 @@ pillow==10.1.0
 numpy==1.24.3
 python-multipart==0.0.6
 # Use CPU-only PyTorch to reduce image size (Railway doesn't have GPU anyway)
-torch==2.0.1+cpu --index-url https://download.pytorch.org/whl/cpu
-torchvision==0.15.2+cpu --index-url https://download.pytorch.org/whl/cpu
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.0.1
+torchvision==0.15.2
