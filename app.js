@@ -156,16 +156,36 @@ const jsDir = path.join(__dirname, "js");
 if (!fs.existsSync(jsDir)) fs.mkdirSync(jsDir, { recursive: true });
 
 // ==================== DATABASE CONNECTION ====================
-const db = mysql.createPool({
-  host: process.env.DB_HOST || "localhost",
-  user: process.env.DB_USER || "root",
-  password: process.env.DB_PASSWORD || "",
-  database: process.env.DB_NAME || "login_system",
-  port: process.env.DB_PORT || 3306,
+// Support Railway MySQL variables (MYSQLHOST, MYSQLUSER, etc.) and custom variables (DB_HOST, etc.)
+const dbConfig = {
+  host: process.env.MYSQLHOST || process.env.DB_HOST || "localhost",
+  user: process.env.MYSQLUSER || process.env.DB_USER || "root",
+  password: process.env.MYSQLPASSWORD || process.env.DB_PASSWORD || "",
+  database: process.env.MYSQLDATABASE || process.env.MYSQL_DATABASE || process.env.DB_NAME || "login_system",
+  port: parseInt(process.env.MYSQLPORT || process.env.DB_PORT || "3306"),
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
-});
+};
+
+// If MYSQL_URL is provided, parse it instead
+if (process.env.MYSQL_URL || process.env.MYSQL_PUBLIC_URL) {
+  const mysqlUrl = process.env.MYSQL_URL || process.env.MYSQL_PUBLIC_URL;
+  try {
+    // Parse MySQL URL format: mysql://user:password@host:port/database
+    const url = new URL(mysqlUrl);
+    dbConfig.host = url.hostname;
+    dbConfig.port = parseInt(url.port || "3306");
+    dbConfig.user = url.username;
+    dbConfig.password = url.password;
+    dbConfig.database = url.pathname.replace(/^\//, ''); // Remove leading slash
+    console.log("✅ Using MYSQL_URL for database connection");
+  } catch (err) {
+    console.error("⚠️ Error parsing MYSQL_URL, using individual variables:", err.message);
+  }
+}
+
+const db = mysql.createPool(dbConfig);
 
 console.log("✅ Database pool connected");
 
