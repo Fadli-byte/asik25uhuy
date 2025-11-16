@@ -24,8 +24,19 @@ const FLASK_PORT = process.env.FLASK_PORT || 5000;
 function startFlask() {
   console.log("🐍 Starting Flask API...");
   
-  // Gunakan python3 jika tersedia, fallback ke python
-  const pythonCmd = process.platform === 'win32' ? 'python' : 'python3';
+  // Gunakan venv/bin/python3 jika venv ada (Railway/production), 
+  // atau python3 jika tersedia, fallback ke python
+  const fs = require('fs');
+  const venvPython = path.join(__dirname, 'venv', 'bin', 'python3');
+  let pythonCmd;
+  
+  if (fs.existsSync(venvPython)) {
+    pythonCmd = venvPython;
+    console.log("✅ Using virtual environment Python");
+  } else {
+    pythonCmd = process.platform === 'win32' ? 'python' : 'python3';
+    console.log("✅ Using system Python");
+  }
   
   flaskProcess = spawn(pythonCmd, ['app.py'], {
     cwd: __dirname,
