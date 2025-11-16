@@ -70,12 +70,43 @@ if [ -d "/root/.nix-profile/lib" ]; then
     fi
 fi
 
-# Find GLib (required by OpenCV)
-GLIB_LIB=$(find /nix/store -name "libgthread-2.0.so.0" -type f 2>/dev/null | head -1)
-if [ -n "$GLIB_LIB" ]; then
-    GLIB_DIR=$(dirname "$GLIB_LIB")
-    export LD_LIBRARY_PATH="$GLIB_DIR:$LD_LIBRARY_PATH"
-    echo "✅ Found GLib at: $GLIB_DIR"
+# Find GLib libraries (required by OpenCV)
+echo "🔍 Searching for GLib libraries..."
+GLIB_LIBS=(
+    "libgthread-2.0.so.0"
+    "libglib-2.0.so.0"
+    "libgobject-2.0.so.0"
+    "libgmodule-2.0.so.0"
+)
+
+for GLIB_LIB_NAME in "${GLIB_LIBS[@]}"; do
+    GLIB_LIB=$(find /nix/store -name "$GLIB_LIB_NAME" -type f 2>/dev/null | head -1)
+    if [ -n "$GLIB_LIB" ]; then
+        GLIB_DIR=$(dirname "$GLIB_LIB")
+        if [[ ":$LD_LIBRARY_PATH:" != *":$GLIB_DIR:"* ]]; then
+            export LD_LIBRARY_PATH="$GLIB_DIR:$LD_LIBRARY_PATH"
+            echo "✅ Found $GLIB_LIB_NAME at: $GLIB_DIR"
+        fi
+    fi
+done
+
+# Also search for glib package directory
+GLIB_PKG_DIR=$(find /nix/store -type d -name "glib-*" 2>/dev/null | head -1)
+if [ -n "$GLIB_PKG_DIR" ] && [ -d "$GLIB_PKG_DIR/lib" ]; then
+    if [[ ":$LD_LIBRARY_PATH:" != *":$GLIB_PKG_DIR/lib:"* ]]; then
+        export LD_LIBRARY_PATH="$GLIB_PKG_DIR/lib:$LD_LIBRARY_PATH"
+        echo "✅ Added GLib package lib: $GLIB_PKG_DIR/lib"
+    fi
+fi
+
+# Search in all lib directories for GLib
+if [ -z "$GLIB_LIB" ]; then
+    for LIB_DIR in $(find /nix/store -type d -name "lib" 2>/dev/null | head -30); do
+        if [ -f "$LIB_DIR/libgthread-2.0.so.0" ] && [[ ":$LD_LIBRARY_PATH:" != *":$LIB_DIR:"* ]]; then
+            export LD_LIBRARY_PATH="$LIB_DIR:$LD_LIBRARY_PATH"
+            echo "✅ Found GLib in: $LIB_DIR"
+        fi
+    done
 fi
 
 # Debug: Print LD_LIBRARY_PATH
