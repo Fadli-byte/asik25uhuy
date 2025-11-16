@@ -26,7 +26,6 @@ function startFlask() {
   
   // Gunakan venv/bin/python3 jika venv ada (Railway/production), 
   // atau python3 jika tersedia, fallback ke python
-  const fs = require('fs');
   const venvPython = path.join(__dirname, 'venv', 'bin', 'python3');
   let pythonCmd;
   
