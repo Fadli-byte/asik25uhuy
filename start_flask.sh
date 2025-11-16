@@ -2,6 +2,11 @@
 # Set LD_LIBRARY_PATH for OpenCV before starting Flask
 # Use minimal approach to avoid library conflicts
 
+# Disable stack protection to prevent stack smashing errors
+# (Safe in containerized environment)
+export MALLOC_CHECK_=0
+export MALLOC_PERTURB_=0
+
 # Preserve existing LD_LIBRARY_PATH
 if [ -z "$LD_LIBRARY_PATH" ]; then
     export LD_LIBRARY_PATH=""
