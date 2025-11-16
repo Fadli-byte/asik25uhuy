@@ -1,0 +1,1611 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Berita - SeaNergy Admin</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary-color: #00d4ff;
+      --primary-dark: #0099cc;
+      --primary-light: #33ddff;
+      --success: #2ed573;
+      --warning: #ffa502;
+      --danger: #ff4757;
+      --sidebar-width: 280px;
+    }
+
+    /* Light Mode (Default) */
+    body {
+      --bg-primary: #f5f7fa;
+      --bg-secondary: #ffffff;
+      --bg-tertiary: #fafbfc;
+      --text-primary: #1a1f3a;
+      --text-secondary: #6b7280;
+      --text-tertiary: #9ca3af;
+      --border-color: #e5e7eb;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 15px rgba(0, 0, 0, 0.08);
+      --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    /* Dark Mode */
+    body.dark-mode {
+      --bg-primary: #0a0e27;
+      --bg-secondary: #1a1f3a;
+      --bg-tertiary: #252b47;
+      --text-primary: #e0e0e0;
+      --text-secondary: #a0a0a0;
+      --text-tertiary: #707070;
+      --border-color: #2d3548;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 4px 15px rgba(0, 0, 0, 0.4);
+      --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      overflow-x: hidden;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    /* Particle Canvas */
+    #particleCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      opacity: 0.3;
+    }
+
+    /* Tech Symbols - Only in Dark Mode */
+    .tech-symbol {
+      position: fixed;
+      font-size: 40px;
+      opacity: 0;
+      pointer-events: none;
+      animation: floatTech 15s ease-in-out infinite;
+      filter: drop-shadow(0 0 10px var(--primary-color));
+      transition: opacity 0.3s ease;
+    }
+
+    body.dark-mode .tech-symbol {
+      opacity: 0.15;
+    }
+
+    .tech-1 { top: 15%; left: 20%; animation-delay: 0s; }
+    .tech-2 { top: 25%; right: 15%; animation-delay: 2s; }
+    .tech-3 { bottom: 25%; left: 25%; animation-delay: 4s; }
+    .tech-4 { bottom: 15%; right: 20%; animation-delay: 6s; }
+    .tech-5 { top: 50%; left: 10%; animation-delay: 8s; }
+    .tech-6 { top: 60%; right: 10%; animation-delay: 10s; }
+
+    @keyframes floatTech {
+      0%, 100% { 
+        transform: translateY(0px) translateX(0px) rotate(0deg); 
+      }
+      25% { 
+        transform: translateY(-30px) translateX(20px) rotate(10deg); 
+      }
+      50% { 
+        transform: translateY(-15px) translateX(-20px) rotate(-10deg); 
+      }
+      75% { 
+        transform: translateY(-25px) translateX(15px) rotate(5deg); 
+      }
+    }
+
+    /* Theme Toggle Button */
+    .theme-toggle {
+      position: fixed;
+      top: 25px;
+      right: 25px;
+      width: 50px;
+      height: 50px;
+      background: var(--bg-secondary);
+      border: 2px solid var(--border-color);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 24px;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-md);
+      z-index: 1001;
+      animation: fadeIn 1s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .theme-toggle:hover {
+      transform: scale(1.1) rotate(15deg);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--primary-color);
+    }
+
+    .theme-toggle:active {
+      transform: scale(0.95);
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: var(--sidebar-width);
+      height: 100vh;
+      background: linear-gradient(180deg, #0a0e27 0%, #1a1f3a 100%);
+      padding: 30px 0;
+      box-shadow: 4px 0 20px rgba(0, 212, 255, 0.2);
+      z-index: 1000;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow-y: auto;
+      animation: slideInLeft 0.5s ease-out;
+    }
+
+    @keyframes slideInLeft {
+      from {
+        transform: translateX(-100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    .sidebar::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .sidebar::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+      background: var(--primary-color);
+      border-radius: 10px;
+    }
+
+    .sidebar-header {
+      padding: 0 25px 30px;
+      border-bottom: 2px solid rgba(0, 212, 255, 0.2);
+      margin-bottom: 30px;
+      animation: fadeInDown 0.6s ease-out 0.2s both;
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 20px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .logo-container:hover {
+      transform: scale(1.05);
+    }
+
+    .logo-img {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      background: white;
+      padding: 5px;
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+      animation: logoPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes logoPulse {
+      0%, 100% {
+        box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+        transform: scale(1);
+      }
+      50% {
+        box-shadow: 0 0 30px rgba(0, 212, 255, 0.8);
+        transform: scale(1.05);
+      }
+    }
+
+    .logo-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .logo-text {
+      color: var(--primary-color);
+      font-size: 22px;
+      font-weight: 700;
+      text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+    }
+
+    .admin-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 15px;
+      background: rgba(0, 212, 255, 0.1);
+      border-radius: 12px;
+      border: 2px solid rgba(0, 212, 255, 0.3);
+      transition: all 0.3s ease;
+      animation: scaleIn 0.5s ease-out 0.3s both;
+    }
+
+    @keyframes scaleIn {
+      from {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .admin-info:hover {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+    }
+
+    .admin-avatar {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .admin-details h3 {
+      color: var(--primary-color);
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+
+    .admin-details p {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 12px;
+    }
+
+    /* Navigation Menu */
+    .nav-menu {
+      padding: 0 15px;
+    }
+
+    .nav-item {
+      margin-bottom: 8px;
+      animation: slideInRight 0.5s ease-out both;
+    }
+
+    .nav-item:nth-child(1) { animation-delay: 0.1s; }
+    .nav-item:nth-child(2) { animation-delay: 0.15s; }
+    .nav-item:nth-child(3) { animation-delay: 0.2s; }
+    .nav-item:nth-child(4) { animation-delay: 0.25s; }
+    .nav-item:nth-child(5) { animation-delay: 0.3s; }
+    .nav-item:nth-child(6) { animation-delay: 0.35s; }
+
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 15px;
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      border-radius: 10px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      font-size: 14px;
+      font-weight: 500;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .nav-link::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--primary-color), transparent);
+      transition: width 0.3s ease;
+      opacity: 0.2;
+    }
+
+    .nav-link:hover::before {
+      width: 100%;
+    }
+
+    .nav-link:hover {
+      color: var(--primary-color);
+      transform: translateX(8px);
+      background: rgba(0, 212, 255, 0.15);
+    }
+
+    .nav-link.active {
+      background: rgba(0, 212, 255, 0.2);
+      color: var(--primary-color);
+      border-left: 4px solid var(--primary-color);
+      font-weight: 600;
+    }
+
+    .nav-icon {
+      font-size: 20px;
+      width: 24px;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .nav-link:hover .nav-icon {
+      transform: scale(1.2) rotate(5deg);
+    }
+
+    .logout-section {
+      padding: 15px 25px;
+      margin-top: 30px;
+      border-top: 2px solid rgba(0, 212, 255, 0.2);
+    }
+
+    .logout-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 15px;
+      background: linear-gradient(135deg, rgba(255, 71, 87, 0.1), rgba(255, 71, 87, 0.05));
+      border: 2px solid var(--danger);
+      color: var(--danger);
+      text-decoration: none;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      font-size: 14px;
+      font-weight: 600;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .logout-btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: var(--danger);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.4s ease, height 0.4s ease;
+    }
+
+    .logout-btn:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .logout-btn:hover {
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(255, 71, 87, 0.4);
+    }
+
+    .logout-btn span {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Main Content */
+    .main-content {
+      margin-left: var(--sidebar-width);
+      padding: 30px;
+      min-height: 100vh;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    /* Top Header */
+    .top-header {
+      background: var(--bg-secondary);
+      padding: 25px 30px;
+      border-radius: 20px;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      border: 2px solid var(--border-color);
+      position: relative;
+      overflow: hidden;
+      animation: slideInDown 0.6s ease-out;
+    }
+
+    .top-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.1), transparent);
+      animation: shine 3s infinite;
+    }
+
+    @keyframes shine {
+      to {
+        left: 100%;
+      }
+    }
+
+    .header-left .main-title {
+      color: var(--text-primary);
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .header-left .main-subtitle {
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+
+    .header-btn {
+      padding: 12px 24px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-back-dashboard {
+      background: rgba(0, 212, 255, 0.1);
+      color: var(--primary-color);
+      border: 2px solid rgba(0, 212, 255, 0.3);
+    }
+
+    .btn-back-dashboard:hover {
+      background: rgba(0, 212, 255, 0.2);
+      border-color: var(--primary-color);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(0, 212, 255, 0.3);
+    }
+
+    /* Content Grid */
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 30px;
+      max-width: 1400px;
+    }
+
+    /* Breadcrumb */
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 25px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      animation: slideInDown 0.6s ease-out;
+      grid-column: 1 / -1;
+    }
+
+    .breadcrumb a {
+      color: var(--primary-color);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .breadcrumb a:hover {
+      color: var(--primary-light);
+      text-decoration: underline;
+    }
+
+    .breadcrumb span {
+      color: var(--text-tertiary);
+    }
+
+    /* Form Container */
+    .form-container {
+      background: var(--bg-secondary);
+      border-radius: 25px;
+      padding: 40px;
+      box-shadow: var(--shadow-md);
+      border: 2px solid var(--border-color);
+      position: relative;
+      backdrop-filter: blur(20px);
+      animation: containerAppear 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes containerAppear {
+      from {
+        opacity: 0;
+        transform: translateY(50px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Glowing Border - Only Dark Mode */
+    body.dark-mode .form-container::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, 
+        var(--primary-color), 
+        var(--primary-dark), 
+        var(--primary-light),
+        var(--primary-color));
+      background-size: 400% 400%;
+      border-radius: 25px;
+      z-index: -1;
+      animation: borderGlow 8s linear infinite;
+      opacity: 0.3;
+      filter: blur(15px);
+    }
+
+    @keyframes borderGlow {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    /* Form Header */
+    .form-header {
+      text-align: center;
+      margin-bottom: 35px;
+      padding-bottom: 25px;
+      border-bottom: 2px solid var(--border-color);
+      animation: fadeInDown 0.8s ease-out;
+    }
+
+    .header-icon {
+      width: 70px;
+      height: 70px;
+      margin: 0 auto 20px;
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      box-shadow: 
+        0 0 30px rgba(0, 212, 255, 0.5),
+        inset 0 0 15px rgba(255, 255, 255, 0.1);
+      animation: iconPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes iconPulse {
+      0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+      }
+      50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 45px rgba(0, 212, 255, 0.8);
+      }
+    }
+
+    .form-title {
+      font-size: 28px;
+      color: var(--primary-color);
+      margin-bottom: 8px;
+      font-weight: 700;
+      text-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+    }
+
+    .form-subtitle {
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+
+    /* Form Styling */
+    .form-group {
+      margin-bottom: 28px;
+      animation: slideInUp 0.8s ease-out both;
+    }
+
+    .form-group:nth-child(1) { animation-delay: 0.1s; }
+    .form-group:nth-child(2) { animation-delay: 0.2s; }
+    .form-group:nth-child(3) { animation-delay: 0.3s; }
+    .form-group:nth-child(4) { animation-delay: 0.4s; }
+
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    label {
+      display: block;
+      color: var(--primary-color);
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .label-icon {
+      font-size: 18px;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    /* Input Fields */
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 14px 18px;
+      background: var(--bg-tertiary);
+      border: 2px solid var(--border-color);
+      border-radius: 12px;
+      color: var(--text-primary);
+      font-size: 14px;
+      font-family: 'Segoe UI', sans-serif;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      resize: vertical;
+    }
+
+    input[type="text"]::placeholder,
+    textarea::placeholder {
+      color: var(--text-tertiary);
+    }
+
+    input[type="text"]:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+      transform: translateY(-2px);
+    }
+
+    textarea {
+      min-height: 150px;
+      line-height: 1.6;
+    }
+
+    /* Current Image Display */
+    .current-image-section {
+      margin-bottom: 20px;
+      padding: 20px;
+      background: var(--bg-tertiary);
+      border-radius: 15px;
+      border: 2px solid var(--border-color);
+    }
+
+    .current-image-label {
+      color: var(--text-secondary);
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .current-image-wrapper {
+      position: relative;
+      display: inline-block;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .current-image-wrapper:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 25px rgba(0, 212, 255, 0.3);
+    }
+
+    .current-image {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 12px;
+    }
+
+    .no-image-placeholder {
+      padding: 40px;
+      text-align: center;
+      background: var(--bg-tertiary);
+      border-radius: 12px;
+      color: var(--text-tertiary);
+      font-size: 14px;
+    }
+
+    .no-image-icon {
+      font-size: 48px;
+      margin-bottom: 10px;
+      opacity: 0.5;
+    }
+
+    /* File Upload */
+    .file-upload-wrapper {
+      position: relative;
+      overflow: hidden;
+      border: 2px dashed var(--border-color);
+      border-radius: 15px;
+      background: var(--bg-tertiary);
+      padding: 35px;
+      text-align: center;
+      transition: all 0.4s ease;
+      cursor: pointer;
+    }
+
+    .file-upload-wrapper:hover {
+      border-color: var(--primary-color);
+      background: rgba(0, 212, 255, 0.05);
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+      transform: translateY(-3px);
+    }
+
+    input[type="file"] {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .upload-icon {
+      font-size: 48px;
+      margin-bottom: 15px;
+      animation: floatUpDown 3s ease-in-out infinite;
+    }
+
+    @keyframes floatUpDown {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-12px); }
+    }
+
+    .upload-text {
+      color: var(--primary-color);
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .upload-hint {
+      color: var(--text-secondary);
+      font-size: 12px;
+    }
+
+    .file-name {
+      margin-top: 15px;
+      color: var(--success);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px;
+      background: rgba(46, 213, 115, 0.1);
+      border-radius: 10px;
+      display: none;
+    }
+
+    .char-counter {
+      text-align: right;
+      color: var(--text-tertiary);
+      font-size: 12px;
+      margin-top: 6px;
+    }
+
+    /* Buttons */
+    .button-container {
+      display: flex;
+      gap: 15px;
+      margin-top: 35px;
+      animation: slideInUp 0.8s ease-out 0.5s both;
+    }
+
+    .btn-submit {
+      flex: 1;
+      padding: 16px 30px;
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btn-submit::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.6s;
+    }
+
+    .btn-submit:hover::before {
+      left: 100%;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 10px 30px rgba(0, 212, 255, 0.6);
+    }
+
+    .btn-submit:active {
+      transform: translateY(-2px);
+    }
+
+    /* Right Sidebar */
+    .right-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      animation: slideInRight 0.8s ease-out 0.2s both;
+    }
+
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .info-card {
+      background: var(--bg-secondary);
+      border-radius: 20px;
+      padding: 25px;
+      border: 2px solid var(--border-color);
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s ease;
+    }
+
+    .info-card:hover {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.2);
+      transform: translateY(-5px);
+    }
+
+    .info-card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid var(--border-color);
+    }
+
+    .info-card-icon {
+      width: 45px;
+      height: 45px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(0, 212, 255, 0.1));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+
+    .info-card-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .tip-item {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 15px;
+      padding: 12px;
+      background: var(--bg-tertiary);
+      border-radius: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .tip-item:hover {
+      background: rgba(0, 212, 255, 0.05);
+      transform: translateX(5px);
+    }
+
+    .tip-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .tip-text {
+      color: var(--text-secondary);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    /* Info Box */
+    .info-box {
+      background: rgba(0, 212, 255, 0.1);
+      padding: 20px;
+      border-radius: 12px;
+      border-left: 4px solid var(--primary-color);
+      margin-bottom: 20px;
+    }
+
+    .info-box-title {
+      color: var(--primary-color);
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .info-box-text {
+      color: var(--text-secondary);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    /* Mobile Toggle */
+    .mobile-toggle {
+      display: none;
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 1001;
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      width: 50px;
+      height: 50px;
+      border-radius: 15px;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(0, 212, 255, 0.5);
+      transition: all 0.3s ease;
+    }
+
+    .mobile-toggle:hover {
+      transform: scale(1.1) rotate(90deg);
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .right-sidebar {
+        grid-row: 2;
+      }
+
+      .theme-toggle {
+        top: 90px;
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+
+      .sidebar.active {
+        transform: translateX(0);
+      }
+
+      .main-content {
+        margin-left: 0;
+      }
+
+      .mobile-toggle {
+        display: block;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .main-content {
+        padding: 100px 20px 20px;
+      }
+
+      .form-container {
+        padding: 30px 20px;
+      }
+
+      .button-container {
+        flex-direction: column;
+      }
+
+      .top-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .header-btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .theme-toggle {
+        top: 85px;
+        right: 20px;
+        width: 45px;
+        height: 45px;
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Particle Canvas -->
+  <canvas id="particleCanvas"></canvas>
+
+  <!-- Tech Symbols (Only visible in dark mode) -->
+  <div class="tech-symbol tech-1">⚡</div>
+  <div class="tech-symbol tech-2">🔧</div>
+  <div class="tech-symbol tech-3">⚙️</div>
+  <div class="tech-symbol tech-4">💻</div>
+  <div class="tech-symbol tech-5">🔌</div>
+  <div class="tech-symbol tech-6">🖥️</div>
+
+  <!-- Theme Toggle -->
+  <div class="theme-toggle" id="themeToggle">🌙</div>
+
+  <!-- Mobile Toggle -->
+  <button class="mobile-toggle" id="mobileToggle">☰</button>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo-container">
+        <div class="logo-img">
+          <img src="/logob.png" alt="SeaNergy Logo">
+        </div>
+        <div class="logo-text">SeaNergy</div>
+      </div>
+
+      <div class="admin-info">
+        <div class="admin-avatar">👑</div>
+        <div class="admin-details">
+          <h3>Admin</h3>
+          <p>Super Administrator</p>
+        </div>
+      </div>
+    </div>
+
+    <nav class="nav-menu">
+      <div class="nav-item">
+        <a href="/admin-home" class="nav-link">
+          <span class="nav-icon">📊</span>
+          <span>Dashboard</span>
+        </a>
+      </div>
+      <div class="nav-item">
+        <a href="/admin/news" class="nav-link">
+          <span class="nav-icon">📰</span>
+          <span>Kelola Berita</span>
+        </a>
+      </div>
+      <div class="nav-item">
+        <a href="/admin/add" class="nav-link">
+          <span class="nav-icon">➕</span>
+          <span>Tambah Berita</span>
+        </a>
+      </div>
+      <div class="nav-item">
+        <a href="/admin/users" class="nav-link">
+          <span class="nav-icon">👥</span>
+          <span>Kelola Users</span>
+        </a>
+      </div>
+      <div class="nav-item">
+        <a href="/admin/settings" class="nav-link">
+          <span class="nav-icon">⚙️</span>
+          <span>Pengaturan</span>
+        </a>
+      </div>
+      <div class="nav-item">
+        <a href="/admin/analytics" class="nav-link">
+          <span class="nav-icon">📈</span>
+          <span>Analytics</span>
+        </a>
+      </div>
+    </nav>
+
+    <div class="logout-section">
+      <a href="/logout" class="logout-btn">
+        <span>🚪</span>
+        <span>Logout</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Top Header -->
+    <div class="top-header">
+      <div class="header-left">
+        <h1 class="main-title">Edit Berita ✏️</h1>
+        <p class="main-subtitle">Perbarui informasi berita SeaNergy</p>
+      </div>
+      <div class="header-right">
+        <a href="/admin-home" class="header-btn btn-back-dashboard">
+          <span>⬅️</span>
+          <span>Kembali ke Dashboard</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="content-grid">
+      <!-- Breadcrumb -->
+      <div class="breadcrumb">
+        <a href="/admin-home">Dashboard</a>
+        <span>›</span>
+        <a href="/admin/news">Kelola Berita</a>
+        <span>›</span>
+        <span>Edit Berita</span>
+      </div>
+
+      <!-- Form Container -->
+      <div class="form-container">
+        <!-- Header -->
+        <div class="form-header">
+          <div class="header-icon">✏️</div>
+          <h1 class="form-title">Edit Berita</h1>
+          <p class="form-subtitle">Perbarui konten berita yang sudah dipublikasi</p>
+        </div>
+
+        <!-- Form -->
+        <form action="/admin/edit/<%= berita.id %>" method="POST" enctype="multipart/form-data" id="editForm">
+          <!-- Judul -->
+          <div class="form-group">
+            <label>
+              <span class="label-icon">📝</span>
+              <span>Judul Berita</span>
+            </label>
+            <input 
+              type="text" 
+              name="judul" 
+              id="judulInput"
+              value="<%= berita.judul %>"
+              placeholder="Masukkan judul berita yang menarik..." 
+              required
+              maxlength="150">
+            <div class="char-counter">
+              <span id="judulCounter">0</span> / 150 karakter
+            </div>
+          </div>
+
+          <!-- Isi -->
+          <div class="form-group">
+            <label>
+              <span class="label-icon">📄</span>
+              <span>Isi Berita</span>
+            </label>
+            <textarea 
+              name="isi" 
+              id="isiInput"
+              placeholder="Tulis isi berita secara lengkap dan detail..." 
+              required
+              maxlength="5000"><%= berita.isi %></textarea>
+            <div class="char-counter">
+              <span id="isiCounter">0</span> / 5000 karakter
+            </div>
+          </div>
+
+          <!-- Current Image -->
+          <div class="form-group">
+            <label>
+              <span class="label-icon">🖼️</span>
+              <span>Gambar Saat Ini</span>
+            </label>
+            <div class="current-image-section">
+              <% if (berita.gambar) { %>
+                <div class="current-image-wrapper">
+                  <img src="/uploads/<%= berita.gambar %>" alt="<%= berita.judul %>" class="current-image">
+                </div>
+              <% } else { %>
+                <div class="no-image-placeholder">
+                  <div class="no-image-icon">📷</div>
+                  <div>Tidak ada gambar</div>
+                </div>
+              <% } %>
+            </div>
+          </div>
+
+          <!-- Upload New Image -->
+          <div class="form-group">
+            <label>
+              <span class="label-icon">🔄</span>
+              <span>Ganti Gambar (Opsional)</span>
+            </label>
+            <div class="info-box">
+              <div class="info-box-title">
+                <span>ℹ️</span>
+                <span>Informasi</span>
+              </div>
+              <div class="info-box-text">
+                Upload gambar baru jika ingin mengganti gambar yang ada. Kosongkan jika tidak ingin mengubah gambar.
+              </div>
+            </div>
+            <div class="file-upload-wrapper" id="fileUpload">
+              <input 
+                type="file" 
+                name="gambar" 
+                id="fileInput"
+                accept="image/*">
+              <div class="upload-icon">📸</div>
+              <div class="upload-text">Klik atau drag & drop untuk upload gambar baru</div>
+              <div class="upload-hint">Format: JPG, PNG, WEBP (Max 5MB)</div>
+              <div class="file-name" id="fileName"></div>
+            </div>
+          </div>
+
+          <!-- Buttons -->
+          <div class="button-container">
+            <button type="submit" class="btn-submit" id="submitBtn">
+              <span>💾</span>
+              <span>Simpan Perubahan</span>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Right Sidebar -->
+      <div class="right-sidebar">
+        <!-- Tips Card -->
+        <div class="info-card">
+          <div class="info-card-header">
+            <div class="info-card-icon">💡</div>
+            <h3 class="info-card-title">Tips Edit Berita</h3>
+          </div>
+          
+          <div class="tip-item">
+            <div class="tip-icon">✅</div>
+            <div class="tip-text">Periksa kembali informasi yang diperbarui untuk memastikan akurasi</div>
+          </div>
+
+          <div class="tip-item">
+            <div class="tip-icon">📷</div>
+            <div class="tip-text">Hanya upload gambar baru jika diperlukan untuk menghemat bandwidth</div>
+          </div>
+
+          <div class="tip-item">
+            <div class="tip-icon">📝</div>
+            <div class="tip-text">Pastikan perubahan yang dilakukan meningkatkan kualitas konten</div>
+          </div>
+
+          <div class="tip-item">
+            <div class="tip-icon">🎯</div>
+            <div class="tip-text">Verifikasi kembali semua data sebelum menyimpan perubahan</div>
+          </div>
+        </div>
+
+        <!-- Info Card -->
+        <div class="info-card">
+          <div class="info-card-header">
+            <div class="info-card-icon">ℹ️</div>
+            <h3 class="info-card-title">Informasi Berita</h3>
+          </div>
+          
+          <div class="tip-item">
+            <div class="tip-icon">🆔</div>
+            <div class="tip-text"><strong>ID Berita:</strong> <%= berita.id %></div>
+          </div>
+
+          <div class="tip-item">
+            <div class="tip-icon">📅</div>
+            <div class="tip-text"><strong>Tanggal:</strong> <%= berita.tanggal ? new Date(berita.tanggal).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : 'Tidak tersedia' %></div>
+          </div>
+
+          <div class="tip-item">
+            <div class="tip-icon">📝</div>
+            <div class="tip-text"><strong>Panjang Konten:</strong> <%= berita.isi.length %> karakter</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // ============================================
+    // THEME TOGGLE
+    // ============================================
+    const themeToggle = document.getElementById('themeToggle');
+    const body = document.body;
+    
+    // Load saved theme
+    const savedTheme = localStorage.getItem('adminTheme') || 'light';
+    if (savedTheme === 'dark') {
+      body.classList.add('dark-mode');
+      themeToggle.textContent = '☀️';
+    }
+
+    themeToggle.addEventListener('click', () => {
+      body.classList.toggle('dark-mode');
+      const isDark = body.classList.contains('dark-mode');
+      
+      themeToggle.textContent = isDark ? '☀️' : '🌙';
+      localStorage.setItem('adminTheme', isDark ? 'dark' : 'light');
+      
+      // Animate toggle
+      themeToggle.style.transform = 'scale(0.8) rotate(360deg)';
+      setTimeout(() => {
+        themeToggle.style.transform = 'scale(1) rotate(0deg)';
+      }, 300);
+    });
+
+    // ============================================
+    // PARTICLE SYSTEM
+    // ============================================
+    const canvas = document.getElementById('particleCanvas');
+    const ctx = canvas.getContext('2d');
+    
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 1;
+        this.speedX = (Math.random() - 0.5) * 0.5;
+        this.speedY = (Math.random() - 0.5) * 0.5;
+        this.opacity = Math.random() * 0.5 + 0.2;
+      }
+
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        if (this.x > canvas.width) this.x = 0;
+        if (this.x < 0) this.x = canvas.width;
+        if (this.y > canvas.height) this.y = 0;
+        if (this.y < 0) this.y = canvas.height;
+      }
+
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(0, 212, 255, ${this.opacity})`;
+        ctx.fill();
+      }
+    }
+
+    const particles = [];
+    for (let i = 0; i < 60; i++) {
+      particles.push(new Particle());
+    }
+
+    function connectParticles() {
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          if (distance < 150) {
+            ctx.beginPath();
+            ctx.strokeStyle = `rgba(0, 212, 255, ${0.15 - distance / 1000})`;
+            ctx.lineWidth = 1;
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      particles.forEach(particle => {
+        particle.update();
+        particle.draw();
+      });
+
+      connectParticles();
+      requestAnimationFrame(animateParticles);
+    }
+
+    animateParticles();
+
+    // ============================================
+    // MOBILE TOGGLE
+    // ============================================
+    const mobileToggle = document.getElementById('mobileToggle');
+    const sidebar = document.getElementById('sidebar');
+
+    mobileToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('active');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (window.innerWidth <= 1024) {
+        if (!sidebar.contains(e.target) && !mobileToggle.contains(e.target)) {
+          sidebar.classList.remove('active');
+        }
+      }
+    });
+
+    // ============================================
+    // CHARACTER COUNTER
+    // ============================================
+    const judulInput = document.getElementById('judulInput');
+    const judulCounter = document.getElementById('judulCounter');
+    const isiInput = document.getElementById('isiInput');
+    const isiCounter = document.getElementById('isiCounter');
+
+    // Set initial counter values
+    judulCounter.textContent = judulInput.value.length;
+    isiCounter.textContent = isiInput.value.length;
+
+    judulInput.addEventListener('input', function() {
+      judulCounter.textContent = this.value.length;
+    });
+
+    isiInput.addEventListener('input', function() {
+      isiCounter.textContent = this.value.length;
+    });
+
+    // ============================================
+    // FILE UPLOAD HANDLING
+    // ============================================
+    const fileInput = document.getElementById('fileInput');
+    const fileUpload = document.getElementById('fileUpload');
+    const fileName = document.getElementById('fileName');
+
+    fileInput.addEventListener('change', function(e) {
+      if (this.files && this.files[0]) {
+        const file = this.files[0];
+        const fileSize = (file.size / 1024 / 1024).toFixed(2);
+        
+        if (fileSize > 5) {
+          alert('❌ Ukuran file terlalu besar! Maksimal 5MB');
+          this.value = '';
+          fileName.style.display = 'none';
+          return;
+        }
+        
+        fileName.textContent = `✓ ${file.name} (${fileSize} MB)`;
+        fileName.style.display = 'block';
+      }
+    });
+
+    // Drag and Drop
+    fileUpload.addEventListener('dragover', function(e) {
+      e.preventDefault();
+      this.style.borderColor = 'var(--primary-color)';
+      this.style.background = 'rgba(0, 212, 255, 0.1)';
+    });
+
+    fileUpload.addEventListener('dragleave', function() {
+      this.style.borderColor = 'var(--border-color)';
+      this.style.background = 'var(--bg-tertiary)';
+    });
+
+    fileUpload.addEventListener('drop', function(e) {
+      e.preventDefault();
+      this.style.borderColor = 'var(--border-color)';
+      this.style.background = 'var(--bg-tertiary)';
+      
+      const files = e.dataTransfer.files;
+      if (files.length > 0) {
+        fileInput.files = files;
+        const event = new Event('change');
+        fileInput.dispatchEvent(event);
+      }
+    });
+
+    // ============================================
+    // FORM SUBMISSION
+    // ============================================
+    const editForm = document.getElementById('editForm');
+    const submitBtn = document.getElementById('submitBtn');
+
+    editForm.addEventListener('submit', function(e) {
+      submitBtn.classList.add('loading');
+      submitBtn.innerHTML = '<span>⏳ Menyimpan...</span>';
+    });
+
+    // ============================================
+    // INPUT FOCUS EFFECTS
+    // ============================================
+    const inputs = document.querySelectorAll('input[type="text"], textarea');
+    
+    inputs.forEach(input => {
+      input.addEventListener('focus', function() {
+        this.parentElement.style.transform = 'scale(1.01)';
+        this.parentElement.style.transition = 'transform 0.3s ease';
+      });
+      
+      input.addEventListener('blur', function() {
+        this.parentElement.style.transform = 'scale(1)';
+      });
+    });
+
+    // ============================================
+    // CONSOLE MESSAGE
+    // ============================================
+    console.log('%c 🌊 SeaNergy - Edit Berita 🌊 ', 
+      'background: linear-gradient(135deg, #00d4ff, #0099cc); color: white; font-size: 16px; font-weight: bold; padding: 10px; border-radius: 8px;');
+  </script>
+</body>
+</html>

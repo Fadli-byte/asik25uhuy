@@ -1,0 +1,1867 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BADU AI - Asisten Ekosistem Laut</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            overflow-x: hidden;
+            color: #1e293b;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding-top: 90px;
+        }
+
+        /* ============ HEADER SECTION ============ */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: linear-gradient(135deg, rgba(0, 180, 166, 0.98), rgba(76, 124, 122, 0.98));
+            backdrop-filter: blur(25px) saturate(200%);
+            box-shadow: 0 10px 40px rgba(0, 180, 166, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            z-index: 1000;
+            border-bottom: 3px solid rgba(0, 229, 208, 0.5);
+            height: 90px;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .header.scrolled {
+            background: rgba(0, 180, 166, 0.95);
+            backdrop-filter: blur(30px) saturate(200%);
+            box-shadow: 0 15px 50px rgba(0, 180, 166, 0.4);
+            height: 80px;
+        }
+
+        .header-container {
+            width: 100%;
+            margin: 0;
+            padding: 0 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 8px 12px 8px 0;
+            transition: transform 0.3s ease;
+        }
+
+        .logo-section:hover {
+            transform: scale(1.02);
+        }
+
+        .logo-icon {
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            border-radius: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo-icon:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 12px 35px rgba(0, 229, 208, 0.3);
+        }
+
+        .logo-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .logo-text .main-title {
+            font-size: 1.55rem;
+            font-weight: 900;
+            color: #ffffff;
+            line-height: 1.2;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo-text .subtitle {
+            font-size: 0.98rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 600;
+            letter-spacing: 0.6px;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .top-bar {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-left: auto;
+        }
+
+        .user-greeting {
+            display: flex;
+            align-items: center;
+            padding: 11px 22px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 28px;
+            margin-right: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .user-greeting:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .greeting-text {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 0.3px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .top-bar a,
+        .top-bar details summary {
+            color: #ffffff;
+            text-decoration: none;
+            padding: 11px 20px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            cursor: pointer;
+            border-radius: 12px;
+            position: relative;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .top-bar a::before,
+        .top-bar details summary::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #00e5d0, #00b4a6);
+            transform: translateX(-50%);
+            transition: width 0.4s ease;
+            border-radius: 3px;
+        }
+
+        .top-bar a:hover,
+        .top-bar details summary:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .top-bar a:hover::before,
+        .top-bar details summary:hover::before {
+            width: 80%;
+        }
+
+        .top-bar details {
+            position: relative;
+        }
+
+        .top-bar details summary {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .top-bar details summary::after {
+            content: '▼';
+            font-size: 0.7rem;
+            margin-left: 6px;
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .top-bar details[open] summary::after {
+            transform: rotate(180deg);
+        }
+
+        .top-bar details ul {
+            position: absolute;
+            top: calc(100% + 10px);
+            left: 0;
+            right: auto;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(25px) saturate(200%);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+            border-radius: 18px;
+            min-width: 240px;
+            margin-top: 0;
+            overflow: hidden;
+            list-style: none;
+            padding: 14px 0;
+            border: 2px solid rgba(0, 180, 166, 0.3);
+            z-index: 1001;
+            animation: dropdownSlide 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes dropdownSlide {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        .top-bar details ul li a {
+            display: block;
+            padding: 13px 24px;
+            color: #333;
+            text-decoration: none;
+            font-size: 0.92rem;
+            text-transform: none;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .top-bar details ul li a::before {
+            content: '';
+            position: absolute;
+            left: -100%;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, #00b4a6, #006b8c);
+            z-index: -1;
+            transition: left 0.4s ease;
+        }
+
+        .top-bar details ul li a:hover {
+            color: white;
+            padding-left: 36px;
+            transform: translateX(6px);
+        }
+
+        .top-bar details ul li a:hover::before {
+            left: 0;
+        }
+
+        .logout {
+            background: linear-gradient(135deg, #dc3545, #c82333) !important;
+            color: white !important;
+            padding: 11px 24px !important;
+            border-radius: 28px;
+            font-weight: 800;
+            box-shadow: 0 6px 20px rgba(220, 53, 69, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logout::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .logout:hover {
+            background: linear-gradient(135deg, #c82333, #a71d2a) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(220, 53, 69, 0.6);
+        }
+
+        .logout:hover::before {
+            left: 100%;
+        }
+
+        .top-bar > a[href="/login-admin"] {
+            background: rgba(255, 255, 255, 0.2) !important;
+            color: white !important;
+            padding: 11px 24px !important;
+            border-radius: 28px;
+            font-weight: 800;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .top-bar > a[href="/login-admin"]:hover {
+            background: rgba(255, 255, 255, 0.3) !important;
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .theme-toggle {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.4s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: rotate(30deg) scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            font-size: 1.8rem;
+            color: white;
+            cursor: pointer;
+            padding: 12px 16px;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            transition: all 0.4s;
+        }
+
+        .mobile-menu-toggle:hover {
+            transform: scale(1.1) rotate(90deg);
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        /* ============ CHAT CONTAINER ============ */
+        .chat-container {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(0, 180, 166, 0.2);
+            margin: 30px auto;
+            max-width: 900px;
+            height: calc(100vh - 200px);
+            animation: containerFadeIn 0.6s ease;
+        }
+
+        @keyframes containerFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #00b4a6 0%, #006b8c 100%);
+            color: white;
+            padding: 20px 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 20px rgba(0, 180, 166, 0.3);
+        }
+
+        .chat-header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .badu-avatar {
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(135deg, #00e5d0, #00b4a6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: 0 5px 20px rgba(0, 229, 208, 0.5);
+            position: relative;
+            animation: avatarPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes avatarPulse {
+            0%, 100% {
+                box-shadow: 0 5px 20px rgba(0, 229, 208, 0.5);
+            }
+            50% {
+                box-shadow: 0 5px 30px rgba(0, 229, 208, 0.8);
+            }
+        }
+
+        .badu-avatar::after {
+            content: '';
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            background: #4ade80;
+            border: 3px solid white;
+            border-radius: 50%;
+            bottom: 2px;
+            right: 2px;
+            animation: statusBounce 2s ease-in-out infinite;
+        }
+
+        @keyframes statusBounce {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+        }
+
+        .chat-header-info h1 {
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .chat-header-info p {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        .chat-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            position: relative;
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.15) rotate(10deg);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Quick Actions Bar */
+        .quick-actions {
+            background: rgba(30, 41, 59, 0.8);
+            padding: 15px 25px;
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            border-bottom: 1px solid rgba(0, 180, 166, 0.2);
+            scroll-behavior: smooth;
+        }
+
+        .quick-actions::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .quick-actions::-webkit-scrollbar-track {
+            background: rgba(0, 180, 166, 0.1);
+            border-radius: 10px;
+        }
+
+        .quick-actions::-webkit-scrollbar-thumb {
+            background: rgba(0, 180, 166, 0.4);
+            border-radius: 10px;
+        }
+
+        .quick-action-btn {
+            background: rgba(0, 180, 166, 0.2);
+            border: 1px solid rgba(0, 180, 166, 0.3);
+            color: #00e5d0;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quick-action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .quick-action-btn:hover {
+            background: rgba(0, 180, 166, 0.4);
+            border-color: #00b4a6;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 180, 166, 0.3);
+        }
+
+        .quick-action-btn:hover::before {
+            left: 100%;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 25px;
+            overflow-y: auto;
+            background: rgba(30, 41, 59, 0.4);
+        }
+
+        .message {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 12px;
+            animation: messageSlideIn 0.4s ease;
+        }
+
+        @keyframes messageSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .message.bot .message-avatar {
+            background: linear-gradient(135deg, #00b4a6, #006b8c);
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 180, 166, 0.3);
+        }
+
+        .message.user .message-avatar {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .message-content-wrapper {
+            max-width: 70%;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .message-content {
+            padding: 15px 20px;
+            border-radius: 18px;
+            word-wrap: break-word;
+            position: relative;
+            transition: all 0.3s ease;
+            line-height: 1.6;
+        }
+
+        .message.user .message-content {
+            background: linear-gradient(135deg, #00b4a6 0%, #006b8c 100%);
+            color: white;
+            border-bottom-right-radius: 5px;
+            box-shadow: 0 4px 15px rgba(0, 180, 166, 0.3);
+        }
+
+        .message.user .message-content:hover {
+            box-shadow: 0 6px 25px rgba(0, 180, 166, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .message.bot .message-content {
+            background: rgba(255, 255, 255, 0.95);
+            color: #1e293b;
+            border: 1px solid rgba(0, 180, 166, 0.2);
+            border-bottom-left-radius: 5px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .message.bot .message-content:hover {
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .message-actions {
+            display: flex;
+            gap: 8px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .message:hover .message-actions {
+            opacity: 1;
+        }
+
+        .message-action-btn {
+            background: rgba(0, 180, 166, 0.2);
+            border: 1px solid rgba(0, 180, 166, 0.3);
+            color: #00b4a6;
+            padding: 6px 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .message-action-btn:hover {
+            background: #00b4a6;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .message-file {
+            background: rgba(0, 180, 166, 0.1);
+            border: 2px dashed rgba(0, 180, 166, 0.3);
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .message-file:hover {
+            background: rgba(0, 180, 166, 0.2);
+            border-color: #00b4a6;
+            transform: translateY(-2px);
+        }
+
+        .file-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #00b4a6, #00e5d0);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: white;
+            animation: fileIconBounce 0.6s ease;
+        }
+
+        @keyframes fileIconBounce {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        .file-info {
+            flex: 1;
+        }
+
+        .file-name {
+            font-weight: 600;
+            color: #e2e8f0;
+            font-size: 0.95rem;
+            margin-bottom: 3px;
+        }
+
+        .file-size {
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 10px 20px;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .typing-indicator.show {
+            display: flex;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 5px;
+        }
+
+        .typing-dots span {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #00b4a6;
+            animation: typingBounce 1.4s infinite;
+        }
+
+        .typing-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typingBounce {
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-15px);
+            }
+        }
+
+        .chat-input-area {
+            padding: 20px 25px;
+            background: rgba(30, 41, 59, 0.8);
+            border-top: 1px solid rgba(0, 180, 166, 0.2);
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+        }
+
+        .file-upload-btn {
+            background: rgba(0, 180, 166, 0.2);
+            border: 1px solid rgba(0, 180, 166, 0.3);
+            color: #00e5d0;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .file-upload-btn:hover {
+            background: #00b4a6;
+            color: white;
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: 0 6px 20px rgba(0, 180, 166, 0.3);
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid rgba(0, 180, 166, 0.3);
+            border-radius: 25px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.3s ease;
+            background: rgba(15, 23, 42, 0.6);
+            color: #e2e8f0;
+            resize: none;
+            min-height: 50px;
+            max-height: 150px;
+            font-family: inherit;
+        }
+
+        .chat-input::placeholder {
+            color: #64748b;
+        }
+
+        .chat-input:focus {
+            border-color: #00b4a6;
+            background: rgba(15, 23, 42, 0.8);
+            box-shadow: 0 0 0 4px rgba(0, 180, 166, 0.2);
+        }
+
+        .send-button {
+            padding: 15px 25px;
+            background: linear-gradient(135deg, #00b4a6 0%, #006b8c 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 180, 166, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            height: 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .send-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .send-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(0, 180, 166, 0.6);
+        }
+
+        .send-button:hover:not(:disabled)::before {
+            left: 100%;
+        }
+
+        .send-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(30, 41, 59, 0.4);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 180, 166, 0.5);
+            border-radius: 10px;
+            transition: background 0.3s ease;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 180, 166, 0.7);
+        }
+
+        /* Info Panel */
+        .info-panel {
+            background: rgba(0, 180, 166, 0.1);
+            border: 1px solid rgba(0, 180, 166, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            animation: panelFadeIn 0.6s ease;
+        }
+
+        @keyframes panelFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .info-panel h3 {
+            color: #00e5d0;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-panel ul {
+            list-style: none;
+            color: #e2e8f0;
+            line-height: 2;
+        }
+
+        .info-panel ul li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .info-panel ul li:hover {
+            transform: translateX(5px);
+        }
+
+        .info-panel ul li::before {
+            content: '✓';
+            color: #00e5d0;
+            font-weight: bold;
+            font-size: 1.2rem;
+            animation: checkBounce 0.6s ease;
+        }
+
+        @keyframes checkBounce {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .top-bar {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: linear-gradient(135deg, rgba(0, 180, 166, 0.98), rgba(0, 107, 140, 0.98));
+                backdrop-filter: blur(25px);
+                flex-direction: column;
+                gap: 0;
+                padding: 22px;
+                box-shadow: 0 10px 35px rgba(0, 0, 0, 0.3);
+                max-height: 0;
+                overflow: hidden;
+                opacity: 0;
+                transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            .top-bar.active {
+                max-height: 700px;
+                opacity: 1;
+            }
+
+            .message-content-wrapper {
+                max-width: 85%;
+            }
+
+            .chat-container {
+                margin: 15px;
+                height: calc(100vh - 160px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                height: auto;
+            }
+
+            .header-container {
+                height: auto;
+                flex-direction: column;
+                padding: 15px 20px;
+            }
+
+            .logo-icon {
+                width: 60px;
+                height: 60px;
+            }
+
+            .logo-text .main-title {
+                font-size: 1.3rem;
+            }
+
+            .logo-text .subtitle {
+                font-size: 0.88rem;
+            }
+
+            .user-greeting {
+                display: none;
+            }
+
+            .chat-messages {
+                padding: 15px;
+            }
+
+            .message-content-wrapper {
+                max-width: 90%;
+            }
+
+            .quick-actions {
+                padding: 10px 15px;
+            }
+
+            body {
+                padding-top: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER SECTION -->
+    <header class="header" id="header">
+            <div class="header-container">
+                <div class="logo-section">
+                    <div class="logo-icon">
+                        <img src="/LOKO ASIK.png" alt="Logo Portal Ekosistem Laut" style="filter: grayscale(100%);">
+                    </div>
+                    <div class="logo-text">
+                        <span class="main-title">SEANERGY</span>
+                        <span class="subtitle">Pulau Tunda, Banten</span>
+                    </div>
+                </div>
+
+                <button class="mobile-menu-toggle" id="menuToggle">☰</button>
+
+                <div class="top-bar" id="topBar">
+                    <div class="user-greeting">
+                         <span class="greeting-text">
+         Halo, <%= user ? user.username : 'Pengguna' %> 👋
+        </span>
+                    </div>
+                    <a href="/home">Home</a>
+                    <details>
+                        <summary>Ekosistem</summary>
+                        <ul>
+                            <li><a href="/mangrove2019"><i class="fas fa-tree"></i> Mangrove</a></li>
+                            <li><a href="/lamun2019"><i class="fas fa-leaf"></i> Lamun</a></li>
+                            <li><a href="/terumbu2019"><i class="fas fa-gem"></i> Terumbu Karang</a></li>
+                            <li><a href="/zpi"><i class="fas fa-fish"></i> Ikan</a></li>
+                        </ul>
+                    </details>
+                    <details>
+                        <summary>Prediksi</summary>
+                        <ul>
+                               <li><a href="/prediksimangrove"><i class="fas fa-tree"></i> Mangrove</a></li>
+                            <li><a href="/prediksilamun"><i class="fas fa-leaf"></i> Lamun</a></li>
+                            <li><a href="/prediksiterumbu"><i class="fas fa-gem"></i> Terumbu Karang</a></li>
+                            <li><a href="/zpi"><i class="fas fa-fish"></i> Ikan</a></li>
+                        </ul>
+                    </details>
+                    <details>
+                        <summary>FAQ</summary>
+                        <ul>
+                           <li><a href="/faq"><i class="fas fa-robot"></i> BADU AI</a></li>
+                            <li><a href="/voice"><i class="fas fa-language"></i> Translate</a></li>
+                            <li><a href="/kamera-ikan"><i class="fas fa-camera"></i> Kamera</a></li>
+                            <li><a href="/artikel"><i class="fas fa-newspaper"></i> Artikel Populer</a></li>
+                        </ul>
+                    </details>
+                    <a href="/logout" class="logout">Logout</a>
+                    <a href="/login-admin">Login Admin</a>
+                </div>
+            </div>
+        </header>
+
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-content">
+
+    <!-- Chat Container -->
+    <main class="chat-container">
+        <div class="chat-header">
+            <div class="chat-header-left">
+                <div class="badu-avatar">🤖</div>
+                <div class="chat-header-info">
+                    <h1>BADU AI Assistant</h1>
+                    <p>Asisten Virtual Ekosistem Laut • Selalu Siap Membantu</p>
+                </div>
+            </div>
+            <div class="chat-actions">
+                <button class="action-btn" id="clearChatBtn" title="Hapus Semua Chat">
+                    <i class="fas fa-trash"></i>
+                </button>
+                <button class="action-btn" id="downloadChatBtn" title="Unduh Riwayat Chat">
+                    <i class="fas fa-download"></i>
+                </button>
+                <button class="action-btn" id="infoBtn" title="Informasi">
+                    <i class="fas fa-info-circle"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <button class="quick-action-btn" data-question="Apa itu ekosistem mangrove?">
+                <i class="fas fa-tree"></i> Tentang Mangrove
+            </button>
+            <button class="quick-action-btn" data-question="Bagaimana kondisi terumbu karang di Pulau Tunda?">
+                <i class="fas fa-water"></i> Terumbu Karang
+            </button>
+            <button class="quick-action-btn" data-question="Spesies ikan apa saja yang ada di Pulau Tunda?">
+                <i class="fas fa-fish"></i> Spesies Ikan
+            </button>
+            <button class="quick-action-btn" data-question="Bagaimana cara melakukan penelitian di Pulau Tunda?">
+                <i class="fas fa-microscope"></i> Panduan Penelitian
+            </button>
+            <button class="quick-action-btn" data-question="Apa saja ancaman terhadap ekosistem laut?">
+                <i class="fas fa-exclamation-triangle"></i> Ancaman Ekosistem
+            </button>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+            <div class="info-panel">
+                <h3><i class="fas fa-lightbulb"></i> Selamat Datang di BADU AI</h3>
+                <ul>
+                    <li>Tanyakan tentang ekosistem laut Pulau Tunda</li>
+                    <li>Upload file data (CSV, Excel, PDF, Gambar) untuk analisis</li>
+                    <li>Dapatkan informasi penelitian dan prediksi</li>
+                    <li>Akses data historis dan statistik ekosistem</li>
+                </ul>
+            </div>
+
+            <div class="message bot">
+                <div class="message-avatar">🤖</div>
+                <div class="message-content-wrapper">
+                    <div class="message-content">
+                        Halo! Saya <strong>BADU AI</strong>, asisten virtual ekosistem laut Pulau Tunda. 🌊<br><br>
+                        Saya dapat membantu Anda dengan:<br>
+                        • Informasi tentang <strong>Mangrove, Lamun, Terumbu Karang, dan Ikan</strong><br>
+                        • Analisis data dan file penelitian<br>
+                        • Prediksi kondisi ekosistem<br>
+                        • Panduan penelitian lapangan<br><br>
+                        Silakan pilih topik di atas atau tanyakan langsung! 😊
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="typing-indicator" id="typingIndicator">
+            <div class="message-avatar" style="background: linear-gradient(135deg, #00b4a6, #006b8c); color: white;">🤖</div>
+            <div class="typing-dots">
+                <span></span><span></span><span></span>
+            </div>
+            <span style="color: #94a3b8; font-size: 14px;">BADU sedang mengetik...</span>
+        </div>
+
+        <div class="chat-input-area">
+            <div class="chat-input-container">
+                <button class="file-upload-btn" id="uploadFileBtn" title="Upload File (CSV, Excel, PDF, Gambar)">
+                    <i class="fas fa-paperclip"></i>
+                </button>
+                <textarea 
+                    class="chat-input" 
+                    id="userInput" 
+                    placeholder="Ketik pertanyaan atau upload file untuk analisis..."
+                    rows="1"
+                ></textarea>
+                <button class="send-button" id="sendButton">
+                    <i class="fas fa-paper-plane"></i>
+                    Kirim
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <input type="file" id="fileInput" accept=".csv,.xlsx,.xls,.pdf,.jpg,.jpeg,.png,.gif">
+
+    <script>
+        const chatMessages = document.getElementById('chatMessages');
+        const userInput = document.getElementById('userInput');
+        const sendButton = document.getElementById('sendButton');
+        const typingIndicator = document.getElementById('typingIndicator');
+        const uploadFileBtn = document.getElementById('uploadFileBtn');
+        const fileInput = document.getElementById('fileInput');
+        const clearChatBtn = document.getElementById('clearChatBtn');
+        const downloadChatBtn = document.getElementById('downloadChatBtn');
+        const infoBtn = document.getElementById('infoBtn');
+        const header = document.getElementById('header');
+        const menuToggle = document.getElementById('menuToggle');
+        const topBar = document.getElementById('topBar');
+
+        let messageCount = 0;
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 60) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile menu toggle
+        if (menuToggle && topBar) {
+            menuToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                topBar.classList.toggle('active');
+                menuToggle.textContent = topBar.classList.contains('active') ? '✕' : '☰';
+            });
+        }
+
+        // Close menu click outside
+        document.addEventListener('click', (e) => {
+            if (topBar && menuToggle && !topBar.contains(e.target) && !menuToggle.contains(e.target)) {
+                topBar.classList.remove('active');
+                menuToggle.textContent = '☰';
+            }
+            document.querySelectorAll('details[open]').forEach(detail => {
+                if (!detail.contains(e.target)) detail.removeAttribute('open');
+            });
+        });
+
+        // Dropdown management
+        document.querySelectorAll('details').forEach(detail => {
+            detail.addEventListener('click', e => e.stopPropagation());
+            detail.addEventListener('toggle', () => {
+                if (detail.open) {
+                    document.querySelectorAll('details').forEach(other => {
+                        if (other !== detail && other.open) other.removeAttribute('open');
+                    });
+                }
+            });
+        });
+
+        // Auto-close menu on link click
+        document.querySelectorAll('.top-bar a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 1024 && topBar) {
+                    topBar.classList.remove('active');
+                    if (menuToggle) menuToggle.textContent = '☰';
+                }
+            });
+        });
+
+        // Auto-resize textarea
+        userInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 150) + 'px';
+        });
+
+        // Quick Action Buttons
+        document.querySelectorAll('.quick-action-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const question = btn.getAttribute('data-question');
+                userInput.value = question;
+                sendMessage();
+            });
+        });
+
+        // Send Message
+        sendButton.addEventListener('click', sendMessage);
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        async function sendMessage() {
+            const message = userInput.value.trim();
+            if (!message) return;
+
+            addMessage(message, 'user');
+            userInput.value = '';
+            userInput.style.height = 'auto';
+            sendButton.disabled = true;
+            typingIndicator.classList.add('show');
+
+            try {
+                const response = await fetch('/ask', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    addMessage(data.reply, 'bot');
+                } else {
+                    addMessage(`Error: ${data.error}`, 'bot');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                addMessage('Maaf, terjadi kesalahan koneksi. Silakan coba lagi.', 'bot');
+            } finally {
+                typingIndicator.classList.remove('show');
+                sendButton.disabled = false;
+            }
+        }
+
+        function addMessage(text, sender, fileData = null) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            messageDiv.setAttribute('data-message-id', messageCount++);
+
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.textContent = sender === 'bot' ? '🤖' : '👤';
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'message-content-wrapper';
+
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            contentDiv.innerHTML = text.replace(/\n/g, '<br>');
+
+            if (fileData) {
+                const fileDiv = document.createElement('div');
+                fileDiv.className = 'message-file';
+                fileDiv.innerHTML = `
+                    <div class="file-icon">
+                        <i class="fas fa-${getFileIcon(fileData.type)}"></i>
+                    </div>
+                    <div class="file-info">
+                        <div class="file-name">${fileData.name}</div>
+                        <div class="file-size">${formatFileSize(fileData.size)}</div>
+                    </div>
+                `;
+                contentDiv.appendChild(fileDiv);
+            }
+
+            const actionsDiv = document.createElement('div');
+            actionsDiv.className = 'message-actions';
+
+            if (sender === 'user') {
+                const editBtn = document.createElement('button');
+                editBtn.className = 'message-action-btn';
+                editBtn.innerHTML = '<i class="fas fa-edit"></i> Edit';
+                editBtn.onclick = () => editMessage(messageDiv, text);
+                actionsDiv.appendChild(editBtn);
+            }
+
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'message-action-btn';
+            deleteBtn.innerHTML = '<i class="fas fa-trash"></i> Hapus';
+            deleteBtn.onclick = () => deleteMessage(messageDiv);
+            actionsDiv.appendChild(deleteBtn);
+
+            const copyBtn = document.createElement('button');
+            copyBtn.className = 'message-action-btn';
+            copyBtn.innerHTML = '<i class="fas fa-copy"></i> Salin';
+            copyBtn.onclick = () => copyMessage(text);
+            actionsDiv.appendChild(copyBtn);
+
+            wrapper.appendChild(contentDiv);
+            wrapper.appendChild(actionsDiv);
+
+            if (sender === 'bot') {
+                messageDiv.appendChild(avatar);
+                messageDiv.appendChild(wrapper);
+            } else {
+                messageDiv.appendChild(wrapper);
+                messageDiv.appendChild(avatar);
+            }
+
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        async function editMessage(messageDiv, originalText) {
+            const contentDiv = messageDiv.querySelector('.message-content');
+            const currentText = contentDiv.textContent.trim();
+
+            const textarea = document.createElement('textarea');
+            textarea.value = currentText;
+            textarea.className = 'chat-input';
+            textarea.style.width = '100%';
+            textarea.style.minHeight = '60px';
+
+            contentDiv.innerHTML = '';
+            contentDiv.appendChild(textarea);
+            textarea.focus();
+
+            const saveEdit = async () => {
+                const newText = textarea.value.trim() || originalText;
+                contentDiv.innerHTML = newText.replace(/\n/g, '<br>');
+
+                if (newText !== currentText) {
+                    typingIndicator.classList.add('show');
+                    sendButton.disabled = true;
+
+                    try {
+                        const response = await fetch('/ask', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ message: newText })
+                        });
+
+                        const data = await response.json();
+                        if (response.ok) {
+                            addMessage(data.reply, 'bot');
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                    } finally {
+                        typingIndicator.classList.remove('show');
+                        sendButton.disabled = false;
+                    }
+                }
+            };
+
+            textarea.addEventListener('blur', saveEdit);
+            textarea.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && e.ctrlKey) {
+                    saveEdit();
+                }
+            });
+        }
+
+        function deleteMessage(messageDiv) {
+            if (confirm('Hapus pesan ini?')) {
+                messageDiv.style.animation = 'messageSlideIn 0.3s reverse';
+                setTimeout(() => {
+                    messageDiv.remove();
+                }, 300);
+            }
+        }
+
+        function copyMessage(text) {
+            const plainText = text.replace(/<br>/g, '\n').replace(/<[^>]*>/g, '');
+            navigator.clipboard.writeText(plainText).then(() => {
+                showNotification('✓ Pesan berhasil disalin!');
+            });
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: linear-gradient(135deg, #00b4a6, #00e5d0);
+                color: #0f172a;
+                padding: 15px 25px;
+                border-radius: 15px;
+                box-shadow: 0 5px 20px rgba(0,180,166,0.4);
+                z-index: 10000;
+                font-weight: 600;
+                animation: slideInRight 0.3s ease;
+            `;
+            document.body.appendChild(notification);
+            setTimeout(() => {
+                notification.style.animation = 'slideInRight 0.3s ease reverse';
+                setTimeout(() => notification.remove(), 300);
+            }, 2000);
+        }
+
+        // Upload File
+        uploadFileBtn.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const fileData = {
+                    name: file.name,
+                    size: file.size,
+                    type: file.type
+                };
+
+                addMessage(`Mengupload file: ${file.name}`, 'user', fileData);
+
+                typingIndicator.classList.add('show');
+                sendButton.disabled = true;
+
+                try {
+                    const formData = new FormData();
+                    formData.append('file', file);
+
+                    const response = await fetch('/upload', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        addMessage(data.reply || 'File berhasil diupload dan dianalisis! Berikut hasilnya...', 'bot');
+                    } else {
+                        addMessage('File berhasil diterima. Apa yang ingin Anda ketahui tentang file ini?', 'bot');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    addMessage(`Terima kasih telah mengupload <strong>${file.name}</strong>. File ini berhasil diterima. Silakan tanyakan apa yang ingin Anda analisis dari file tersebut.`, 'bot');
+                } finally {
+                    typingIndicator.classList.remove('show');
+                    sendButton.disabled = false;
+                    fileInput.value = '';
+                }
+            }
+        });
+
+        function getFileIcon(fileType) {
+            if (fileType.includes('image')) return 'file-image';
+            if (fileType.includes('pdf')) return 'file-pdf';
+            if (fileType.includes('excel') || fileType.includes('spreadsheet')) return 'file-excel';
+            if (fileType.includes('csv')) return 'file-csv';
+            return 'file-alt';
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+        }
+
+        // Clear Chat
+        clearChatBtn.addEventListener('click', () => {
+            if (confirm('Apakah Anda yakin ingin menghapus semua riwayat chat?')) {
+                const messages = chatMessages.querySelectorAll('.message');
+                messages.forEach(msg => msg.remove());
+
+                const infoPanel = document.querySelector('.info-panel');
+                if (infoPanel) {
+                    chatMessages.appendChild(infoPanel);
+                }
+
+                addMessage('Halo! Saya <strong>BADU AI</strong>, asisten virtual ekosistem laut Pulau Tunda. 🌊<br><br>Saya dapat membantu Anda dengan:<br>• Informasi tentang <strong>Mangrove, Lamun, Terumbu Karang, dan Ikan</strong><br>• Analisis data dan file penelitian<br>• Prediksi kondisi ekosistem<br>• Panduan penelitian lapangan<br><br>Silakan pilih topik di atas atau tanyakan langsung! 😊', 'bot');
+
+                showNotification('✓ Chat berhasil dihapus!');
+            }
+        });
+
+        // Download Chat
+        downloadChatBtn.addEventListener('click', () => {
+            let chatText = '='.repeat(60) + '\n';
+            chatText += 'RIWAYAT CHAT BADU AI\n';
+            chatText += 'Portal Ekosistem Laut - Pulau Tunda, Banten\n';
+            chatText += '='.repeat(60) + '\n';
+            chatText += `Tanggal: ${new Date().toLocaleString('id-ID', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            })}\n`;
+            chatText += '='.repeat(60) + '\n\n';
+
+            const messages = chatMessages.querySelectorAll('.message');
+            messages.forEach((msg, index) => {
+                const isUser = msg.classList.contains('user');
+                const content = msg.querySelector('.message-content').textContent.trim();
+                const sender = isUser ? 'ANDA' : 'BADU AI';
+
+                chatText += `[${index + 1}] ${sender}:\n`;
+                chatText += `${content}\n`;
+                chatText += '-'.repeat(60) + '\n\n';
+            });
+
+            chatText += '='.repeat(60) + '\n';
+            chatText += 'Terima kasih telah menggunakan BADU AI\n';
+            chatText += '='.repeat(60) + '\n';
+
+            const blob = new Blob([chatText], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `BADU-AI-Chat-${new Date().toISOString().split('T')[0]}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showNotification('✓ Chat berhasil diunduh!');
+        });
+
+        // Info Button
+        infoBtn.addEventListener('click', () => {
+            const infoMessage = `
+                <strong>📊 BADU AI - Informasi Sistem</strong><br><br>
+                <strong>Kemampuan:</strong><br>
+                ✓ Menjawab pertanyaan tentang ekosistem laut<br>
+                ✓ Menganalisis file (CSV, Excel, PDF, Gambar)<br>
+                ✓ Memberikan prediksi dan statistik<br>
+                ✓ Panduan penelitian lapangan<br><br>
+                <strong>Format File yang Didukung:</strong><br>
+                • Data: CSV, XLSX, XLS<br>
+                • Dokumen: PDF<br>
+                • Gambar: JPG, PNG, GIF<br><br>
+                <strong>Tips Penggunaan:</strong><br>
+                • Gunakan tombol quick action untuk pertanyaan umum<br>
+                • Upload file untuk analisis data<br>
+                • Edit pesan dengan klik tombol edit<br>
+                • Download riwayat chat untuk dokumentasi
+            `;
+            addMessage(infoMessage, 'bot');
+        });
+    </script>
+</body>
+</html>
+
+<!-- Footer modern dengan interaktivitas ekstra -->
+<footer style="background: linear-gradient(135deg, #0d4d4d 0%, #0a5f5f 70%, #0d4d4d 100%); color: #ffffff; padding: 50px 0 20px; position: relative; margin-top: 0; font-family: 'Inter', Arial, sans-serif;">
+    <style>
+      @keyframes gradientFlow {
+        0% { background-position: 0% 50%; }
+        100% { background-position: 100% 50%; }
+      }
+      @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px);}
+        to { opacity: 1; transform: translateY(0);}
+      }
+      .footer-animate { animation: fadeInUp 0.8s cubic-bezier(0.22, 1, 0.36, 1); }
+      .footer-social:hover, .footer-social:focus {
+        transform: scale(1.08) rotate(-8deg);
+        background: linear-gradient(120deg, #00e5d0, #14b8a6 60%);
+        color: #1e293b !important;
+        box-shadow: 0 6px 24px 0 rgba(20,184,166,0.20);
+      }
+      .input-active:focus, .input-active:active {
+        border-color: #14b8a6 !important; box-shadow: 0 2px 10px #14b8a650;
+      }
+      .submit-btn-inter {
+        transition: 0.3s cubic-bezier(.41,2.4,.64,.94);
+        box-shadow: 0 4px 15px 0 #14b8a650;
+      }
+      .submit-btn-inter:hover, .submit-btn-inter:focus {
+        background: linear-gradient(120deg,#06b6d4 40%,#14b8a6 100%);
+        color: #fff;
+        letter-spacing: 1px;
+        transform: translateY(-4px) scale(1.05);
+        box-shadow: 0 10px 40px 0 #14b8a650;
+      }
+      .snackbar {
+        opacity: 0;
+        min-width: 250px;
+        margin-left: -125px;
+        background: rgba(47,197,129,0.95);
+        color: white;
+        text-align: center;
+        border-radius: 8px;
+        padding: 16px;
+        position: fixed;
+        z-index: 1100;
+        left: 50%;
+        bottom: 40px;
+        font-size: 1rem;
+        box-shadow: 0 6px 24px 0 #14b8a680;
+        animation: none;
+        transition: opacity 0.3s;
+      }
+      .snackbar.show {
+        opacity: 1;
+        animation: fadeInUp 0.7s;
+      }
+      .snackbar.error { background: #ef4444; }
+      .snackbar .close { float:right; font-weight:bold; cursor:pointer; margin-left:16px;}
+      /* Responsive remains mostly same */
+    </style>
+  
+    <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #00b4a6 0%, #00e5d0 25%, #006b8c 50%, #00e5d0 75%, #00b4a6 100%); background-size: 300% 100%; animation: gradientFlow 4s linear infinite;"></div>
+  
+    <div style="max-width: 1400px; margin: 0 auto; padding: 0 30px; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 2fr; gap: 40px; align-items: start;">
+      <!-- LOGO & DESKRIPSI -->
+      <div class="footer-animate" style="animation-delay: .1s">
+        <div style="display: flex; align-items: center; gap: 22px; margin-bottom: 1rem;">
+          <img src="logob.png" alt="Logo" style="width: 170px; height: 170px; object-fit: contain; border-radius:20px; filter: drop-shadow(0 4px 20px #13fad580); background: #ffffff18;">
+          <h3 style="font-size: 1.7rem; color: #ffffff; margin: 0; font-weight: 700; letter-spacing: .7px;">Portal Ekosistem Laut</h3>
+        </div>
+        <p style="color: #b8e6e6; line-height: 1.8; font-size: 1.04rem; margin-bottom: 26px;">Platform digital terdepan untuk penelitian dan konservasi ekosistem laut Indonesia. Bergabunglah dengan kami dalam menjaga keberlanjutan laut untuk generasi mendatang.</p>
+        <div style="display: flex; gap: 16px;">
+          <a href="#" class="footer-social" style="width: 45px; height: 45px; background: rgba(255,255,255,0.15); border-radius: 50%; display: flex; align-items:center; justify-content:center; color:#fff; font-size:1.1rem; border: 2px solid rgba(0,229,208,0.16); transition:.3s;"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="footer-social" style="width: 45px; height: 45px; background: rgba(255,255,255,0.15); border-radius: 50%; display: flex; align-items:center; justify-content:center; color:#fff; font-size:1.1rem; border: 2px solid rgba(0,229,208,0.16); transition:.3s;"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="footer-social" style="width: 45px; height: 45px; background: rgba(255,255,255,0.15); border-radius: 50%; display: flex; align-items:center; justify-content:center; color:#fff; font-size:1.1rem; border: 2px solid rgba(0,229,208,0.16); transition:.3s;"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="footer-social" style="width: 45px; height: 45px; background: rgba(255,255,255,0.15); border-radius: 50%; display: flex; align-items:center; justify-content:center; color:#fff; font-size:1.1rem; border: 2px solid rgba(0,229,208,0.16); transition:.3s;"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      <!-- NAVIGASI -->
+      <div class="footer-animate" style="animation-delay: .2s">
+        <h4 style="font-size: 1.22rem; margin-bottom: 21px; color: #5eead4; font-weight: 700; letter-spacing: .7px;">Navigasi</h4>
+        <ul style="list-style:none; padding:0; margin:0; display: flex; flex-direction:column; gap:12px;">
+          <li><a href="/home" style="color:#b8e6e6; text-decoration:none; font-size:1rem; transition:.3s;">Home</a></li>
+          <li><a href="mangrove2019" style="color:#b8e6e6; text-decoration:none; font-size:1rem; transition:.3s;">Mangrove</a></li>
+          <li><a href="lamun2019" style="color:#b8e6e6; text-decoration:none; font-size:1rem; transition:.3s;">Lamun</a></li>
+          <li><a href="/Terumbu2019" style="color:#b8e6e6; text-decoration:none; font-size:1rem; transition:.3s;">Terumbu Karang</a></li>
+          <li><a href="zpi" style="color:#b8e6e6; text-decoration:none; font-size:1rem; transition:.3s;">Ikan</a></li>
+        </ul>
+      </div>
+      <!-- LAYANAN -->
+      <div class="footer-animate" style="animation-delay: .3s">
+        <h4 style="font-size: 1.22rem; margin-bottom: 21px; color: #5eead4; font-weight: 700; letter-spacing: .7px;">Layanan</h4>
+        <ul style="list-style:none; padding:0; margin:0; display: flex; flex-direction:column; gap:12px;">
+          <li><a href="prediksilamun" style="color:#b8e6e6; text-decoration:none; font-size:1rem; transition:.3s;">Prediksi</a></li>
+          <li><a href="kamera-ikan" style="color:#b8e6e6; text-decoration:none; font-size:1rem; transition:.3s;">Deteksi AI</a></li>
+          <li><a href="/faq" style="color:#b8e6e6; text-decoration:none; font-size:1rem; transition:.3s;">BADU AI</a></li>
+          <li><a href="/voice" style="color:#b8e6e6; text-decoration:none; font-size:1rem; transition:.3s;">Translate</a></li>
+        </ul>
+      </div>
+      <!-- KONTAK -->
+      <div class="footer-animate" style="animation-delay: .4s">
+        <h4 style="font-size: 1.22rem; margin-bottom: 21px; color: #5eead4; font-weight: 700; letter-spacing: .7px;">Kontak</h4>
+        <div style="display:flex; flex-direction:column; gap:15px;">
+          <div style="display:flex; align-items:flex-start; gap:11px; color:#b8e6e6; font-size:.97rem">
+            <i class="fas fa-map-marker-alt" style="color:#5eead4;"></i>
+            <span>Pulau Tunda, Banten, Indonesia</span>
+          </div>
+          <div style="display:flex; align-items:flex-start; gap:11px; color:#b8e6e6; font-size:.97rem">
+            <i class="fas fa-phone" style="color:#5eead4;"></i>
+            <span>+62 123 4567 890</span>
+          </div>
+          <div style="display:flex; align-items:flex-start; gap:11px; color:#b8e6e6; font-size:.97rem">
+            <i class="fas fa-envelope" style="color:#5eead4;"></i>
+            <span>info@pulauntunda.ac.id</span>
+          </div>
+          <div style="display:flex; align-items:flex-start; gap:11px; color:#b8e6e6; font-size:.97rem">
+            <i class="fas fa-clock" style="color:#5eead4;"></i>
+            <span>Senin - Jumat, 08:00 - 17:00</span>
+          </div>
+        </div>
+      </div>
+      <!-- UMPAN BALIK FORM (INTERAKTIF) -->
+      <div class="footer-animate" style="animation-delay:.5s; background:rgba(255,255,255,0.09); padding:28px 20px 17px; border-radius:16px; backdrop-filter:blur(9px); border:1px solid #b8e6e630;">
+        <h4 style="font-size: 1.18rem; margin-bottom: 22px; color: #5eead4;">Umpan Balik</h4>
+        <form action="https://api.web3forms.com/submit" method="POST" id="feedbackForm">
+          <input type="hidden" name="access_key" value="a1c331ee-714c-4409-8009-7dee4c452bce">
+          <input type="hidden" name="redirect" value="false">
+          <input type="hidden" name="subject" value="Umpan Balik dari Portal Ekosistem Laut">
+          <input type="hidden" name="from_name" value="Portal Ekosistem Laut">
+          <div style="margin-bottom: 16px;">
+            <input type="email" name="email" class="input-active" placeholder="📧 Email Anda" required style="width:100%; padding:13px 19px; border:1.7px solid #aaf6f6; border-radius:8px; background:rgb(255, 255, 255); color:#1c274c; font-size:1rem; font-family:inherit; transition:.24s;">
+          </div>
+          <div style="margin-bottom: 16px;">
+            <textarea name="message" class="input-active" placeholder="📝 Pesan Anda" required style="width:100%; padding:13px 19px; border:1.7px solid #aaf6f6; border-radius:8px; background:rgb(255, 255, 255); color:#1c274c; font-size:1rem; font-family:inherit; transition:.24s; resize:vertical; min-height:86px;"></textarea>
+          </div>
+          <button type="submit" id="submitBtn" class="submit-btn-inter" style="width:100%; padding:13px; background:linear-gradient(130deg,#14b8a6 70%,#00e5d0 100%); color:#fff; border:none; border-radius:8px; font-size:1.1rem; font-weight:700; cursor:pointer; transition:.3s;">
+            <span id="btnText">Kirim</span>
+            <span id="btnLoading" style="display:none;"><i class="fas fa-spinner fa-spin"></i> Mengirim...</span>
+          </button>
+        </form>
+        <div id="successMessage" style="display:none; padding:8px; margin-top:12px; background:rgba(34,197,94,0.17); border:1px solid #22c55e; border-radius:9px; color:#13c484; text-align:center; font-size:1rem;">
+          ✅ Pesan berhasil terkirim! Terima kasih atas umpan balik Anda.
+        </div>
+        <div id="errorMessage" style="display:none; padding:8px; margin-top:12px; background:rgba(239,68,68,0.16); border:1px solid #ef4444; border-radius:9px; color:#ef4444; text-align:center; font-size:1rem;">
+          ❌ Gagal mengirim pesan. Silakan coba lagi.
+        </div>
+      </div>
+    </div>
+  
+    <!-- Snackbar notification -->
+    <div id="snackbar" class="snackbar"></div>
+  
+    <!-- Footer Bottom -->
+    <div style="max-width:1400px; margin:42px auto 0; padding:15px 30px 0; border-top:1px solid rgba(255,255,255,0.13); display:flex; justify-content:space-between; align-items:center; color:#b8e6e6; font-size:1rem; flex-wrap:wrap; gap:1rem;">
+      <p style="margin:0;">© 2024 Portal Ekosistem Laut Pulau Tunda. All Rights Reserved.</p>
+      <div>
+        <a href="#" style="color:#b8e6e6; text-decoration:none; margin:0 8px;">Privacy Policy</a> |
+        <a href="#" style="color:#b8e6e6; text-decoration:none; margin:0 8px;">Terms of Service</a> |
+        <a href="#" style="color:#b8e6e6; text-decoration:none; margin:0 8px;">Sitemap</a>
+      </div>
+    </div>
+  
+    <script>
+      function showSnackbar(msg, error=false) {
+        var x = document.getElementById("snackbar");
+        x.textContent = msg;
+        x.className = "snackbar show" + (error ? " error" : "");
+        x.onclick = function(){x.className="snackbar";}
+        setTimeout(function(){ x.className = x.className.replace("show", ""); }, 4000);
+      }
+  
+      document.getElementById('feedbackForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const form = e.target;
+        const submitBtn = document.getElementById('submitBtn');
+        const btnText = document.getElementById('btnText');
+        const btnLoading = document.getElementById('btnLoading');
+        const successMsg = document.getElementById('successMessage');
+        const errorMsg = document.getElementById('errorMessage');
+        // Hide messages
+        successMsg.style.display = errorMsg.style.display = "none";
+        btnText.style.display = "none";
+        btnLoading.style.display = "inline";
+        submitBtn.disabled = true;
+        try {
+          const formData = new FormData(form);
+          const response = await fetch('https://api.web3forms.com/submit', {
+            method: 'POST', body: formData
+          });
+          const data = await response.json();
+          if (data.success) {
+            showSnackbar("✅ Pesan berhasil terkirim! Terima kasih.");
+            successMsg.style.display = "block";
+            form.reset();
+            setTimeout(() => { successMsg.style.display = "none"; }, 5000);
+          } else {
+            showSnackbar("❌ Gagal mengirim pesan.", true);
+            errorMsg.style.display = "block";
+          }
+        } catch (error) {
+          showSnackbar("❌ Gagal mengirim pesan. Silakan coba lagi.", true);
+          errorMsg.style.display = "block";
+        } finally {
+          btnText.style.display = "inline";
+          btnLoading.style.display = "none";
+          submitBtn.disabled = false;
+        }
+      });
+    </script>
+  </footer>

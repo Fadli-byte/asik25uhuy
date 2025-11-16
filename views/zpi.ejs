@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <base target="_top">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Peta ZPI-SPL-Klorofil - Pulau Tunda</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" 
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700;900&family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #00b4a6;
+            --secondary: #006b8c;
+            --accent: #00e5d0;
+            --dark: #003d52;
+            --bg-primary: #ffffff;
+            --bg-secondary: rgba(224, 247, 245, 0.98);
+            --text-primary: #333;
+            --text-secondary: #555;
+            --sidebar-width: 320px;
+            --header-height: 100px;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0a1128;
+            --bg-secondary: rgba(10, 17, 40, 0.98);
+            --text-primary: #e0e0e0;
+            --text-secondary: #b0b0b0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background 0.5s ease, color 0.5s ease;
+        }
+
+        /* ==================== KEYFRAMES ==================== */
+        @keyframes headerGlow {
+            0%, 100% {
+                background: linear-gradient(135deg, rgba(0, 180, 166, 0.95), rgba(0, 107, 140, 0.95));
+                box-shadow: 
+                    0 10px 40px rgba(0, 180, 166, 0.3),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                    0 0 25px rgba(0, 229, 208, 0.2);
+            }
+            50% {
+                background: linear-gradient(135deg, rgba(0, 180, 166, 1), rgba(0, 107, 140, 1));
+                box-shadow: 
+                    0 10px 40px rgba(0, 180, 166, 0.5),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                    0 0 45px rgba(0, 229, 208, 0.4);
+            }
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 300% 0%; }
+        }
+
+        @keyframes logoEntrance {
+            0% {
+                opacity: 0;
+                transform: translateX(-80px) scale(0.7) rotate(-15deg);
+            }
+            70% {
+                transform: translateX(15px) scale(1.08) rotate(3deg);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0) scale(1) rotate(0deg);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes dropdownSlide {
+            from {
+                opacity: 0;
+                transform: translateY(-20px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes slideInFromTop {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInFromBottom {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes popupFadeIn {
+            0% { opacity: 0; transform: scale(0.8) translateY(-20px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        @keyframes fishFloat {
+            0%, 100% { 
+                transform: translateY(0px) scale(1);
+                opacity: 1;
+            }
+            50% { 
+                transform: translateY(-5px) scale(1.05);
+                opacity: 0.95;
+            }
+        }
+
+        /* ==================== HEADER ==================== */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: linear-gradient(135deg, rgba(0, 180, 166, 0.98), rgba(0, 107, 140, 0.98));
+            backdrop-filter: blur(25px) saturate(200%);
+            box-shadow: 
+                0 10px 40px rgba(0, 180, 166, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            z-index: 1000;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            border-bottom: 3px solid rgba(0, 229, 208, 0.5);
+            animation: headerGlow 6s ease-in-out infinite;
+        }
+
+        [data-theme="dark"] .header {
+            background: linear-gradient(135deg, rgba(0, 90, 80, 0.98), rgba(0, 65, 90, 0.98));
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, 
+                #00e5d0 0%, 
+                #ffffff 25%,
+                #00e5d0 50%, 
+                #ffffff 75%,
+                #00e5d0 100%);
+            background-size: 300% 100%;
+            animation: gradientFlow 6s linear infinite;
+            box-shadow: 0 0 15px rgba(0, 229, 208, 0.6);
+        }
+
+        .header-container {
+            width: 100%;
+            margin: 0;
+            padding: 0 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 100px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            animation: logoEntrance 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .logo-icon {
+            width: 90px;
+            height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            filter: drop-shadow(0 8px 20px rgba(255, 255, 255, 0.3));
+        }
+
+        .logo-icon::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: radial-gradient(circle, 
+                rgba(255, 255, 255, 0.3) 0%, 
+                transparent 70%);
+            border-radius: 50%;
+            opacity: 0;
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .logo-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 12px rgba(255, 255, 255, 0.5));
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .logo-text .main-title {
+            font-size: 1.55rem;
+            font-weight: 900;
+            color: #ffffff;
+            line-height: 1.2;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo-text .subtitle {
+            font-size: 0.98rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 600;
+            letter-spacing: 0.6px;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .top-bar {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-left: auto;
+            animation: fadeInRight 1s cubic-bezier(0.4, 0, 0.2, 1) 0.3s both;
+        }
+
+        .user-greeting {
+            display: flex;
+            align-items: center;
+            padding: 11px 22px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 28px;
+            margin-right: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .greeting-text {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 0.3px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .top-bar a {
+            color: #ffffff;
+            text-decoration: none;
+            padding: 11px 20px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            border-radius: 12px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: all 0.4s ease;
+        }
+
+        .top-bar a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .logout {
+            background: linear-gradient(135deg, #dc3545, #c82333) !important;
+            color: white !important;
+            padding: 11px 24px !important;
+            border-radius: 28px;
+            font-weight: 800;
+            box-shadow: 0 6px 20px rgba(220, 53, 69, 0.5);
+        }
+
+        /* ==================== SIDEBAR ==================== */
+        .sidebar {
+            position: fixed;
+            top: var(--header-height);
+            left: 0;
+            width: var(--sidebar-width);
+            height: calc(100vh - var(--header-height));
+            background: white;
+            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+            z-index: 999;
+            overflow-y: auto;
+        }
+
+        [data-theme="dark"] .sidebar {
+            background: rgba(10, 17, 40, 0.98);
+            border-right: 2px solid rgba(0, 229, 208, 0.3);
+        }
+
+        .sidebar-content {
+            padding: 20px;
+        }
+
+        .realtime-info {
+            padding: 15px;
+            background: linear-gradient(135deg, rgba(0, 180, 166, 0.08), rgba(0, 229, 208, 0.08));
+            border-radius: 12px;
+            border: 2px solid rgba(0, 180, 166, 0.3);
+            margin-bottom: 15px;
+        }
+
+        .realtime-info h3 {
+            font-size: 0.9rem;
+            color: var(--primary);
+            font-weight: 800;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .clock-display {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--text-primary);
+            text-align: center;
+            padding: 10px;
+            background: rgba(0, 180, 166, 0.1);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .info-pulau-tunda {
+            padding: 15px;
+            background: linear-gradient(135deg, rgba(0, 180, 166, 0.08), rgba(0, 229, 208, 0.08));
+            border-radius: 12px;
+            border: 2px solid rgba(0, 180, 166, 0.3);
+            margin-bottom: 15px;
+        }
+
+        .info-pulau-tunda h3 {
+            font-size: 1rem;
+            color: var(--primary);
+            font-weight: 800;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-pulau-tunda p {
+            font-size: 0.8rem;
+            line-height: 1.5;
+            color: var(--text-secondary);
+            margin: 5px 0;
+        }
+
+        /* ==================== BASEMAP CONTROL ==================== */
+        .basemap-control {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            background: white;
+            padding: 15px 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            border: 2px solid rgba(0, 180, 166, 0.3);
+            max-width: 90%;
+            animation: slideInFromBottom 0.5s ease;
+        }
+
+        [data-theme="dark"] .basemap-control {
+            background: rgba(10, 17, 40, 0.95);
+            border-color: rgba(0, 229, 208, 0.5);
+        }
+
+        .basemap-control h4 {
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            text-align: center;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 8px;
+        }
+
+        .basemap-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .basemap-thumbnails {
+            display: flex;
+            gap: 10px;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            padding: 5px 0;
+        }
+
+        .basemap-thumb {
+            min-width: 80px;
+            width: 80px;
+            height: 60px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+            overflow: hidden;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .basemap-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .basemap-thumb:hover {
+            transform: scale(1.08);
+            box-shadow: 0 6px 20px rgba(0, 180, 166, 0.4);
+        }
+
+        .basemap-thumb.active {
+            border-color: var(--primary);
+            box-shadow: 0 6px 25px rgba(0, 180, 166, 0.6);
+        }
+
+        .basemap-thumb-label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 3px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .opacity-control-horizontal {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 200px;
+            padding-left: 15px;
+            border-left: 2px solid rgba(0, 180, 166, 0.2);
+        }
+
+        .opacity-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .opacity-slider {
+            width: 100%;
+            height: 6px;
+            border-radius: 5px;
+            background: linear-gradient(90deg, rgba(0, 180, 166, 0.2), var(--primary));
+            outline: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+        }
+
+        .opacity-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 180, 166, 0.5);
+        }
+
+        /* ==================== MAP & LEGEND ==================== */
+        #map { 
+            position: fixed;
+            top: var(--header-height);
+            left: var(--sidebar-width);
+            width: calc(100% - var(--sidebar-width));
+            height: calc(100vh - var(--header-height));
+        }
+
+        .leaflet-control.legend {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            border: 2px solid rgba(0, 180, 166, 0.3);
+        }
+
+        [data-theme="dark"] .leaflet-control.legend {
+            background: rgba(10, 17, 40, 0.95);
+            border-color: rgba(0, 229, 208, 0.5);
+        }
+
+        .legend h4 {
+            margin: 0 0 12px 0;
+            font-size: 14px;
+            color: var(--text-primary);
+            font-weight: 800;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 8px;
+        }
+
+        .legend-item {
+            margin: 10px 0;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .legend-color {
+            width: 30px;
+            height: 20px;
+            border: 2px solid #333;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Fish Marker Icon - CYAN NEON dengan Glow Kuat */
+        .fish-marker-icon { 
+            animation: fishFloat 3s ease-in-out infinite;
+            display: inline-block;
+            filter: 
+                drop-shadow(0 0 15px #00FFFF) 
+                drop-shadow(0 0 25px #00FFFF) 
+                drop-shadow(0 0 35px #00E5FF)
+                brightness(1.3);
+        }
+
+        .fish-marker-icon:hover {
+            filter: 
+                drop-shadow(0 0 20px #00FFFF) 
+                drop-shadow(0 0 35px #00FFFF) 
+                drop-shadow(0 0 50px #00E5FF)
+                brightness(1.5);
+            transform: scale(1.3);
+        }
+
+        /* Custom Popup Styling */
+        .leaflet-popup-content-wrapper {
+            background: white;
+            color: var(--text-primary);
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(0, 180, 166, 0.3);
+            font-family: 'Inter', sans-serif;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        [data-theme="dark"] .leaflet-popup-content-wrapper {
+            background: rgba(10, 17, 40, 0.98);
+            border-color: rgba(0, 229, 208, 0.5);
+        }
+
+        .leaflet-popup-content {
+            margin: 0;
+            padding: 0;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 120px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #00b4a6, #006b8c);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10000;
+            box-shadow: 0 8px 25px rgba(0, 180, 166, 0.4);
+            font-size: 1.8rem;
+            transition: all 0.4s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.15) rotate(180deg);
+            box-shadow: 0 12px 35px rgba(0, 180, 166, 0.6);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.show { transform: translateX(0); }
+            #map { left: 0; width: 100%; }
+            .basemap-content { flex-direction: column; }
+            .opacity-control-horizontal {
+                border-left: none;
+                border-top: 2px solid rgba(0, 180, 166, 0.2);
+                padding-left: 0;
+                padding-top: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="theme-toggle" id="themeToggle">☀️</button>
+
+    <header class="header">
+        <div class="header-container">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <img src="/LOKO ASIK.png" alt="Logo Portal Ekosistem Laut">
+                </div>
+                <div class="logo-text">
+                    <span class="main-title">Zona Potensial Ikan</span>
+                    <span class="subtitle">Pulau Tunda, Banten</span>
+                </div>
+            </div>
+
+            <div class="top-bar">
+                <div class="user-greeting">
+                   <span class="greeting-text">Halo, <%= user ? user.username : 'Pengguna' %> 👋</span>
+                </div>
+                <a href="/home">Home</a>
+                <a href="mangrove19">Ekosistem</a>
+                <a href="predikslmangrove">Prediksi</a>
+                <a href="/logout" class="logout">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-content">
+            
+            <div class="realtime-info">
+                <h3>⏰ Waktu Real-time</h3>
+                <div class="clock-display" id="clockDisplay">00:00:00</div>
+            </div>
+
+            <div class="info-pulau-tunda">
+                <h3>🏝️ Pulau Tunda</h3>
+                <p><strong>Lokasi:</strong> Laut Jawa, Kab. Serang, Banten</p>
+                <p><strong>Koordinat:</strong> 5°48'54"S, 106°16'28"E</p>
+                <p><strong>Luas:</strong> ±300 hektar</p>
+                <p><strong>Desa:</strong> Wargasara, Kec. Tirtayasa</p>
+            </div>
+
+        </div>
+    </aside>
+
+    <div id="map">
+        <!-- Basemap Control (Horizontal) -->
+        <div class="basemap-control">
+            <h4>🗺️ Pilih Peta Dasar & Atur Opacity</h4>
+            <div class="basemap-content">
+                <div class="basemap-thumbnails">
+                    <div class="basemap-thumb" data-basemap="osm" title="OpenStreetMap">
+                        <img src="https://tile.openstreetmap.org/5/16/10.png" alt="OSM">
+                        <div class="basemap-thumb-label">OSM</div>
+                    </div>
+                    <div class="basemap-thumb active" data-basemap="satellite" title="Satelit">
+                        <img src="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/5/10/16" alt="Satelit">
+                        <div class="basemap-thumb-label">SATELIT</div>
+                    </div>
+                    <div class="basemap-thumb" data-basemap="topo" title="Topografi">
+                        <img src="https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/5/10/16" alt="Topo">
+                        <div class="basemap-thumb-label">TOPO</div>
+                    </div>
+                    <div class="basemap-thumb" data-basemap="dark" title="Dark Mode">
+                        <img src="https://a.basemaps.cartocdn.com/dark_all/5/16/10.png" alt="Dark">
+                        <div class="basemap-thumb-label">DARK</div>
+                    </div>
+                    <div class="basemap-thumb" data-basemap="positron" title="Positron">
+                        <img src="https://a.basemaps.cartocdn.com/light_all/5/16/10.png" alt="Positron">
+                        <div class="basemap-thumb-label">LIGHT</div>
+                    </div>
+                    <div class="basemap-thumb" data-basemap="voyager" title="Voyager">
+                        <img src="https://a.basemaps.cartocdn.com/rastertiles/voyager/5/16/10.png" alt="Voyager">
+                        <div class="basemap-thumb-label">VOYAGER</div>
+                    </div>
+                </div>
+                <div class="opacity-control-horizontal">
+                    <div class="opacity-label">
+                        <span>Opacity</span>
+                        <span id="opacityValue">100%</span>
+                    </div>
+                    <input type="range" min="0" max="100" value="100" class="opacity-slider" id="opacitySlider">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dummy Data -->
+    <script>
+        var spl = {"type": "FeatureCollection", "features": []};
+        var klorofil = {"type": "FeatureCollection", "features": []};
+        var zpi = {
+            "type": "FeatureCollection",
+            "features": [
+                {
+                    "type": "Feature",
+                    "properties": {
+                        "gridcode": 8,
+                        "jenis": "titik_zpi",
+                        "kelas_zpi": "Sangat Potensial"
+                    },
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [[
+                            [106.27, -5.81],
+                            [106.28, -5.81],
+                            [106.28, -5.80],
+                            [106.27, -5.80],
+                            [106.27, -5.81]
+                        ]]
+                    }
+                }
+            ]
+        };
+    </script>
+
+    <script src="/js/spl.js"></script>
+    <script src="/js/klorofil.js"></script>
+    <script src="/js/zpi.js"></script>
+
+    <script>
+        // Real-time clock
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('clockDisplay').textContent = `${hours}:${minutes}:${seconds}`;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Theme toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        
+        html.setAttribute('data-theme', currentTheme);
+        themeToggle.textContent = currentTheme === 'dark' ? '🌙' : '☀️';
+
+        themeToggle.addEventListener('click', () => {
+            const theme = html.getAttribute('data-theme');
+            const newTheme = theme === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            themeToggle.textContent = newTheme === 'dark' ? '🌙' : '☀️';
+        });
+
+        // Map initialization
+        const map = L.map('map').setView([-5.815, 106.2745], 15);
+
+        const osmLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; OpenStreetMap'
+        });
+
+        const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            maxZoom: 19,
+            attribution: '&copy; Esri'
+        });
+
+        const topoLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+            maxZoom: 19,
+            attribution: '&copy; Esri'
+        });
+
+        const darkLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            maxZoom: 19,
+            attribution: '&copy; CartoDB'
+        });
+
+        const positronLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            maxZoom: 19,
+            attribution: '&copy; CartoDB'
+        });
+
+        const voyagerLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+            maxZoom: 19,
+            attribution: '&copy; CartoDB'
+        });
+
+        let currentBaseLayer = satelliteLayer;
+        currentBaseLayer.addTo(map);
+
+        const basemapThumbs = document.querySelectorAll('.basemap-thumb');
+        basemapThumbs.forEach(thumb => {
+            thumb.addEventListener('click', function() {
+                const basemapType = this.getAttribute('data-basemap');
+                
+                basemapThumbs.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                map.removeLayer(currentBaseLayer);
+                
+                switch(basemapType) {
+                    case 'osm': currentBaseLayer = osmLayer; break;
+                    case 'satellite': currentBaseLayer = satelliteLayer; break;
+                    case 'topo': currentBaseLayer = topoLayer; break;
+                    case 'dark': currentBaseLayer = darkLayer; break;
+                    case 'positron': currentBaseLayer = positronLayer; break;
+                    case 'voyager': currentBaseLayer = voyagerLayer; break;
+                }
+                
+                currentBaseLayer.addTo(map);
+                const opacity = document.getElementById('opacitySlider').value / 100;
+                currentBaseLayer.setOpacity(opacity);
+            });
+        });
+
+        const opacitySlider = document.getElementById('opacitySlider');
+        const opacityValue = document.getElementById('opacityValue');
+
+        opacitySlider.addEventListener('input', function() {
+            const opacity = this.value / 100;
+            currentBaseLayer.setOpacity(opacity);
+            opacityValue.textContent = this.value + '%';
+        });
+
+        // Function untuk SVG fish icon - CYAN NEON TERANG
+        function createFishSVG(color = '#00FFFF') {  
+            return `
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 60" width="45" height="28">
+                    <!-- Badan Ikan - CYAN NEON -->
+                    <ellipse cx="40" cy="30" rx="25" ry="15" fill="#00FFFF" opacity="1" stroke="#FFFFFF" stroke-width="2.5"/>
+                    
+                    <!-- Kepala - CYAN NEON -->
+                    <circle cx="60" cy="30" r="10" fill="#00FFFF" opacity="1" stroke="#FFFFFF" stroke-width="2.5"/>
+                    
+                    <!-- Mata -->
+                    <circle cx="63" cy="28" r="3" fill="white" stroke="#000" stroke-width="1"/>
+                    <circle cx="63" cy="28" r="1.5" fill="#000"/>
+                    
+                    <!-- Sirip Punggung - CYAN NEON -->
+                    <path d="M 40 15 L 45 5 L 50 15 Z" fill="#00FFFF" opacity="1" stroke="#FFFFFF" stroke-width="2"/>
+                    
+                    <!-- Sirip Ekor - CYAN NEON -->
+                    <path d="M 15 20 L 5 10 L 12 30 L 5 50 L 15 40 Z" fill="#00FFFF" opacity="1" stroke="#FFFFFF" stroke-width="2"/>
+                    
+                    <!-- Sirip Perut - CYAN NEON -->
+                    <path d="M 35 43 L 38 50 L 42 45 Z" fill="#00FFFF" opacity="1" stroke="#FFFFFF" stroke-width="2"/>
+                    
+                    <!-- Glow effect TERANG -->
+                    <ellipse cx="40" cy="30" rx="28" ry="18" fill="none" stroke="#FFFFFF" stroke-width="2" opacity="0.8"/>
+                </svg>
+            `;
+        }
+
+        function getSPLColor(val) {
+            return val <= 27 ? '#001f3f' :
+                   val <= 28 ? '#0074D9' :
+                   val <= 29 ? '#00FF00' :
+                   val <= 29.5 ? '#FFFF00' :
+                   val <= 31 ? '#FF6600' : '#FF0000';
+        }
+
+        function getKlorofilColor(val) {
+            return val < 0.5 ? '#8B0000' :
+                   val < 1.5 ? '#FF0000' :
+                   val < 2.5 ? '#FFFF33' :
+                   val < 4 ? '#39FF14' : '#39FF14';
+        }
+
+        function getZPIColor(kode) {
+            switch(kode) {
+                case 1: return '#FF0000';
+                case 2: return '#FFC107';
+                case 3: return '#FFC107';
+                case 4: return '#39FF14';
+                case 8: return '#FF0000';
+                default: return '#808080';
+            }
+        }
+
+        function calculateFishCount(feature) {
+            if (feature.geometry.type === 'Polygon') {
+                var coords = feature.geometry.coordinates[0];
+                var area = Math.abs((coords.length - 1));
+                
+                if (feature.properties.gridcode === 8) {
+                    if (area > 10) return 3;
+                    if (area > 5) return 2;
+                    return 1;
+                }
+            }
+            return 1;
+        }
+
+        // SPL Layer
+        L.geoJson(spl, {
+            style: function(feature) {
+                var val = feature.properties.spl ?? feature.properties.gridcode;
+                return {
+                    color: getSPLColor(val),
+                    fillColor: getSPLColor(val),
+                    fillOpacity: 0.6,
+                    weight: 2
+                };
+            },
+            onEachFeature: function(feature, layer) {
+                var kode = feature.properties.spl ?? feature.properties.gridcode;
+                layer.bindPopup(`
+                    <div style="min-width: 240px; font-family: 'Inter', sans-serif; text-align: center;">
+                        <strong style="font-size: 15px; color: #00b4a6;">🌡️ SPL (Sea Surface Temperature)</strong><br>
+                        <strong style="color: #006b8c;">Pulau Tunda, Serang, Banten</strong><br><br>
+                        <span style="font-size: 20px; color: #4dd0e1; font-weight: 700;">${kode}°C</span>
+                    </div>
+                `);
+            }
+        }).addTo(map);
+
+        // Klorofil Layer
+        L.geoJson(klorofil, {
+            style: function(feature) {
+                var val = feature.properties.klorofil ?? feature.properties.gridcode;
+                return {
+                    color: getKlorofilColor(val),
+                    fillColor: getKlorofilColor(val),
+                    fillOpacity: 0.5,
+                    weight: 2
+                };
+            },
+            onEachFeature: function(feature, layer) {
+                var kode = feature.properties.klorofil ?? feature.properties.gridcode;
+                layer.bindPopup(`
+                    <div style="min-width: 240px; font-family: 'Inter', sans-serif; text-align: center;">
+                        <strong style="font-size: 15px; color: #00b4a6;">🌿 Klorofil-a</strong><br>
+                        <strong style="color: #006b8c;">Pulau Tunda, Serang, Banten</strong><br><br>
+                        <span style="font-size: 20px; color: #00FF00; font-weight: 700;">${kode} mg/m³</span>
+                    </div>
+                `);
+            }
+        }).addTo(map);
+
+        // ZPI Layer
+        L.geoJson(zpi, {
+            style: function(feature) {
+                if(feature.geometry.type === 'Polygon' || feature.geometry.type === 'MultiPolygon') {
+                    var kode = feature.properties.gridcode;
+                    return {
+                        color: '#ffffff',
+                        fillColor: getZPIColor(kode),
+                        fillOpacity: 0.65,
+                        weight: 2.5
+                    };
+                }
+            },
+            onEachFeature: function(feature, layer) {
+                var potensi = feature.properties.kelas_zpi || '-';
+                var kode = feature.properties.gridcode || '-';
+                
+                layer.bindPopup(`
+                    <div style="min-width: 240px; font-family: 'Inter', sans-serif;">
+                        <strong style="font-size: 15px; color: #00b4a6;">🎣 Zona Potensial Ikan</strong><br>
+                        <strong style="color: #006b8c;">Pulau Tunda, Serang, Banten</strong><br><br>
+                        <table style="font-size: 13px; width: 100%;">
+                            <tr><td><strong>Grid:</strong></td><td>${kode}</td></tr>
+                            <tr><td><strong>Kelas:</strong></td><td style="color: #00FFFF; font-weight: 700;">${potensi}</td></tr>
+                        </table>
+                    </div>
+                `);
+
+                if (feature.geometry.type === 'Polygon') {
+                    var coords = feature.geometry.coordinates[0];
+                    var fishCount = calculateFishCount(feature);
+                    
+                    var bounds = L.latLngBounds(
+                        coords.map(coord => [coord[1], coord[0]])
+                    );
+                    
+                    var latRange = bounds.getNorth() - bounds.getSouth();
+                    var lngRange = bounds.getEast() - bounds.getWest();
+                    
+                    var cols = fishCount === 1 ? 1 : 2;
+                    var rows = Math.ceil(fishCount / cols);
+                    
+                    for (let i = 0; i < fishCount; i++) {
+                        var row = Math.floor(i / cols);
+                        var col = i % cols;
+                        
+                        var lat = bounds.getNorth() - ((row + 0.5) * (latRange / (rows + 1)));
+                        var lng = bounds.getWest() + ((col + 0.5) * (lngRange / (cols + 1)));
+                        
+                        // Icon CYAN NEON dengan Glow Super Terang
+                        var fishIcon = L.divIcon({
+                            html: `<div class="fish-marker-icon" style="filter: drop-shadow(0 0 15px #00FFFF) drop-shadow(0 0 25px #FFFFFF) brightness(1.4);">${createFishSVG('#00FFFF')}</div>`,
+                            iconSize: [45, 28],
+                            iconAnchor: [22, 14],
+                            popupAnchor: [0, -14],
+                            className: 'fish-icon'
+                        });
+                        
+                        L.marker([lat, lng], {icon: fishIcon})
+                            .bindPopup(`
+                                <div style="min-width: 240px; font-family: 'Inter', sans-serif;">
+                                    <strong style="font-size: 15px; color: #00b4a6;">🐟 Lokasi Tangkapan #${i + 1}</strong><br>
+                                    <strong style="color: #006b8c;">Pulau Tunda, Serang, Banten</strong><br><br>
+                                    <table style="font-size: 13px; width: 100%;">
+                                        <tr><td><strong>📍 Grid:</strong></td><td>${kode}</td></tr>
+                                        <tr><td><strong>⭐ Potensi:</strong></td><td style="color: #00FFFF; font-weight: 700;">Sangat Tinggi</td></tr>
+                                        <tr><td><strong>📊 Status:</strong></td><td style="color: #00FF00;">Aktif ✓</td></tr>
+                                    </table>
+                                    <p style="font-size: 12px; margin-top: 10px; color: #666;"><em>💧 Kondisi air optimal untuk penangkapan</em></p>
+                                </div>
+                            `)
+                            .addTo(map);
+                    }
+                }
+            }
+        }).addTo(map);
+
+        // Legend
+        const legend = L.control({position: 'bottomleft'});
+        legend.onAdd = function(map) {
+            const div = L.DomUtil.create('div', 'legend leaflet-control');
+            div.innerHTML = '<h4>🗺️ LEGENDA PETA ZPI</h4>';
+            
+            div.innerHTML += '<div class="legend-item"><span class="legend-color" style="background:#001f3f"></span><span>SPL ≤27°C</span></div>';
+            div.innerHTML += '<div class="legend-item"><span class="legend-color" style="background:#0074D9"></span><span>SPL 27-28°C</span></div>';
+            div.innerHTML += '<div class="legend-item"><span class="legend-color" style="background:#00FF00"></span><span>SPL 28-29°C</span></div>';
+            div.innerHTML += '<div class="legend-item"><span class="legend-color" style="background:#8B0000"></span><span>Klorofil &lt;0.5</span></div>';
+            div.innerHTML += '<div class="legend-item"><span class="legend-color" style="background:#FF0000"></span><span>Grid 1,8 (ZPI)</span></div>';
+            div.innerHTML += '<div class="legend-item"><span class="legend-color" style="background:#FFC107"></span><span>Grid 2,3 (ZPI)</span></div>';
+            div.innerHTML += '<div class="legend-item"><span class="legend-color" style="background:#39FF14"></span><span>Grid 4 (ZPI)</span></div>';
+            div.innerHTML += '<div style="text-align: center; margin-top: 10px;"><span style="font-size: 28px; filter: drop-shadow(0 0 8px #00FFFF);">🐟</span><br><span style="font-size: 12px; color: #00FFFF; font-weight: 700;">Marker Ikan Cyan</span></div>';
+            
+            return div;
+        };
+        legend.addTo(map);
+
+        L.control.scale({ metric: true, imperial: false, position: 'bottomleft' }).addTo(map);
+    </script>
+
+</body>
+</html>

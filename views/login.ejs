@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SeaNergy - User Login</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary-color: #00d4ff;
+      --primary-dark: #0099cc;
+      --primary-light: #33ddff;
+      --bg-dark: #0a0e27;
+      --error-color: #ff4757;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .background-image {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -2;
+    }
+
+    .background-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, 
+        rgba(10, 14, 39, 0.85) 0%, 
+        rgba(26, 31, 58, 0.85) 50%, 
+        rgba(10, 14, 39, 0.85) 100%);
+      z-index: -1;
+      animation: pulseOverlay 8s ease-in-out infinite;
+    }
+
+    @keyframes pulseOverlay {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.8; }
+    }
+
+    .floating-shapes {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .shape {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(0, 212, 255, 0.1);
+      animation: float 6s ease-in-out infinite;
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+    }
+
+    .shape:nth-child(1) {
+      width: 80px;
+      height: 80px;
+      top: 10%;
+      left: 10%;
+      animation-delay: 0s;
+    }
+
+    .shape:nth-child(2) {
+      width: 120px;
+      height: 120px;
+      top: 70%;
+      left: 80%;
+      animation-delay: 2s;
+    }
+
+    .shape:nth-child(3) {
+      width: 100px;
+      height: 100px;
+      top: 50%;
+      left: 5%;
+      animation-delay: 4s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-30px) scale(1.1); }
+    }
+
+    .container {
+      display: flex;
+      width: 90%;
+      max-width: 1100px;
+      background: rgba(15, 25, 50, 0.95);
+      border-radius: 25px;
+      overflow: hidden;
+      box-shadow: 
+        0 25px 80px rgba(0, 212, 255, 0.4),
+        0 0 100px rgba(0, 212, 255, 0.2);
+      position: relative;
+      z-index: 1;
+      backdrop-filter: blur(20px);
+      border: 2px solid rgba(0, 212, 255, 0.2);
+      animation: slideUp 0.8s ease-out;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Glowing Border */
+    .container::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, 
+        var(--primary-color), 
+        var(--primary-dark), 
+        var(--primary-light),
+        var(--primary-color));
+      background-size: 400% 400%;
+      border-radius: 25px;
+      z-index: -1;
+      animation: borderGlow 8s linear infinite;
+      opacity: 0.3;
+      filter: blur(10px);
+    }
+
+    @keyframes borderGlow {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .left-section {
+      flex: 1;
+      padding: 60px 50px;
+      background: rgba(10, 14, 39, 0.3);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 40px;
+      animation: fadeInLeft 0.8s ease-out 0.2s both;
+    }
+
+    @keyframes fadeInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .logo-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 212, 255, 0.5);
+      border: 3px solid rgba(0, 212, 255, 0.3);
+      position: relative;
+      transition: transform 0.3s ease;
+      background: white;
+      padding: 5px;
+    }
+
+    .logo-icon:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 30px rgba(0, 212, 255, 0.7);
+    }
+
+    .logo-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .logo-text {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary-color);
+      text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+    }
+
+    .logo-text span {
+      display: block;
+      font-size: 14px;
+      font-weight: 400;
+      color: rgba(0, 212, 255, 0.7);
+    }
+
+    h1 {
+      font-size: 36px;
+      color: var(--primary-color);
+      margin-bottom: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      animation: fadeInLeft 0.8s ease-out 0.3s both;
+      text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+    }
+
+    .subtitle {
+      color: rgba(0, 212, 255, 0.8);
+      font-size: 18px;
+      margin-bottom: 30px;
+      font-weight: 500;
+      animation: fadeInLeft 0.8s ease-out 0.4s both;
+    }
+
+    .signup-link {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 14px;
+      margin-bottom: 30px;
+      animation: fadeInLeft 0.8s ease-out 0.5s both;
+    }
+
+    .signup-link a {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .signup-link a:hover {
+      color: var(--primary-light);
+      text-shadow: 0 0 10px rgba(0, 212, 255, 0.6);
+      text-decoration: underline;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      animation: fadeInLeft 0.8s ease-out 0.6s both;
+    }
+
+    label {
+      display: block;
+      color: rgba(0, 212, 255, 0.9);
+      font-size: 14px;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 14px 45px 14px 15px;
+      border: 2px solid rgba(0, 212, 255, 0.3);
+      border-radius: 12px;
+      font-size: 15px;
+      transition: all 0.3s;
+      background: rgba(26, 31, 58, 0.6);
+      color: white;
+      backdrop-filter: blur(10px);
+    }
+
+    input[type="text"]::placeholder,
+    input[type="password"]::placeholder {
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      background: rgba(26, 31, 58, 0.8);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(0, 212, 255, 0.4);
+    }
+
+    .input-icon {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(0, 212, 255, 0.6);
+      font-size: 18px;
+      transition: all 0.3s;
+    }
+
+    input:focus + .input-icon {
+      color: var(--primary-color);
+      transform: translateY(-50%) scale(1.2);
+    }
+
+    .error-message {
+      background: rgba(255, 71, 87, 0.1);
+      color: var(--error-color);
+      padding: 12px 15px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      border: 2px solid var(--error-color);
+      animation: shake 0.5s ease-in-out;
+      box-shadow: 0 0 20px rgba(255, 71, 87, 0.3);
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-10px); }
+      75% { transform: translateX(10px); }
+    }
+
+    .btn-login {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      box-shadow: 0 4px 20px rgba(0, 212, 255, 0.5);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-login::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .btn-login:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .btn-login:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(0, 212, 255, 0.7);
+    }
+
+    .btn-login:active {
+      transform: translateY(0);
+    }
+
+    .btn-login span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .social-login {
+      margin-top: 30px;
+      text-align: center;
+      animation: fadeInLeft 0.8s ease-out 0.7s both;
+    }
+
+    .social-login p {
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 13px;
+      margin-bottom: 15px;
+    }
+
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .social-icon {
+      width: 45px;
+      height: 45px;
+      border: 2px solid rgba(0, 212, 255, 0.3);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      background: rgba(26, 31, 58, 0.6);
+      font-size: 20px;
+      backdrop-filter: blur(10px);
+    }
+
+    .social-icon:hover {
+      border-color: var(--primary-color);
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0, 212, 255, 0.4);
+      background: rgba(26, 31, 58, 0.8);
+    }
+
+    .right-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      position: relative;
+      overflow: hidden;
+      background: rgba(0, 212, 255, 0.05);
+    }
+
+    .right-bg-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+      opacity: 0.3;
+    }
+
+    .right-bg-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, 
+        rgba(0, 212, 255, 0.2) 0%, 
+        rgba(0, 153, 204, 0.2) 100%);
+      z-index: 1;
+    }
+
+    .glow-effect {
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(0, 212, 255, 0.3) 0%, transparent 70%);
+      border-radius: 50%;
+      top: -100px;
+      right: -100px;
+      z-index: 2;
+      animation: rotate 20s linear infinite;
+      filter: blur(40px);
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .character-container {
+      position: relative;
+      z-index: 3;
+      text-align: center;
+      animation: fadeInRight 0.8s ease-out 0.4s both;
+    }
+
+    @keyframes fadeInRight {
+      from {
+        opacity: 0;
+        transform: translateX(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .character {
+      width: 280px;
+      height: 280px;
+      background: rgba(0, 212, 255, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 30px;
+      border: 4px solid rgba(0, 212, 255, 0.4);
+      animation: floatChar 3s ease-in-out infinite;
+      box-shadow: 
+        0 10px 40px rgba(0, 212, 255, 0.4),
+        inset 0 0 40px rgba(0, 212, 255, 0.1);
+      transition: transform 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+
+    .character-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .character:hover {
+      transform: scale(1.05);
+      box-shadow: 
+        0 15px 50px rgba(0, 212, 255, 0.6),
+        inset 0 0 50px rgba(0, 212, 255, 0.2);
+    }
+
+    @keyframes floatChar {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+
+    .welcome-text {
+      color: var(--primary-color);
+      font-size: 32px;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 15px;
+      text-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
+      letter-spacing: 3px;
+    }
+
+    .welcome-subtitle {
+      color: rgba(0, 212, 255, 0.9);
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.6;
+      text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+    }
+
+    .nav-menu {
+      position: absolute;
+      top: 30px;
+      right: 30px;
+      display: flex;
+      gap: 15px;
+      z-index: 10;
+      animation: fadeInRight 0.8s ease-out 0.2s both;
+    }
+
+    .nav-link {
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.3s;
+      padding: 10px 20px;
+      border-radius: 20px;
+      background: rgba(0, 212, 255, 0.2);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(0, 212, 255, 0.3);
+    }
+
+    .nav-link:hover {
+      background: rgba(0, 212, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0, 212, 255, 0.4);
+      border-color: var(--primary-color);
+    }
+
+    .particles {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .particle {
+      position: absolute;
+      background: rgba(0, 212, 255, 0.6);
+      border-radius: 50%;
+      animation: rise 8s infinite ease-in;
+      box-shadow: 0 0 10px rgba(0, 212, 255, 0.8);
+    }
+
+    @keyframes rise {
+      0% {
+        bottom: -10px;
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        bottom: 100%;
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .left-section,
+      .right-section {
+        padding: 40px 30px;
+      }
+
+      .character {
+        width: 200px;
+        height: 200px;
+      }
+
+      h1 {
+        font-size: 28px;
+      }
+
+      .nav-menu {
+        top: 20px;
+        right: 20px;
+        gap: 10px;
+      }
+
+      .nav-link {
+        padding: 8px 15px;
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Background Image -->
+  <img src="/LOGINBG.jpg" alt="Background" class="background-image">
+  <div class="background-overlay"></div>
+
+  <!-- Floating Shapes -->
+  <div class="floating-shapes">
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+  </div>
+
+  <div class="container">
+    <div class="left-section">
+      <div class="logo">
+        <div class="logo-icon">
+          <img src="/logob.png" alt="SeaNergy Logo">
+        </div>
+        <div class="logo-text">
+          SeaNergy<br><span>Ocean Energy Portal</span>
+        </div>
+      </div>
+
+      <h1>Welcome Back</h1>
+      <p class="subtitle">Silahkan Login</p>
+
+      <p class="signup-link">Belum Punya Akun? <a href="/register">Daftar Sekarang</a></p>
+
+      <% if (error) { %>
+        <div class="error-message" id="errorMsg">
+          ⚠️ <%= error %>
+        </div>
+      <% } %>
+
+      <form action="/login" method="POST" id="loginForm">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <div class="input-wrapper">
+            <input type="text" id="username" name="username" placeholder="Masukkan username" required autocomplete="username">
+            <span class="input-icon">👤</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="input-wrapper">
+            <input type="password" id="password" name="password" placeholder="Masukkan password" required autocomplete="current-password">
+            <span class="input-icon">🔒</span>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-login">
+          <span>Login Sekarang</span>
+        </button>
+      </form>
+
+      <div class="social-login">
+        <p>Atau login dengan</p>
+        <div class="social-icons">
+          <div class="social-icon" data-platform="discord">📱</div>
+          <div class="social-icon" data-platform="steam">🎮</div>
+          <div class="social-icon" data-platform="google">🌐</div>
+          <div class="social-icon" data-platform="facebook">📘</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="right-section">
+      <!-- Background Image for Right Section -->
+      <img src="/LOGO.jpg" alt="SeaNergy Background" class="right-bg-image">
+      <div class="right-bg-overlay"></div>
+      <div class="glow-effect"></div>
+
+      <!-- Particles Container -->
+      <div class="particles" id="particles"></div>
+
+      <div class="nav-menu">
+        <a href="/" class="nav-link">Home</a>
+        <a href="/register" class="nav-link">Register</a>
+      </div>
+
+      <div class="character-container">
+        <div class="character" id="characterCircle">
+          <img src="/BADAK.jpg" alt="BADU Assistant" class="character-image">
+        </div>
+        <h2 class="welcome-text">SEANERGY</h2>
+        <p class="welcome-subtitle">Login sekarang<br>kapan saja, di mana saja!</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Form Validation
+    const loginForm = document.getElementById('loginForm');
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+
+    loginForm.addEventListener('submit', function(e) {
+      const username = usernameInput.value.trim();
+      const password = passwordInput.value.trim();
+
+      if (username === '' || password === '') {
+        e.preventDefault();
+        
+        if (username === '') {
+          usernameInput.style.animation = 'shake 0.5s';
+          setTimeout(() => usernameInput.style.animation = '', 500);
+        }
+        if (password === '') {
+          passwordInput.style.animation = 'shake 0.5s';
+          setTimeout(() => passwordInput.style.animation = '', 500);
+        }
+      }
+    });
+
+    // Input focus effects
+    const inputs = document.querySelectorAll('input[type="text"], input[type="password"]');
+    inputs.forEach(input => {
+      input.addEventListener('focus', function() {
+        this.parentElement.style.transform = 'scale(1.02)';
+        this.parentElement.style.transition = 'transform 0.3s ease';
+      });
+      
+      input.addEventListener('blur', function() {
+        this.parentElement.style.transform = 'scale(1)';
+      });
+    });
+
+    // Social icon click effects
+    const socialIcons = document.querySelectorAll('.social-icon');
+    socialIcons.forEach(icon => {
+      icon.addEventListener('click', function() {
+        const platform = this.getAttribute('data-platform');
+        
+        this.style.transform = 'scale(0.9)';
+        setTimeout(() => {
+          this.style.transform = 'scale(1)';
+        }, 200);
+        
+        console.log(`Login dengan ${platform}`);
+      });
+    });
+
+    // Character hover effect
+    const character = document.getElementById('characterCircle');
+    character.addEventListener('mousemove', function(e) {
+      const rect = this.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      
+      const rotateX = (y - centerY) / 10;
+      const rotateY = (centerX - x) / 10;
+      
+      this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+
+    character.addEventListener('mouseleave', function() {
+      this.style.transform = '';
+    });
+
+    // Create animated particles
+    function createParticle() {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      
+      const size = Math.random() * 4 + 2;
+      particle.style.width = size + 'px';
+      particle.style.height = size + 'px';
+      particle.style.left = Math.random() * 100 + '%';
+      particle.style.animationDuration = (Math.random() * 5 + 5) + 's';
+      particle.style.animationDelay = Math.random() * 5 + 's';
+      
+      document.getElementById('particles').appendChild(particle);
+      
+      setTimeout(() => {
+        particle.remove();
+      }, 10000);
+    }
+
+    setInterval(createParticle, 500);
+    
+    for (let i = 0; i < 10; i++) {
+      createParticle();
+    }
+
+    // Button click ripple effect
+    const loginBtn = document.querySelector('.btn-login');
+    loginBtn.addEventListener('click', function(e) {
+      const x = e.clientX - this.getBoundingClientRect().left;
+      const y = e.clientY - this.getBoundingClientRect().top;
+      
+      const ripple = document.createElement('span');
+      ripple.style.left = x + 'px';
+      ripple.style.top = y + 'px';
+      ripple.style.position = 'absolute';
+      ripple.style.width = '0';
+      ripple.style.height = '0';
+      ripple.style.borderRadius = '50%';
+      ripple.style.background = 'rgba(255, 255, 255, 0.6)';
+      ripple.style.transform = 'translate(-50%, -50%)';
+      ripple.style.animation = 'ripple 0.6s ease-out';
+      
+      this.appendChild(ripple);
+      
+      setTimeout(() => ripple.remove(), 600);
+    });
+
+    // Parallax effect on mouse move
+    document.addEventListener('mousemove', function(e) {
+      const shapes = document.querySelectorAll('.shape');
+      const mouseX = e.clientX / window.innerWidth;
+      const mouseY = e.clientY / window.innerHeight;
+      
+      shapes.forEach((shape, index) => {
+        const speed = (index + 1) * 20;
+        const x = (mouseX * speed) - (speed / 2);
+        const y = (mouseY * speed) - (speed / 2);
+        
+        shape.style.transform = `translate(${x}px, ${y}px)`;
+      });
+    });
+
+    // Typing effect
+    const welcomeText = document.querySelector('.welcome-text');
+    const originalText = welcomeText.textContent;
+    welcomeText.textContent = '';
+    
+    let charIndex = 0;
+    function typeText() {
+      if (charIndex < originalText.length) {
+        welcomeText.textContent += originalText.charAt(charIndex);
+        charIndex++;
+        setTimeout(typeText, 100);
+      }
+    }
+    
+    setTimeout(typeText, 1000);
+
+    // Logo click effect
+    const logo = document.querySelector('.logo');
+    logo.addEventListener('click', function() {
+      this.style.animation = 'none';
+      setTimeout(() => {
+        this.style.animation = 'fadeInLeft 0.5s ease-out';
+      }, 10);
+    });
+
+    // Error message auto hide
+    const errorMsg = document.getElementById('errorMsg');
+    if (errorMsg) {
+      setTimeout(() => {
+        errorMsg.style.opacity = '0';
+        errorMsg.style.transform = 'translateY(-20px)';
+        setTimeout(() => errorMsg.remove(), 500);
+      }, 5000);
+    }
+
+    console.log('%c SeaNergy User Login ', 
+      'background: #00d4ff; color: #0a0e27; font-size: 14px; font-weight: bold; padding: 8px;');
+  </script>
+</body>
+</html>

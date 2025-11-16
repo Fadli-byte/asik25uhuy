@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SeaNergy Portal - Welcome</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary-color: #00d4ff;
+      --primary-dark: #0099cc;
+      --primary-light: #33ddff;
+      --success-color: #10b981;
+      --warning-color: #f59e0b;
+      --bg-dark: #0a0e27;
+      --bg-medium: #1a1f3a;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      background: var(--bg-dark);
+    }
+
+    /* Animated Gradient Background */
+    .animated-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, 
+        #0a0e27 0%, 
+        #0f1829 25%,
+        #1a1f3a 50%, 
+        #0f1829 75%,
+        #0a0e27 100%);
+      background-size: 400% 400%;
+      animation: gradientShift 15s ease infinite;
+      z-index: -3;
+    }
+
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    /* Canvas for particle effects */
+    #particleCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+    }
+
+    /* Holographic Grid Effect */
+    .grid-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      animation: gridMove 20s linear infinite;
+      z-index: -1;
+    }
+
+    @keyframes gridMove {
+      0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
+      100% { transform: perspective(500px) rotateX(60deg) translateY(50px); }
+    }
+
+    /* Floating Energy Orbs */
+    .energy-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.3;
+      animation: floatOrb 20s ease-in-out infinite;
+      pointer-events: none;
+      background: radial-gradient(circle, var(--primary-color), transparent);
+    }
+
+    .orb-1 {
+      width: 300px;
+      height: 300px;
+      top: 10%;
+      left: 10%;
+      animation-delay: 0s;
+    }
+
+    .orb-2 {
+      width: 400px;
+      height: 400px;
+      top: 60%;
+      right: 10%;
+      animation-delay: 7s;
+    }
+
+    .orb-3 {
+      width: 250px;
+      height: 250px;
+      bottom: 20%;
+      left: 30%;
+      animation-delay: 14s;
+    }
+
+    @keyframes floatOrb {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(50px, -50px) scale(1.2); }
+      66% { transform: translate(-30px, 30px) scale(0.9); }
+    }
+
+    /* Main Container */
+    .welcome-container {
+      max-width: 1100px;
+      width: 90%;
+      background: rgba(15, 25, 50, 0.7);
+      border-radius: 35px;
+      box-shadow: 
+        0 0 60px rgba(0, 212, 255, 0.3),
+        0 0 100px rgba(0, 212, 255, 0.2),
+        inset 0 0 60px rgba(0, 212, 255, 0.05);
+      padding: 60px;
+      animation: containerAppear 1s ease-out;
+      backdrop-filter: blur(20px);
+      position: relative;
+      z-index: 10;
+      border: 2px solid rgba(0, 212, 255, 0.2);
+    }
+
+    @keyframes containerAppear {
+      from {
+        opacity: 0;
+        transform: translateY(100px) scale(0.8);
+        filter: blur(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+      }
+    }
+
+    /* Glowing Border Animation */
+    .welcome-container::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, 
+        var(--primary-color), 
+        var(--primary-dark), 
+        var(--primary-light),
+        var(--primary-color));
+      background-size: 400% 400%;
+      border-radius: 35px;
+      z-index: -1;
+      animation: borderGlow 8s linear infinite;
+      opacity: 0.4;
+      filter: blur(10px);
+    }
+
+    @keyframes borderGlow {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    /* Logo Section */
+    .logo-section {
+      text-align: center;
+      margin-bottom: 50px;
+      animation: fadeInDown 0.8s ease-out;
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .logo-container {
+      position: relative;
+      width: 180px;
+      height: 180px;
+      margin: 0 auto 30px;
+    }
+
+    /* Rotating Rings */
+    .rotating-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 3px solid var(--primary-color);
+      opacity: 0.3;
+    }
+
+    .ring-1 {
+      width: 200px;
+      height: 200px;
+      top: -10px;
+      left: -10px;
+      animation: rotateRing 10s linear infinite;
+      box-shadow: 0 0 20px var(--primary-color);
+    }
+
+    .ring-2 {
+      width: 220px;
+      height: 220px;
+      top: -20px;
+      left: -20px;
+      animation: rotateRing 15s linear infinite reverse;
+      border-style: dashed;
+    }
+
+    @keyframes rotateRing {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .logo-image-wrapper {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 5px solid var(--primary-color);
+      box-shadow: 
+        0 0 40px rgba(0, 212, 255, 0.6),
+        0 0 60px rgba(0, 212, 255, 0.4),
+        inset 0 0 30px rgba(0, 212, 255, 0.2);
+      animation: logoFloat 4s ease-in-out infinite;
+      position: relative;
+      z-index: 2;
+      background: white;
+    }
+
+    @keyframes logoFloat {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-15px); }
+    }
+
+    .logo-image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 20px;
+    }
+
+    /* Scanning Line */
+    .scan-line {
+      position: absolute;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+      top: 0;
+      left: 0;
+      animation: scanMove 3s linear infinite;
+      box-shadow: 0 0 15px var(--primary-color);
+      z-index: 3;
+    }
+
+    @keyframes scanMove {
+      0% { top: 0%; }
+      100% { top: 100%; }
+    }
+
+    /* Title */
+    .welcome-title {
+      font-size: 3.2em;
+      color: white;
+      font-weight: 800;
+      margin-bottom: 15px;
+      text-shadow: 0 0 30px rgba(0, 212, 255, 0.6);
+      letter-spacing: 2px;
+    }
+
+    .welcome-title .highlight {
+      color: var(--primary-color);
+      text-shadow: 
+        0 0 20px var(--primary-color),
+        0 0 40px var(--primary-color);
+      animation: textPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes textPulse {
+      0%, 100% { filter: brightness(1); }
+      50% { filter: brightness(1.3); }
+    }
+
+    .welcome-subtitle {
+      font-size: 1.3em;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+    }
+
+    .welcome-description {
+      font-size: 1.1em;
+      color: rgba(0, 212, 255, 0.8);
+      line-height: 1.6;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    /* Menu Cards Grid */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+      margin-top: 60px;
+      animation: slideInUp 1s ease-out 0.3s both;
+    }
+
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Menu Card */
+    .menu-card {
+      background: linear-gradient(135deg, 
+        rgba(0, 212, 255, 0.1) 0%,
+        rgba(0, 153, 204, 0.1) 100%);
+      border: 2px solid rgba(0, 212, 255, 0.3);
+      border-radius: 25px;
+      padding: 40px 30px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      backdrop-filter: blur(10px);
+    }
+
+    .menu-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, 
+        transparent 30%, 
+        rgba(0, 212, 255, 0.1) 50%, 
+        transparent 70%);
+      transform: rotate(45deg);
+      transition: all 0.6s;
+    }
+
+    .menu-card:hover::before {
+      animation: shineEffect 1.5s ease infinite;
+    }
+
+    @keyframes shineEffect {
+      0% { transform: translateX(-100%) rotate(45deg); }
+      100% { transform: translateX(100%) rotate(45deg); }
+    }
+
+    .menu-card:hover {
+      transform: translateY(-15px) scale(1.05);
+      border-color: var(--primary-color);
+      box-shadow: 
+        0 0 50px rgba(0, 212, 255, 0.6),
+        0 20px 40px rgba(0, 212, 255, 0.4);
+    }
+
+    /* Card Icon */
+    .card-icon {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 50px;
+      position: relative;
+      z-index: 1;
+      transition: all 0.4s ease;
+    }
+
+    .menu-card:hover .card-icon {
+      transform: scale(1.2) rotate(10deg);
+    }
+
+    /* Icon Colors */
+    .card-user .card-icon {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      box-shadow: 0 0 30px rgba(59, 130, 246, 0.5);
+    }
+
+    .card-register .card-icon {
+      background: linear-gradient(135deg, #10b981, #059669);
+      box-shadow: 0 0 30px rgba(16, 185, 129, 0.5);
+    }
+
+    .card-admin .card-icon {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      box-shadow: 0 0 30px rgba(245, 158, 11, 0.5);
+    }
+
+    /* Card Title */
+    .card-title {
+      font-size: 1.6em;
+      color: white;
+      font-weight: 700;
+      margin: 0;
+      position: relative;
+      z-index: 1;
+      text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+    }
+
+    /* Card Description */
+    .card-description {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.95em;
+      line-height: 1.6;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Card Badge */
+    .card-badge {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.75em;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      z-index: 1;
+    }
+
+    .card-user .card-badge {
+      background: rgba(59, 130, 246, 0.2);
+      color: #3b82f6;
+      border: 1px solid rgba(59, 130, 246, 0.5);
+    }
+
+    .card-register .card-badge {
+      background: rgba(16, 185, 129, 0.2);
+      color: #10b981;
+      border: 1px solid rgba(16, 185, 129, 0.5);
+    }
+
+    .card-admin .card-badge {
+      background: rgba(245, 158, 11, 0.2);
+      color: #f59e0b;
+      border: 1px solid rgba(245, 158, 11, 0.5);
+    }
+
+    /* Arrow Icon */
+    .card-arrow {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(0, 212, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      transition: all 0.3s ease;
+      z-index: 1;
+    }
+
+    .menu-card:hover .card-arrow {
+      background: var(--primary-color);
+      transform: translateX(5px);
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      margin-top: 50px;
+      padding-top: 30px;
+      border-top: 2px solid rgba(0, 212, 255, 0.2);
+      animation: fadeIn 1.5s ease-out 0.5s both;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .footer-text {
+      color: rgba(0, 212, 255, 0.7);
+      font-size: 0.95em;
+      margin: 5px 0;
+    }
+
+    .footer-highlight {
+      color: var(--primary-color);
+      font-weight: 700;
+      font-size: 1.1em;
+    }
+
+    /* Sparkle Effect */
+    .sparkle {
+      position: fixed;
+      pointer-events: none;
+      font-size: 20px;
+      animation: sparkleFloat 2s ease-out forwards;
+      z-index: 1000;
+      color: var(--primary-color);
+      filter: drop-shadow(0 0 10px var(--primary-color));
+    }
+
+    @keyframes sparkleFloat {
+      0% {
+        opacity: 1;
+        transform: translateY(0) scale(1) rotate(0deg);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-150px) scale(0) rotate(720deg);
+      }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 968px) {
+      .menu-grid {
+        grid-template-columns: 1fr;
+        gap: 25px;
+      }
+
+      .welcome-title {
+        font-size: 2.2em;
+      }
+
+      .welcome-container {
+        padding: 40px 30px;
+      }
+
+      .logo-container {
+        width: 150px;
+        height: 150px;
+      }
+
+      .logo-image-wrapper {
+        width: 150px;
+        height: 150px;
+      }
+
+      .ring-1 {
+        width: 170px;
+        height: 170px;
+      }
+
+      .ring-2 {
+        width: 190px;
+        height: 190px;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .welcome-container {
+        padding: 30px 20px;
+      }
+
+      .welcome-title {
+        font-size: 1.8em;
+      }
+
+      .welcome-subtitle {
+        font-size: 1em;
+      }
+
+      .card-icon {
+        width: 80px;
+        height: 80px;
+        font-size: 40px;
+      }
+
+      .card-title {
+        font-size: 1.3em;
+      }
+    }
+
+    @media (max-width: 600px) {
+  .welcome-container {
+    padding: 16px 2vw;
+    border-radius: 10px;
+    width: 98vw;
+    max-width: 100%;
+    margin-top: 0;
+  }
+
+  .logo-section {
+    margin-bottom: 32px;
+  }
+
+  .logo-container, .logo-image-wrapper {
+    width: 72px;
+    height: 72px;
+  }
+
+  .welcome-title {
+    font-size: 1.12em;
+    margin-bottom: 5px;
+    letter-spacing: 1px;
+  }
+
+  .welcome-subtitle {
+    font-size: 0.92em;
+    margin-bottom: 3px;
+    letter-spacing: 0.5px;
+  }
+
+  .welcome-description {
+    font-size: 0.92em;
+    max-width: 95vw;
+    margin-bottom: 8px;
+    padding: 0;
+  }
+
+  .menu-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin-top: 18px;
+    width: 100%;
+  }
+
+  .menu-card {
+    padding: 13px 4px;
+    font-size: 0.95em;
+    border-radius: 10px;
+    min-width: 0;
+    margin: 0;
+    box-shadow: 0 3px 12px rgba(0,212,255,0.08);
+  }
+
+  .card-icon {
+    width: 45px;
+    height: 45px;
+    font-size: 30px;
+  }
+
+  .card-title {
+    font-size: 1.02em;
+    margin: 0;
+  }
+  .card-description {
+    font-size: 0.87em;
+    margin: 0;
+    padding: 0;
+    line-height: 1.5;
+  }
+  .footer {
+    font-size: 0.93em;
+    margin-top: 16px;
+    padding-top: 10px;
+  }
+}
+
+@media (max-width: 400px) {
+  .welcome-title, .welcome-subtitle {
+    font-size: 0.85em;
+  }
+  .menu-card {
+    padding: 8px 2px;
+    font-size: 0.92em;
+    border-radius: 7px;
+  }
+}
+
+  </style>
+</head>
+<body>
+  <!-- Animated Background -->
+  <div class="animated-bg"></div>
+  
+  <!-- Particle Canvas -->
+  <canvas id="particleCanvas"></canvas>
+  
+  <!-- Holographic Grid -->
+  <div class="grid-overlay"></div>
+  
+  <!-- Energy Orbs -->
+  <div class="energy-orb orb-1"></div>
+  <div class="energy-orb orb-2"></div>
+  <div class="energy-orb orb-3"></div>
+
+  <div class="welcome-container">
+    <!-- Logo Section -->
+    <div class="logo-section">
+      <div class="logo-container">
+        <div class="rotating-ring ring-1"></div>
+        <div class="rotating-ring ring-2"></div>
+        <div class="scan-line"></div>
+        <div class="logo-image-wrapper">
+          <img src="/logob.png" alt="SeaNergy Logo" class="logo-image">
+        </div>
+      </div>
+      
+      <h1 class="welcome-title">
+        Welcome to <span class="highlight">SeaNergy</span>
+      </h1>
+      <p class="welcome-subtitle">Ocean Energy • Future Technology</p>
+      <p class="welcome-description">
+        Platform digital masa depan untuk pengelolaan energi laut berkelanjutan. 
+        Pilih portal akses Anda untuk memulai perjalanan menuju masa depan yang lebih hijau.
+      </p>
+    </div>
+
+    <!-- Menu Grid -->
+    <div class="menu-grid">
+      <!-- Login User -->
+      <a href="/login" class="menu-card card-user">
+        <span class="card-badge">User</span>
+        <div class="card-icon">👤</div>
+        <h3 class="card-title">Login User</h3>
+        <p class="card-description">
+          Akses dashboard pengguna untuk monitoring dan pengelolaan data energi laut
+        </p>
+        <div class="card-arrow">→</div>
+      </a>
+
+      <!-- Register -->
+      <a href="/register" class="menu-card card-register">
+        <span class="card-badge">New</span>
+        <div class="card-icon">✨</div>
+        <h3 class="card-title">Register</h3>
+        <p class="card-description">
+          Daftar akun baru untuk bergabung dengan komunitas SeaNergy global
+        </p>
+        <div class="card-arrow">→</div>
+      </a>
+
+      <!-- Login Admin -->
+      <a href="/login-admin" class="menu-card card-admin">
+        <span class="card-badge">Admin</span>
+        <div class="card-icon">👑</div>
+        <h3 class="card-title">Login Admin</h3>
+        <p class="card-description">
+          Portal administrator untuk pengelolaan sistem dan manajemen platform
+        </p>
+        <div class="card-arrow">→</div>
+      </a>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <p class="footer-text footer-highlight">© 2024 SeaNergy Pulau Tunda</p>
+      <p class="footer-text">Harnessing Ocean Energy • Building Tomorrow</p>
+      <p class="footer-text">Sustainable Future • Advanced Technology</p>
+    </div>
+  </div>
+
+  <script>
+    // ============================================
+    // PARTICLE SYSTEM
+    // ============================================
+    const canvas = document.getElementById('particleCanvas');
+    const ctx = canvas.getContext('2d');
+    
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 1;
+        this.speedX = (Math.random() - 0.5) * 0.5;
+        this.speedY = (Math.random() - 0.5) * 0.5;
+        this.opacity = Math.random() * 0.5 + 0.2;
+      }
+
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        if (this.x > canvas.width) this.x = 0;
+        if (this.x < 0) this.x = canvas.width;
+        if (this.y > canvas.height) this.y = 0;
+        if (this.y < 0) this.y = canvas.height;
+      }
+
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(0, 212, 255, ${this.opacity})`;
+        ctx.fill();
+        
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = 'rgba(0, 212, 255, 0.8)';
+      }
+    }
+
+    const particles = [];
+    const particleCount = 100;
+
+    for (let i = 0; i < particleCount; i++) {
+      particles.push(new Particle());
+    }
+
+    function connectParticles() {
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          if (distance < 150) {
+            ctx.beginPath();
+            ctx.strokeStyle = `rgba(0, 212, 255, ${0.2 - distance / 750})`;
+            ctx.lineWidth = 1;
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      particles.forEach(particle => {
+        particle.update();
+        particle.draw();
+      });
+
+      connectParticles();
+      requestAnimationFrame(animateParticles);
+    }
+
+    animateParticles();
+
+    // ============================================
+    // SPARKLE EFFECTS
+    // ============================================
+    function createSparkles(x, y, count) {
+      for (let i = 0; i < count; i++) {
+        setTimeout(() => {
+          const sparkle = document.createElement('div');
+          sparkle.className = 'sparkle';
+          sparkle.textContent = '✦';
+          
+          const angle = (Math.PI * 2 * i) / count;
+          const distance = 40 + Math.random() * 30;
+          const offsetX = Math.cos(angle) * distance;
+          const offsetY = Math.sin(angle) * distance;
+          
+          sparkle.style.left = (x + offsetX) + 'px';
+          sparkle.style.top = (y + offsetY) + 'px';
+          
+          document.body.appendChild(sparkle);
+          setTimeout(() => sparkle.remove(), 2000);
+        }, i * 50);
+      }
+    }
+
+    // Card Hover Effects
+    document.querySelectorAll('.menu-card').forEach(card => {
+      card.addEventListener('mouseenter', function(e) {
+        const rect = this.getBoundingClientRect();
+        createSparkles(
+          rect.left + rect.width / 2, 
+          rect.top + rect.height / 2, 
+          8
+        );
+      });
+
+      card.addEventListener('click', function(e) {
+        const rect = this.getBoundingClientRect();
+        createSparkles(
+          rect.left + rect.width / 2, 
+          rect.top + rect.height / 2, 
+          12
+        );
+      });
+    });
+
+    // Logo Click Effect
+    const logoWrapper = document.querySelector('.logo-image-wrapper');
+    logoWrapper.addEventListener('click', function(e) {
+      const rect = this.getBoundingClientRect();
+      createSparkles(
+        rect.left + rect.width / 2, 
+        rect.top + rect.height / 2, 
+        16
+      );
+      
+      this.style.transform = 'scale(1.1) rotate(10deg)';
+      setTimeout(() => {
+        this.style.transform = '';
+      }, 300);
+    });
+
+    // Mouse Trail
+    document.addEventListener('mousemove', (e) => {
+      if (Math.random() > 0.97) {
+        const trail = document.createElement('div');
+        trail.className = 'sparkle';
+        trail.textContent = '·';
+        trail.style.left = e.clientX + 'px';
+        trail.style.top = e.clientY + 'px';
+        trail.style.fontSize = '10px';
+        document.body.appendChild(trail);
+        
+        setTimeout(() => trail.remove(), 1000);
+      }
+    });
+
+    // Console Message
+    console.log('%c 🌊 SeaNergy Portal - Welcome 🌊 ', 
+      'background: linear-gradient(135deg, #00d4ff, #0099cc); color: white; font-size: 16px; font-weight: bold; padding: 10px; border-radius: 8px;');
+    console.log('%c Choose your portal and start your journey! ', 
+      'color: #00d4ff; font-size: 14px; font-weight: bold;');
+  </script>
+</body>
+</html>

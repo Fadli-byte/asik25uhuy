@@ -1,0 +1,3918 @@
+ <!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal Ekosistem Laut - Pulau Tunda</title>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #00b4a6;
+      --secondary: #006b8c;
+      --accent: #00e5d0;
+      --dark: #003d52;
+      --bg-primary: #ffffff;
+      --bg-secondary: rgba(224, 247, 245, 0.98);
+      --text-primary: #333;
+      --text-secondary: #555;
+    }
+
+    [data-theme="dark"] {
+      --bg-primary: #0a1128;
+      --bg-secondary: rgba(10, 17, 40, 0.98);
+      --text-primary: #e0e0e0;
+      --text-secondary: #b0b0b0;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+  font-family: 'Inter', 'Segoe UI', 'Merriweather', serif;
+  padding-top: 300px; /* UBAH INI dari 100px menjadi 140px */
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+@media (max-width: 768px) {
+  body {
+    padding-top: 120px; /* Sesuaikan untuk mobile */
+  }
+}
+    /* Header Navigation */
+    .header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: linear-gradient(-45deg, rgba(255,255,255,0.98), rgba(240,250,250,0.98), rgba(255,255,255,0.98), rgba(240,250,250,0.98));
+      background-size: 400% 400%;
+      backdrop-filter: blur(25px) saturate(200%);
+      box-shadow: 0 10px 40px rgba(0, 180, 166, 0.15), 0 0 30px rgba(0,229,208,0.1);
+      z-index: 1000;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      border-bottom: 3px solid rgba(0, 180, 166, 0.2);
+      animation: headerShimmer 6s ease-in-out infinite;
+      height: 100px;
+      display: flex;
+      align-items: center;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(0,180,166,0.05) 25%, 
+        rgba(0,107,140,0.05) 50%, 
+        rgba(0,180,166,0.05) 75%, 
+        transparent 100%);
+      animation: headerSlideDown 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none;
+    }
+
+    @keyframes headerSlideDown {
+      from {
+        transform: translateY(-100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes headerShimmer {
+      0%, 100% {
+        background-position: 0% 50%;
+        box-shadow: 0 0 20px rgba(0,229,208,0.3), inset 0 0 20px rgba(0,229,208,0.1);
+      }
+      50% {
+        background-position: 100% 50%;
+        box-shadow: 0 0 40px rgba(0,229,208,0.6), inset 0 0 30px rgba(0,229,208,0.2);
+      }
+    }
+
+    .header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #00b4a6 0%, #00e5d0 25%, #006b8c 50%, #00e5d0 75%, #00b4a6 100%);
+      background-size: 300% 100%;
+      animation: gradientFlow 6s linear infinite;
+      box-shadow: 0 0 15px rgba(0,229,208,0.4);
+      transition: opacity 0.5s ease;
+    }
+
+    @keyframes gradientFlow {
+      0% {
+        background-position: 0% 0%;
+      }
+      100% {
+        background-position: 200% 0%;
+      }
+    }
+
+    .header.scrolled {
+      background: rgba(255, 255, 255, 0) !important;
+      backdrop-filter: none !important;
+      box-shadow: none !important;
+      border-bottom: none !important;
+      height: 80px;
+    }
+
+    [data-theme="dark"] .header {
+      background: linear-gradient(90deg, rgba(0, 90, 80, 0.95) 0%, rgba(0, 107, 140, 0.95) 25%, rgba(0, 65, 90, 0.95) 50%, rgba(10, 17, 40, 0.95) 100%);
+      animation: none;
+    }
+
+    .header.scrolled::after {
+      opacity: 0;
+    }
+
+    .header-container {
+      width: 100%;
+      margin: 0 auto;
+      padding: 0 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+      position: relative;
+      z-index: 1;
+      gap: 20px;
+    }
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      animation: fadeInLeft 0.8s ease-out;
+    }
+
+    @keyframes fadeInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .logo-section:hover {
+      cursor: pointer;
+    }
+
+    .logo-icon {
+      width: 90px;
+      height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      filter: drop-shadow(0 8px 20px rgba(0,180,166,0.3));
+      flex-shrink: 0;
+      transition: all 0.3s ease;
+      border-radius: 18px;
+    }
+
+    @keyframes logoFloat {
+      0%, 100% {
+        transform: translateY(0) rotate(0deg);
+      }
+      25% {
+        transform: translateY(-8px) rotate(2deg);
+      }
+      50% {
+        transform: translateY(-12px) rotate(0deg);
+      }
+      75% {
+        transform: translateY(-8px) rotate(-2deg);
+      }
+    }
+
+    @keyframes logoGradient {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    .logo-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      transition: transform 0.3s ease;
+    }
+
+    .logo-icon:hover {
+      transform: scale(1.15) rotate(5deg);
+      box-shadow: 0 12px 36px rgba(0,180,166,0.6);
+    }
+
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      justify-content: center;
+    }
+
+    .logo-text .main-title {
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: var(--text-primary);
+      line-height: 1.1;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin: 0;
+      opacity: 1;
+      transition: font-size 0.3s ease;
+    }
+
+    .header.scrolled .logo-text .main-title {
+      font-size: 1.1rem;
+    }
+
+    @keyframes titleGradientMove {
+      0%, 100% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+    }
+
+    .logo-text .main-title::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #00b4a6, #00e5d0);
+      transition: width 0.4s ease;
+    }
+
+    .logo-section:hover .main-title::after {
+      width: 100%;
+    }
+
+    .logo-text .subtitle {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      margin: 0;
+      opacity: 1;
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-left: auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    @keyframes fadeInRight {
+      from {
+        opacity: 0;
+        transform: translateX(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .user-greeting {
+      display: flex;
+      align-items: center;
+      padding: 11px 20px;
+      background: linear-gradient(135deg, rgba(0,180,166,0.1), rgba(0,229,208,0.12));
+      border-radius: 12px;
+      font-weight: 700;
+      color: var(--primary);
+      font-size: 0.92rem;
+      border: 2px solid rgba(0,180,166,0.2);
+    }
+
+    .top-bar a,
+    .top-bar details summary {
+      color: var(--text-primary);
+      text-decoration: none;
+      padding: 11px 20px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      border-radius: 12px;
+      display: inline-block;
+      white-space: nowrap;
+      position: relative;
+    }
+
+    .top-bar a:hover,
+    .top-bar details summary:hover {
+      color: var(--primary);
+      background: linear-gradient(135deg, rgba(0,180,166,0.1), rgba(0,229,208,0.12));
+      transform: translateY(-3px);
+    }
+
+    .top-bar details {
+      position: relative;
+    }
+
+    .top-bar details summary {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .top-bar details summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .top-bar details summary::after {
+      content: '▼';
+      font-size: 0.7rem;
+      margin-left: 6px;
+      transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .top-bar details[open] summary::after {
+      transform: rotate(180deg);
+    }
+
+    .top-bar details ul {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: linear-gradient(135deg, #ffffff, #f8f9fa);
+      box-shadow: 0 10px 40px rgba(0,180,166,0.2);
+      border-radius: 15px;
+      min-width: 240px;
+      margin-top: 15px;
+      overflow: hidden;
+      list-style: none;
+      padding: 15px 0;
+      animation: dropdownSlide 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 2px solid rgba(0,180,166,0.1);
+      z-index: 10;
+    }
+
+    .top-bar details ul li a {
+      display: block;
+      padding: 14px 25px;
+      color: #333;
+      text-decoration: none;
+      font-size: 0.95rem;
+      text-transform: none;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .top-bar details ul li a:hover {
+      background: linear-gradient(90deg, #00b4a6, #006b8c);
+      color: white;
+      padding-left: 35px;
+      transform: translateX(5px);
+    }
+
+    .logout {
+      background: linear-gradient(135deg, #dc3545, #c82333);
+      color: white !important;
+      padding: 12px 24px !important;
+      border-radius: 30px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 15px rgba(220,53,69,0.4);
+      transition: all 0.3s ease;
+    }
+
+    @keyframes buttonPulse {
+      0%, 100% {
+        box-shadow: 0 4px 15px rgba(220,53,69,0.4);
+      }
+      50% {
+        box-shadow: 0 6px 25px rgba(220,53,69,0.6);
+      }
+    }
+
+    .logout:hover {
+      background: linear-gradient(135deg, #c82333, #a71d2a);
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 8px 25px rgba(220,53,69,0.6);
+    }
+
+    .top-bar > a[href="/login-admin"] {
+      background: linear-gradient(135deg, #00b4a6, #009688);
+      color: white !important;
+      padding: 12px 24px !important;
+      border-radius: 30px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 15px rgba(0,180,166,0.4);
+      transition: all 0.3s ease;
+    }
+
+    .top-bar > a[href="/login-admin"]:hover {
+      background: linear-gradient(135deg, #009688, #00796b);
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 8px 25px rgba(0,180,166,0.6);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-left: 12px;
+    }
+
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.05);
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+
+    [data-theme="dark"] .theme-toggle {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(255,255,255,0.1);
+    }
+
+    .theme-toggle label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      cursor: pointer;
+    }
+
+    .theme-toggle input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .toggle-wrapper {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .toggle-slider {
+      width: 46px;
+      height: 22px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.15);
+      position: relative;
+      transition: background 0.3s ease;
+    }
+
+    [data-theme="dark"] .toggle-slider {
+      background: rgba(255,255,255,0.3);
+    }
+
+    .toggle-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: white;
+      position: absolute;
+      top: 2px;
+      left: 3px;
+      transition: transform 0.3s ease;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    .theme-toggle input:checked + .toggle-slider .toggle-thumb {
+      transform: translateX(22px);
+    }
+
+    .mobile-menu-toggle {
+      display: none;
+      background: linear-gradient(135deg, #00b4a6, #006b8c);
+      border: none;
+      font-size: 1.8rem;
+      color: white;
+      cursor: pointer;
+      padding: 10px 15px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,180,166,0.3);
+      transition: all 0.3s ease;
+    }
+
+    .mobile-menu-toggle:hover {
+      transform: scale(1.1) rotate(90deg);
+      box-shadow: 0 6px 20px rgba(0,180,166,0.5);
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .mobile-menu-toggle {
+        display: block;
+      }
+
+      .top-bar {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: linear-gradient(135deg, #ffffff, #f8f9fa);
+        flex-direction: column;
+        gap: 0;
+        padding: 20px;
+        box-shadow: 0 8px 30px rgba(0,180,166,0.2);
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        border-top: 2px solid rgba(0,180,166,0.2);
+      }
+
+      .top-bar.active {
+        max-height: 600px;
+        opacity: 1;
+      }
+
+      .top-bar > a,
+      .top-bar details {
+        width: 100%;
+      }
+
+      .top-bar details summary {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .top-bar details ul {
+        position: static;
+        margin-top: 10px;
+        box-shadow: none;
+        background: rgba(0,180,166,0.05);
+      }
+
+      .user-greeting {
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 10px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .header-container {
+        padding: 0 15px;
+      }
+
+      .logo-icon {
+        width: 60px;
+        height: 55px;
+      }
+
+      .logo-text .main-title {
+        font-size: 1rem;
+      }
+
+      .logo-text .subtitle {
+        font-size: 0.75rem;
+      }
+    }
+
+    /* Demo Content */
+    .demo-content {
+      padding: 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .demo-content h1 {
+      color: #00b4a6;
+      margin-bottom: 20px;
+      font-size: 2.5rem;
+    }
+
+    .demo-content p {
+      line-height: 1.8;
+      color: #333;
+      margin-bottom: 20px;
+      font-size: 1.1rem;
+    }
+
+    .demo-box {
+      height: 1500px;
+      background: linear-gradient(to bottom, #e0f7f5, #ffffff);
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 4px 20px rgba(0,180,166,0.1);
+    }
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #6366f1;
+    --secondary-color: #8b5cf6;
+    --success-color: #10b981;
+    --danger-color: #ef4444;
+    --warning-color: #f59e0b;
+    --dark-color: #1f2937;
+    --light-bg: #f9fafb;
+    --border-color: #e5e7eb;
+    --text-primary: #111827;
+    --text-secondary: #6b7280;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 10v;
+    padding: 0;
+    color: var(--text-primary);
+}
+
+.hero-section {
+    text-align: center;
+    padding: 40px 20px;
+    color: white;
+}
+
+.hero-section h1 {
+    font-size: 2.5em;
+    font-weight: 700;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+.subtitle {
+    font-size: 1.1em;
+    font-weight: 300;
+    opacity: 0.95;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto 40px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    overflow: hidden;
+}
+
+/* Tab Navigation */
+    .tab-navigation {
+      display: flex;
+      background: var(--light-bg);
+      border-bottom: 2px solid var(--border-color);
+      overflow-x: auto;
+      gap: 6px;
+      scroll-snap-type: x mandatory;
+      padding: 0 12px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 18px 15px;
+      border: none;
+      background: transparent;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.3s;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+      scroll-snap-align: start;
+    }
+
+.tab-btn:hover {
+    background: rgba(99, 102, 241, 0.05);
+    color: var(--primary-color);
+}
+
+.tab-btn.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    background: white;
+}
+
+/* Tab Content */
+   .tab-content {
+  margin-top: 32px;      /* Memberi jarak antara tab-navigation dan konten */
+  padding-top: 12px;     /* Jika ingin padding, tambahkan garis ini */
+}
+.container {
+  margin-top: 32px;    /* Atau 40px, agar seluruh tab-navigation dan konten lebih turun */
+}
+.upload-card {
+  margin-top: 30px;
+}
+
+.tab-pane {
+    display: none;
+    animation: fadeIn 0.4s ease-in;
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Upload Cards */
+    .upload-card,
+    .translation-card,
+    .record-card {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: clamp(20px, 3vw, 40px);
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
+
+.upload-icon {
+    font-size: 4em;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+h2 {
+    text-align: center;
+    color: var(--dark-color);
+    font-size: 1.8em;
+    margin-bottom: 10px;
+}
+
+.info-text {
+    text-align: center;
+    color: var(--text-secondary);
+    margin-bottom: 30px;
+}
+
+/* Drag & Drop Area */
+.drag-drop-area {
+    border: 3px dashed var(--primary-color);
+    border-radius: 15px;
+    padding: 60px 40px;
+    text-align: center;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.03) 0%, rgba(139, 92, 246, 0.03) 100%);
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.drag-drop-area.dragover {
+    border-color: var(--success-color);
+    background: rgba(16, 185, 129, 0.05);
+    transform: scale(1.02);
+}
+
+.drag-drop-content p {
+    margin: 10px 0;
+    color: var(--text-primary);
+}
+
+.or-text {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.upload-svg {
+    width: 80px;
+    height: 80px;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+}
+
+.browse-btn {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+}
+
+.browse-btn:hover {
+    background: var(--secondary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+}
+
+/* File Info Card */
+.file-info-card {
+    background: var(--light-bg);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 30px 0;
+    border: 2px solid var(--border-color);
+}
+
+.file-details {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.file-icon {
+    font-size: 2.5em;
+}
+
+.file-meta {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.file-meta strong {
+    color: var(--dark-color);
+    margin-bottom: 5px;
+}
+
+.file-meta span {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.remove-file-btn {
+    background: var(--danger-color);
+    color: white;
+    border: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s;
+}
+
+.remove-file-btn:hover {
+    background: #dc2626;
+    transform: rotate(90deg);
+}
+
+/* Language Controls */
+    .language-controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      align-items: end;
+      margin: 30px 0;
+    }
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.control-group.centered {
+    max-width: 400px;
+    margin: 0 auto 30px;
+}
+
+.control-group label {
+    font-weight: 600;
+    color: var(--dark-color);
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.modern-select {
+    width: 100%;
+    padding: 14px 18px;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 16px;
+    font-family: 'Poppins', sans-serif;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.modern-select:hover {
+    border-color: var(--primary-color);
+}
+
+.modern-select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.swap-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.swap-lang-btn {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+}
+
+.swap-lang-btn:hover {
+    background: var(--secondary-color);
+    transform: rotate(180deg);
+}
+
+/* Action Buttons */
+.action-btn {
+    padding: 16px 32px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: 'Poppins', sans-serif;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.action-btn.primary {
+    background: var(--primary-color);
+    color: white;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+}
+
+.action-btn.primary:hover {
+    background: var(--secondary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+}
+
+.action-btn.secondary {
+    background: var(--text-secondary);
+    color: white;
+}
+
+.action-btn.secondary:hover {
+    background: var(--dark-color);
+}
+
+.action-btn.danger {
+    background: var(--danger-color);
+    color: white;
+}
+
+.action-btn.danger:hover {
+    background: #dc2626;
+}
+
+.action-btn.large {
+    padding: 18px 48px;
+    font-size: 18px;
+}
+
+.action-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+.button-group {
+    display: flex;
+    gap: 15px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+}
+
+.button-group.centered {
+    justify-content: center;
+}
+
+/* Results Grid */
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      margin: 30px 0;
+    }
+
+.result-card {
+    background: var(--light-bg);
+    border-radius: 12px;
+    padding: 25px;
+    border: 2px solid var(--border-color);
+}
+
+.result-card.full-width {
+    grid-column: 1 / -1;
+}
+
+.result-card h3 {
+    color: var(--dark-color);
+    font-size: 1.2em;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.result-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    min-height: 150px;
+    max-height: 400px;
+    overflow-y: auto;
+    line-height: 1.8;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+.result-content.large {
+    min-height: 200px;
+}
+
+.result-content:empty::before {
+    content: 'Waiting for content...';
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+.result-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.icon-btn {
+    background: white;
+    border: 2px solid var(--border-color);
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.icon-btn:hover {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+.icon-btn.small {
+    padding: 6px 12px;
+    font-size: 16px;
+}
+
+/* Text Translation Specific */
+    .text-translation-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      margin: 30px 0;
+    }
+
+.text-area-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.modern-textarea {
+    width: 100%;
+    min-height: 200px;
+    padding: 16px;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 15px;
+    font-family: 'Poppins', sans-serif;
+    resize: vertical;
+    transition: all 0.3s;
+}
+
+.modern-textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.modern-textarea[readonly] {
+    background: var(--light-bg);
+}
+
+.textarea-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.char-count {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.icon-group {
+    display: flex;
+    gap: 8px;
+}
+
+/* Voice Record Specific */
+.recording-visualizer {
+    text-align: center;
+    margin: 40px 0;
+}
+
+.mic-button-wrapper {
+    margin-bottom: 20px;
+}
+
+.mic-button {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    color: white;
+}
+
+.mic-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 15px 40px rgba(99, 102, 241, 0.5);
+}
+
+.mic-button:active {
+    transform: scale(0.95);
+}
+
+.mic-icon {
+    font-size: 2.5em;
+}
+
+.mic-text {
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* Video Player */
+.video-player {
+    width: 100%;
+    max-width: 800px;
+    border-radius: 12px;
+    margin: 20px auto;
+    display: block;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+}
+
+/* Status Message */
+.status-message {
+    background: linear-gradient(135deg, #e0f2fe, #dbeafe);
+    border-left: 4px solid var(--primary-color);
+    padding: 16px 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+    font-weight: 600;
+    color: var(--dark-color);
+    display: none;
+}
+
+.status-message.show {
+    display: block;
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: white;
+    font-size: 14px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero-section h1 {
+        font-size: 1.8em;
+    }
+   
+        .tab-content {
+  margin-top: 32px;      /* Memberi jarak antara tab-navigation dan konten */
+  padding-top: 12px;     /* Jika ingin padding, tambahkan garis ini */
+}
+
+    }
+    
+    .language-controls,
+    .results-grid,
+    .text-translation-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .swap-container {
+        order: 3;
+        margin-top: 10px;
+    }
+    
+    .tab-navigation {
+        flex-wrap: wrap;
+    }
+    
+    .tab-btn {
+        flex: 1 1 50%;
+    }
+
+/* Scrollbar Styling */
+.result-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.result-content::-webkit-scrollbar-track {
+    background: var(--light-bg);
+    border-radius: 4px;
+}
+
+.result-content::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 4px;
+}
+
+.result-content::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary-color);
+}
+
+/* Search Input for Language Select */
+.select-wrapper {
+    position: relative;
+}
+
+.search-input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+    margin-bottom: 8px;
+    transition: all 0.3s;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+/* Result Header */
+.result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.result-header h3 {
+    margin: 0;
+}
+
+/* Editable textarea */
+.result-content.editable {
+    background: white !important;
+    cursor: text;
+    resize: vertical;
+    border: 2px solid var(--border-color);
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.6;
+}
+
+.result-content.editable:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.result-content.editable:disabled {
+    background: var(--light-bg) !important;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* Usage Indicator */
+#usageIndicator {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+    text-align: center;
+    font-weight: 600;
+    animation: slideDown 0.5s ease-out;
+    display: none;
+}
+
+#usageIndicator.show {
+    display: block;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.usage-bar {
+    background: rgba(255,255,255,0.3);
+    height: 8px;
+    border-radius: 4px;
+    margin-top: 10px;
+    overflow: hidden;
+}
+
+.usage-progress {
+    height: 100%;
+    background: white;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.header-separator {
+  width: 100%;
+  height: 20px;
+  background: linear-gradient(to bottom, 
+    rgba(0, 180, 166, 0.15) 0%, 
+    rgba(0, 180, 166, 0.05) 50%,
+    transparent 100%);
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0, 180, 166, 0.1);
+}
+    </style>
+</head>
+<body data-theme="light">
+    <header class="header" id="header">
+            <div class="header-container">
+                <div class="logo-section">
+                    <div class="logo-icon">
+                        <img src="/LOKO ASIK.png" alt="Logo Portal Ekosistem Laut">
+                    </div>
+                    <div class="logo-text">
+                        <span class="main-title">SEANERGY</span>
+                        <span class="subtitle">Pulau Tunda, Banten</span>
+                    </div>
+                </div>
+
+                <button class="mobile-menu-toggle" id="menuToggle">☰</button>
+
+                <div class="top-bar" id="topBar">
+                    <div class="user-greeting">
+                         <span class="greeting-text">
+         Halo, <%= user ? user.username : 'Pengguna' %> 👋
+        </span>
+                    </div>
+                    <a href="/home">Home</a>
+                    <details>
+                        <summary>Ekosistem</summary>
+                        <ul>
+                            <li><a href="/mangrove2019"><i class="fas fa-tree"></i> Mangrove</a></li>
+                            <li><a href="/lamun2019"><i class="fas fa-leaf"></i> Lamun</a></li>
+                            <li><a href="/terumbu2019"><i class="fas fa-gem"></i> Terumbu Karang</a></li>
+                            <li><a href="/zpi"><i class="fas fa-fish"></i> Ikan</a></li>
+                        </ul>
+                    </details>
+                    <details>
+                        <summary>Prediksi</summary>
+                        <ul>
+                               <li><a href="/prediksimangrove"><i class="fas fa-tree"></i> Mangrove</a></li>
+                            <li><a href="/prediksilamun"><i class="fas fa-leaf"></i> Lamun</a></li>
+                            <li><a href="/prediksiterumbu"><i class="fas fa-gem"></i> Terumbu Karang</a></li>
+                            <li><a href="/zpi"><i class="fas fa-fish"></i> Ikan</a></li>
+                        </ul>
+                    </details>
+                    <details>
+                        <summary>FAQ</summary>
+                        <ul>
+                           <li><a href="/faq"><i class="fas fa-robot"></i> BADU AI</a></li>
+                            <li><a href="/voice"><i class="fas fa-language"></i> Translate</a></li>
+                            <li><a href="/kamera-ikan"><i class="fas fa-camera"></i> Kamera</a></li>
+                            <li><a href="/artikel"><i class="fas fa-newspaper"></i> Artikel Populer</a></li>
+                        </ul>
+                    </details>
+                    <a href="/logout" class="logout">Logout</a>
+                    <a href="/login-admin">Login Admin</a>
+                </div>
+            </div>
+        </header>
+
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-content">
+            <div class="header-actions">
+                <div class="theme-toggle" aria-label="Toggle mode">
+                    <span>☀️</span>
+                    <label class="toggle-wrapper">
+                        <input type="checkbox" id="themeToggle">
+                        <span class="toggle-slider">
+                            <span class="toggle-thumb"></span>
+                        </span>
+                    </label>
+                    <span>🌙</span>
+                </div>
+                <button class="mobile-menu-toggle" id="menuToggle">☰</button>
+            </div>
+        </div>
+    </header>
+    <div class="header-separator"></div>
+    
+    <div class="container">
+        <!-- Tab Navigation -->
+        <div class="tab-navigation">
+            <button class="tab-btn active" data-tab="file-upload">📄 Upload File</button>
+            <button class="tab-btn" data-tab="video-upload">🎥 Upload Video</button>
+            <button class="tab-btn" data-tab="text-translate">💬 Text Translation</button>
+            <button class="tab-btn" data-tab="voice-record">🎤 Voice Record</button>
+        </div>
+        
+        <!-- Tab Content -->
+        <div class="tab-content">
+            
+           <!-- FILE UPLOAD TAB -->
+<div id="file-upload" class="tab-pane active">
+    <div class="upload-card">
+        <div class="upload-icon">📁</div>
+        <h2>Upload Document to Translate</h2>
+        <p class="info-text">Supported formats: TXT, PDF, DOC, DOCX (Max: 10MB)</p>
+        
+        <!-- Usage Indicator -->
+        <div id="usageIndicator" style="display:none;"></div>
+        
+        <div class="drag-drop-area" id="fileDragDrop">
+            <div class="drag-drop-content">
+                <svg class="upload-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+                </svg>
+                <p><strong>Drag & Drop file here</strong></p>
+                <p class="or-text">or</p>
+                <input type="file" id="fileUploadInput" accept=".txt,.pdf,.doc,.docx" hidden>
+                <button class="browse-btn" id="fileBrowseBtn">Browse Files</button>
+            </div>
+        </div>
+        
+        <div id="filePreviewSection" style="display:none;">
+            <div class="file-info-card">
+                <div class="file-details">
+                    <span class="file-icon">📄</span>
+                    <div class="file-meta">
+                        <strong id="fileName">document.txt</strong>
+                        <span id="fileSize">1.2 MB</span>
+                    </div>
+                    <button class="remove-file-btn" id="removeFileBtn">✖</button>
+                </div>
+            </div>
+            
+            <div class="language-controls">
+                <div class="control-group">
+                    <label>🌍 Source Language</label>
+                    <div class="select-wrapper">
+                        <input type="text" id="fileSourceSearch" class="search-input" placeholder="Search language...">
+                        <select id="fileSourceLang" class="modern-select"></select>
+                    </div>
+                </div>
+                
+                <div class="swap-container">
+                    <button class="swap-lang-btn" id="fileSwapBtn">⇄</button>
+                </div>
+                
+                <div class="control-group">
+                    <label>🎯 Target Language</label>
+                    <div class="select-wrapper">
+                        <input type="text" id="fileTargetSearch" class="search-input" placeholder="Search language...">
+                        <select id="fileTargetLang" class="modern-select"></select>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="action-btn primary" id="translateFileBtn">
+                <span>🔄 Translate Document</span>
+            </button>
+            
+            <div id="fileStatus" class="status-message"></div>
+            
+            <div class="results-grid">
+                <div class="result-card">
+                    <div class="result-header">
+                        <h3>📝 Original Text</h3>
+                        <button class="icon-btn small" id="editOriginalBtn" title="Edit Text">✏️</button>
+                    </div>
+                    <textarea id="fileOriginalText" class="result-content editable"></textarea>
+                </div>
+                <div class="result-card">
+                    <div class="result-header">
+                        <h3>✨ Translation</h3>
+                        <button class="icon-btn small" id="editTranslationBtn" title="Edit Text">✏️</button>
+                    </div>
+                    <textarea id="fileTranslatedText" class="result-content editable" placeholder="Translation will appear here..."></textarea>
+                    <div class="result-actions">
+                        <button class="icon-btn" id="speakFileBtn" title="Speak Translation">🔊</button>
+                        <button class="icon-btn" id="copyFileBtn" title="Copy Translation">📋</button>
+                        <button class="icon-btn" id="downloadFileBtn" title="Download">💾</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+            <!-- VIDEO UPLOAD TAB -->
+            <div id="video-upload" class="tab-pane">
+                <div class="upload-card">
+                    <div class="upload-icon">🎬</div>
+                    <h2>Upload Video for Transcription</h2>
+                    <p class="info-text">Supported formats: MP4, WebM, MOV (Max: 100MB)</p>
+                    
+                    <div class="drag-drop-area" id="videoDragDrop">
+                        <div class="drag-drop-content">
+                            <svg class="upload-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+                            </svg>
+                            <p><strong>Drag & Drop video here</strong></p>
+                            <p class="or-text">or</p>
+                            <input type="file" id="videoUploadInput" accept="video/*" hidden>
+                            <button class="browse-btn" id="videoBrowseBtn">Browse Videos</button>
+                        </div>
+                    </div>
+                    
+                    <div id="videoPreviewSection" style="display:none;">
+                        <video id="videoPlayer" class="video-player" controls></video>
+                        
+                        <div class="language-controls">
+                            <div class="control-group">
+                                <label>🌍 Video Language</label>
+                                <select id="videoLanguage" class="modern-select">
+                                    <option value="id-ID">🇮🇩 Indonesian</option>
+                                    <option value="en-US">🇺🇸 English</option>
+                                    <option value="ar-SA">🇸🇦 Arabic</option>
+                                    <option value="ja-JP">🇯🇵 Japanese</option>
+                                </select>
+                            </div>
+                            
+                            <div class="control-group">
+                                <label>🎯 Translate To</label>
+                                <select id="videoTargetLang" class="modern-select">
+                                    <option value="en">🇺🇸 English</option>
+                                    <option value="id">🇮🇩 Indonesian</option>
+                                    <option value="ar">🇸🇦 Arabic</option>
+                                    <option value="ja">🇯🇵 Japanese</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="button-group">
+                            <button class="action-btn primary" id="transcribeVideoBtn">🎤 Start Transcription</button>
+                            <button class="action-btn secondary" id="stopTranscribeBtn" disabled>⏹️ Stop</button>
+                            <button class="action-btn danger" id="clearVideoBtn">🗑️ Clear</button>
+                        </div>
+                        
+                        <div id="videoStatus" class="status-message"></div>
+                        
+                        <div class="results-grid">
+                            <div class="result-card">
+                                <h3>📝 Transcript</h3>
+                                <div id="originalTranscript" class="result-content"></div>
+                            </div>
+                            <div class="result-card">
+                                <h3>✨ Translation</h3>
+                                <div id="translatedTranscript" class="result-content"></div>
+                                <div class="result-actions">
+                                    <button class="icon-btn" id="speakVideoBtn" title="Speak">🔊</button>
+                                    <button class="icon-btn" id="downloadVideoBtn" title="Download">💾</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- TEXT TRANSLATION TAB -->
+            <div id="text-translate" class="tab-pane">
+                <div class="translation-card">
+                    <h2>💬 Text Translation & Speech</h2>
+                    
+                    <div class="language-controls">
+                        <div class="control-group">
+                            <label>🌍 From</label>
+                            <select id="sourceLanguage" class="modern-select">
+                                <option value="id">🇮🇩 Indonesian</option>
+                                <option value="en">🇺🇸 English</option>
+                                <option value="ar">🇸🇦 Arabic</option>
+                                <option value="ja">🇯🇵 Japanese</option>
+                            </select>
+                        </div>
+                        
+                        <div class="swap-container">
+                            <button class="swap-lang-btn" id="swapBtn">⇄</button>
+                        </div>
+                        
+                        <div class="control-group">
+                            <label>🎯 To</label>
+                            <select id="targetLanguage" class="modern-select">
+                                <option value="en">🇺🇸 English</option>
+                                <option value="id">🇮🇩 Indonesian</option>
+                                <option value="ar">🇸🇦 Arabic</option>
+                                <option value="ja">🇯🇵 Japanese</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="text-translation-grid">
+                        <div class="text-area-wrapper">
+                            <textarea id="sourceText" class="modern-textarea" placeholder="Type or paste text here..."></textarea>
+                            <div class="textarea-footer">
+                                <span class="char-count" id="sourceCharCount">0 / 5000</span>
+                                <button class="icon-btn small" id="clearSourceBtn" title="Clear">🗑️</button>
+                            </div>
+                        </div>
+                        
+                        <div class="text-area-wrapper">
+                            <textarea id="targetText" class="modern-textarea" placeholder="Translation will appear here..." readonly></textarea>
+                            <div class="textarea-footer">
+                                <span class="char-count" id="targetCharCount">0</span>
+                                <div class="icon-group">
+                                    <button class="icon-btn small" id="copyBtn" title="Copy">📋</button>
+                                    <button class="icon-btn small" id="speakTranslationBtn" title="Speak">🔊</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="button-group centered">
+                        <button class="action-btn primary large" id="translateBtn">
+                            🔄 Translate
+                        </button>
+                        <button class="action-btn secondary" id="downloadTranslationBtn">
+                            💾 Download
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- VOICE RECORD TAB -->
+            <div id="voice-record" class="tab-pane">
+                <div class="record-card">
+                    <h2>🎤 Voice Recording & Transcription</h2>
+                    
+                    <div class="control-group centered">
+                        <label>🌍 Recording Language</label>
+                        <select id="sttLanguageSelect" class="modern-select">
+                            <option value="id-ID">🇮🇩 Indonesian</option>
+                            <option value="en-US">🇺🇸 English</option>
+                            <option value="ar-SA">🇸🇦 Arabic</option>
+                            <option value="ja-JP">🇯🇵 Japanese</option>
+                        </select>
+                    </div>
+                    
+                    <div class="recording-visualizer">
+                        <div class="mic-button-wrapper">
+                            <button class="mic-button" id="startBtn">
+                                <span class="mic-icon">🎤</span>
+                                <span class="mic-text">Start Recording</span>
+                            </button>
+                        </div>
+                        <button class="action-btn secondary" id="stopBtn" disabled>⏹️ Stop Recording</button>
+                    </div>
+                    
+                    <div id="status" class="status-message"></div>
+                    
+                    <div class="result-card full-width">
+                        <h3>📝 Transcription Result</h3>
+                        <div id="result" class="result-content large"></div>
+                        <div class="result-actions">
+                            <button class="icon-btn" id="clearBtn" title="Clear">🗑️</button>
+                            <button class="icon-btn" id="downloadBtn" title="Download" style="display:none;">💾</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    
+    
+    <footer class="footer">
+        <p>Made with ❤️ by Multi-Language Translator Pro | © 2025</p>
+    </footer>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+(function initHeaderExperience() {
+  const header = document.getElementById('header');
+  const topBar = document.getElementById('topBar');
+  const menuToggle = document.getElementById('menuToggle');
+  const themeToggle = document.getElementById('themeToggle');
+  const THEME_KEY = 'asik-theme';
+
+  const savedTheme = localStorage.getItem(THEME_KEY) || 'light';
+  document.body.setAttribute('data-theme', savedTheme);
+  if (themeToggle) {
+    themeToggle.checked = savedTheme === 'dark';
+    themeToggle.addEventListener('change', () => {
+      const theme = themeToggle.checked ? 'dark' : 'light';
+      document.body.setAttribute('data-theme', theme);
+      localStorage.setItem(THEME_KEY, theme);
+    });
+  }
+
+  const handleScroll = () => {
+    if (!header) return;
+    if (window.pageYOffset > 60) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  };
+
+  handleScroll();
+  window.addEventListener('scroll', handleScroll);
+
+  if (menuToggle && topBar) {
+    menuToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      topBar.classList.toggle('active');
+      menuToggle.textContent = topBar.classList.contains('active') ? '✕' : '☰';
+    });
+  }
+
+  document.addEventListener('click', (e) => {
+    document.querySelectorAll('.top-bar details[open]').forEach(detail => {
+      if (!detail.contains(e.target)) detail.removeAttribute('open');
+    });
+
+    if (topBar && menuToggle && !topBar.contains(e.target) && !menuToggle.contains(e.target)) {
+      topBar.classList.remove('active');
+      menuToggle.textContent = '☰';
+    }
+  });
+
+  const detailGroups = document.querySelectorAll('.top-bar details');
+  detailGroups.forEach(detail => {
+    detail.addEventListener('click', (ev) => ev.stopPropagation());
+    detail.addEventListener('toggle', () => {
+      if (detail.open) {
+        detailGroups.forEach(other => {
+          if (other !== detail) {
+            other.removeAttribute('open');
+          }
+        });
+      }
+    });
+  });
+
+  document.querySelectorAll('.top-bar a').forEach(link => {
+    link.addEventListener('click', () => {
+      if (window.innerWidth <= 1024 && topBar && menuToggle) {
+        topBar.classList.remove('active');
+        menuToggle.textContent = '☰';
+      }
+    });
+  });
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 1024 && topBar && menuToggle) {
+      topBar.classList.remove('active');
+      menuToggle.textContent = '☰';
+    }
+  });
+})();
+
+let audioPermissionGranted = false;
+async function ensureAudioPermission() {
+  if (audioPermissionGranted || !navigator.mediaDevices?.getUserMedia) {
+    return true;
+  }
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    stream.getTracks().forEach(track => track.stop());
+    audioPermissionGranted = true;
+    return true;
+  } catch (error) {
+    console.error('Audio permission denied:', error);
+    return false;
+  }
+}
+
+       // ==================== COMPREHENSIVE LANGUAGE DATABASE ====================
+
+const allLanguages = [
+    {group: 'Popular', langs: [
+        {code: 'en', name: '🇺🇸 English', speech: 'en-US'},
+        {code: 'id', name: '🇮🇩 Indonesian', speech: 'id-ID'},
+        {code: 'ar', name: '🇸🇦 Arabic', speech: 'ar-SA'},
+        {code: 'ja', name: '🇯🇵 Japanese', speech: 'ja-JP'},
+        {code: 'zh-CN', name: '🇨🇳 Chinese (Simplified)', speech: 'cmn-Hans-CN'},
+        {code: 'es', name: '🇪🇸 Spanish', speech: 'es-ES'},
+        {code: 'fr', name: '🇫🇷 French', speech: 'fr-FR'},
+        {code: 'de', name: '🇩🇪 German', speech: 'de-DE'},
+        {code: 'ko', name: '🇰🇷 Korean', speech: 'ko-KR'},
+        {code: 'ru', name: '🇷🇺 Russian', speech: 'ru-RU'},
+        {code: 'pt', name: '🇵🇹 Portuguese', speech: 'pt-PT'},
+        {code: 'hi', name: '🇮🇳 Hindi', speech: 'hi-IN'},
+        {code: 'th', name: '🇹🇭 Thai', speech: 'th-TH'},
+        {code: 'vi', name: '🇻🇳 Vietnamese', speech: 'vi-VN'}
+    ]},
+    {group: 'A-E', langs: [
+        {code: 'af', name: 'Afrikaans', speech: 'af-ZA'},
+        {code: 'sq', name: 'Albanian', speech: 'sq-AL'},
+        {code: 'am', name: 'Amharic', speech: 'am-ET'},
+        {code: 'hy', name: 'Armenian', speech: 'hy-AM'},
+        {code: 'az', name: 'Azerbaijani', speech: 'az-AZ'},
+        {code: 'eu', name: 'Basque', speech: 'eu-ES'},
+        {code: 'be', name: 'Belarusian', speech: 'be-BY'},
+        {code: 'bn', name: 'Bengali', speech: 'bn-BD'},
+        {code: 'bs', name: 'Bosnian', speech: 'bs-BA'},
+        {code: 'bg', name: 'Bulgarian', speech: 'bg-BG'},
+        {code: 'ca', name: 'Catalan', speech: 'ca-ES'},
+        {code: 'ceb', name: 'Cebuano', speech: 'ceb-PH'},
+        {code: 'ny', name: 'Chichewa', speech: 'ny-MW'},
+        {code: 'zh-TW', name: 'Chinese (Traditional)', speech: 'cmn-Hant-TW'},
+        {code: 'co', name: 'Corsican', speech: 'co-FR'},
+        {code: 'hr', name: 'Croatian', speech: 'hr-HR'},
+        {code: 'cs', name: 'Czech', speech: 'cs-CZ'},
+        {code: 'da', name: 'Danish', speech: 'da-DK'},
+        {code: 'nl', name: 'Dutch', speech: 'nl-NL'},
+        {code: 'eo', name: 'Esperanto', speech: 'eo'},
+        {code: 'et', name: 'Estonian', speech: 'et-EE'}
+    ]},
+    {group: 'F-L', langs: [
+        {code: 'tl', name: 'Filipino', speech: 'fil-PH'},
+        {code: 'fi', name: 'Finnish', speech: 'fi-FI'},
+        {code: 'fy', name: 'Frisian', speech: 'fy-NL'},
+        {code: 'gl', name: 'Galician', speech: 'gl-ES'},
+        {code: 'ka', name: 'Georgian', speech: 'ka-GE'},
+        {code: 'el', name: 'Greek', speech: 'el-GR'},
+        {code: 'gu', name: 'Gujarati', speech: 'gu-IN'},
+        {code: 'ht', name: 'Haitian Creole', speech: 'ht-HT'},
+        {code: 'ha', name: 'Hausa', speech: 'ha-NG'},
+        {code: 'haw', name: 'Hawaiian', speech: 'haw-US'},
+        {code: 'iw', name: 'Hebrew', speech: 'he-IL'},
+        {code: 'hmn', name: 'Hmong', speech: 'hmn'},
+        {code: 'hu', name: 'Hungarian', speech: 'hu-HU'},
+        {code: 'is', name: 'Icelandic', speech: 'is-IS'},
+        {code: 'ig', name: 'Igbo', speech: 'ig-NG'},
+        {code: 'ga', name: 'Irish', speech: 'ga-IE'},
+        {code: 'it', name: 'Italian', speech: 'it-IT'},
+        {code: 'jw', name: 'Javanese', speech: 'jv-ID'},
+        {code: 'kn', name: 'Kannada', speech: 'kn-IN'},
+        {code: 'kk', name: 'Kazakh', speech: 'kk-KZ'},
+        {code: 'km', name: 'Khmer', speech: 'km-KH'},
+        {code: 'ku', name: 'Kurdish', speech: 'ku-TR'},
+        {code: 'ky', name: 'Kyrgyz', speech: 'ky-KG'},
+        {code: 'lo', name: 'Lao', speech: 'lo-LA'},
+        {code: 'la', name: 'Latin', speech: 'la'},
+        {code: 'lv', name: 'Latvian', speech: 'lv-LV'},
+        {code: 'lt', name: 'Lithuanian', speech: 'lt-LT'},
+        {code: 'lb', name: 'Luxembourgish', speech: 'lb-LU'}
+    ]},
+    {group: 'M-R', langs: [
+        {code: 'mk', name: 'Macedonian', speech: 'mk-MK'},
+        {code: 'mg', name: 'Malagasy', speech: 'mg-MG'},
+        {code: 'ms', name: 'Malay', speech: 'ms-MY'},
+        {code: 'ml', name: 'Malayalam', speech: 'ml-IN'},
+        {code: 'mt', name: 'Maltese', speech: 'mt-MT'},
+        {code: 'mi', name: 'Maori', speech: 'mi-NZ'},
+        {code: 'mr', name: 'Marathi', speech: 'mr-IN'},
+        {code: 'mn', name: 'Mongolian', speech: 'mn-MN'},
+        {code: 'my', name: 'Myanmar (Burmese)', speech: 'my-MM'},
+        {code: 'ne', name: 'Nepali', speech: 'ne-NP'},
+        {code: 'no', name: 'Norwegian', speech: 'nb-NO'},
+        {code: 'ps', name: 'Pashto', speech: 'ps-AF'},
+        {code: 'fa', name: 'Persian', speech: 'fa-IR'},
+        {code: 'pl', name: 'Polish', speech: 'pl-PL'},
+        {code: 'pa', name: 'Punjabi', speech: 'pa-IN'},
+        {code: 'ro', name: 'Romanian', speech: 'ro-RO'}
+    ]},
+    {group: 'S-Z', langs: [
+        {code: 'sm', name: 'Samoan', speech: 'sm-WS'},
+        {code: 'gd', name: 'Scots Gaelic', speech: 'gd-GB'},
+        {code: 'sr', name: 'Serbian', speech: 'sr-RS'},
+        {code: 'st', name: 'Sesotho', speech: 'st-ZA'},
+        {code: 'sn', name: 'Shona', speech: 'sn-ZW'},
+        {code: 'sd', name: 'Sindhi', speech: 'sd-PK'},
+        {code: 'si', name: 'Sinhala', speech: 'si-LK'},
+        {code: 'sk', name: 'Slovak', speech: 'sk-SK'},
+        {code: 'sl', name: 'Slovenian', speech: 'sl-SI'},
+        {code: 'so', name: 'Somali', speech: 'so-SO'},
+        {code: 'su', name: 'Sundanese', speech: 'su-ID'},
+        {code: 'sw', name: 'Swahili', speech: 'sw-TZ'},
+        {code: 'sv', name: 'Swedish', speech: 'sv-SE'},
+        {code: 'tg', name: 'Tajik', speech: 'tg-TJ'},
+        {code: 'ta', name: 'Tamil', speech: 'ta-IN'},
+        {code: 'te', name: 'Telugu', speech: 'te-IN'},
+        {code: 'tr', name: 'Turkish', speech: 'tr-TR'},
+        {code: 'uk', name: 'Ukrainian', speech: 'uk-UA'},
+        {code: 'ur', name: 'Urdu', speech: 'ur-PK'},
+        {code: 'uz', name: 'Uzbek', speech: 'uz-UZ'},
+        {code: 'cy', name: 'Welsh', speech: 'cy-GB'},
+        {code: 'xh', name: 'Xhosa', speech: 'xh-ZA'},
+        {code: 'yi', name: 'Yiddish', speech: 'yi'},
+        {code: 'yo', name: 'Yoruba', speech: 'yo-NG'},
+        {code: 'zu', name: 'Zulu', speech: 'zu-ZA'}
+    ]}
+];
+
+// Language code mapping
+const langToSpeechMap = {};
+allLanguages.forEach(group => {
+    group.langs.forEach(lang => {
+        langToSpeechMap[lang.code] = lang.speech;
+    });
+});
+
+function getSpeechCode(translationCode) {
+    return langToSpeechMap[translationCode] || translationCode;
+}
+
+function getTranslationCode(speechCode) {
+    const match = Object.entries(langToSpeechMap).find(([key, val]) => val === speechCode);
+    return match ? match[0] : speechCode.split('-')[0];
+}
+
+// ==================== POPULATE LANGUAGE SELECTORS ====================
+
+function populateLanguageSelect(selectElement, includeSpeechRecognition = false) {
+    if (!selectElement) return;
+    
+    selectElement.innerHTML = '';
+    
+    if (selectElement.id.includes('Source') || selectElement.id.includes('source')) {
+        const autoOption = document.createElement('option');
+        autoOption.value = 'auto';
+        autoOption.textContent = '🌍 Auto Detect';
+        selectElement.appendChild(autoOption);
+    }
+    
+    allLanguages.forEach(group => {
+        const optgroup = document.createElement('optgroup');
+        optgroup.label = group.group === 'Popular' ? '⭐ Popular Languages' : group.group;
+        
+        group.langs.forEach(lang => {
+            const option = document.createElement('option');
+            option.value = includeSpeechRecognition ? lang.speech : lang.code;
+            option.textContent = lang.name;
+            optgroup.appendChild(option);
+        });
+        
+        selectElement.appendChild(optgroup);
+    });
+}
+
+// ==================== TAB NAVIGATION ====================
+
+const tabButtons = document.querySelectorAll('.tab-btn');
+const tabPanes = document.querySelectorAll('.tab-pane');
+
+tabButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const targetTab = button.getAttribute('data-tab');
+        
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        tabPanes.forEach(pane => pane.classList.remove('active'));
+        
+        button.classList.add('active');
+        document.getElementById(targetTab).classList.add('active');
+    });
+});
+
+// ==================== FILE UPLOAD TAB ====================
+
+const fileUploadInput = document.getElementById('fileUploadInput');
+const fileBrowseBtn = document.getElementById('fileBrowseBtn');
+const fileDragDrop = document.getElementById('fileDragDrop');
+const filePreviewSection = document.getElementById('filePreviewSection');
+const fileName = document.getElementById('fileName');
+const fileSize = document.getElementById('fileSize');
+const removeFileBtn = document.getElementById('removeFileBtn');
+const fileSourceLang = document.getElementById('fileSourceLang');
+const fileTargetLang = document.getElementById('fileTargetLang');
+const fileSwapBtn = document.getElementById('fileSwapBtn');
+const translateFileBtn = document.getElementById('translateFileBtn');
+const fileStatus = document.getElementById('fileStatus');
+const fileOriginalText = document.getElementById('fileOriginalText');
+const fileTranslatedText = document.getElementById('fileTranslatedText');
+const speakFileBtn = document.getElementById('speakFileBtn');
+const copyFileBtn = document.getElementById('copyFileBtn');
+const downloadFileBtn = document.getElementById('downloadFileBtn');
+
+let currentFileContent = '';
+
+fileBrowseBtn.addEventListener('click', () => fileUploadInput.click());
+fileDragDrop.addEventListener('click', () => fileUploadInput.click());
+
+fileDragDrop.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    fileDragDrop.classList.add('dragover');
+});
+
+fileDragDrop.addEventListener('dragleave', () => {
+    fileDragDrop.classList.remove('dragover');
+});
+
+fileDragDrop.addEventListener('drop', (e) => {
+    e.preventDefault();
+    fileDragDrop.classList.remove('dragover');
+    if (e.dataTransfer.files.length > 0) {
+        handleFileUpload(e.dataTransfer.files[0]);
+    }
+});
+
+fileUploadInput.addEventListener('change', (e) => {
+    if (e.target.files[0]) handleFileUpload(e.target.files[0]);
+});
+
+async function handleFileUpload(file) {
+    const maxSize = 10 * 1024 * 1024;
+    
+    if (file.size > maxSize) {
+        showFileStatus('❌ File too large! Maximum 10MB', 'error');
+        return;
+    }
+    
+    const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
+    const validTypes = ['.txt', '.pdf', '.doc', '.docx'];
+    
+    if (!validTypes.includes(fileExtension)) {
+        showFileStatus('❌ Invalid file type! Please upload TXT, PDF, DOC, or DOCX', 'error');
+        return;
+    }
+    
+    fileName.textContent = file.name;
+    fileSize.textContent = formatFileSize(file.size);
+    filePreviewSection.style.display = 'block';
+    
+    try {
+        if (fileExtension === '.txt') {
+            currentFileContent = await readTextFile(file);
+            fileOriginalText.textContent = currentFileContent;
+            showFileStatus('✅ File loaded successfully!', 'success');
+        } else if (fileExtension === '.pdf') {
+            currentFileContent = await readPDFFile(file);
+            fileOriginalText.textContent = currentFileContent;
+            showFileStatus('✅ PDF loaded successfully!', 'success');
+        } else {
+            showFileStatus('⚠️ DOC/DOCX preview not available. Please convert to TXT or PDF.', 'warning');
+            currentFileContent = '';
+        }
+    } catch (error) {
+        console.error('Error reading file:', error);
+        showFileStatus('❌ Error reading file!', 'error');
+    }
+}
+
+function readTextFile(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => resolve(e.target.result);
+        reader.onerror = reject;
+        reader.readAsText(file);
+    });
+}
+
+async function readPDFFile(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        
+        reader.onload = async (e) => {
+            try {
+                const typedArray = new Uint8Array(e.target.result);
+                const pdf = await pdfjsLib.getDocument(typedArray).promise;
+                let fullText = '';
+                
+                for (let i = 1; i <= pdf.numPages; i++) {
+                    const page = await pdf.getPage(i);
+                    const textContent = await page.getTextContent();
+                    const pageText = textContent.items.map(item => item.str).join(' ');
+                    fullText += pageText + '\n\n';
+                }
+                
+                resolve(fullText.trim());
+            } catch (error) {
+                reject(error);
+            }
+        };
+        
+        reader.onerror = reject;
+        reader.readAsArrayBuffer(file);
+    });
+}
+
+function formatFileSize(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+}
+
+removeFileBtn.addEventListener('click', () => {
+    fileUploadInput.value = '';
+    filePreviewSection.style.display = 'none';
+    currentFileContent = '';
+    fileOriginalText.textContent = '';
+    fileTranslatedText.textContent = '';
+    hideFileStatus();
+});
+
+fileSwapBtn.addEventListener('click', () => {
+    const temp = fileSourceLang.value;
+    fileSourceLang.value = fileTargetLang.value;
+    fileTargetLang.value = temp;
+    
+    const tempText = fileOriginalText.textContent;
+    fileOriginalText.textContent = fileTranslatedText.textContent;
+    fileTranslatedText.textContent = tempText;
+});
+
+translateFileBtn.addEventListener('click', async () => {
+    if (!currentFileContent && !fileOriginalText.textContent.trim()) {
+        showFileStatus('❌ No content to translate!', 'error');
+        return;
+    }
+    
+    const sourceLang = fileSourceLang.value;
+    const targetLang = fileTargetLang.value;
+    
+    if (sourceLang === targetLang) {
+        showFileStatus('❌ Source and target languages must be different!', 'error');
+        return;
+    }
+    
+    const textToTranslate = currentFileContent || fileOriginalText.textContent;
+    showFileStatus('🔄 Translating...', 'info');
+    
+    const chunks = splitTextIntoChunks(textToTranslate, 400);
+    let translatedText = '';
+    
+    for (let i = 0; i < chunks.length; i++) {
+        const translation = await translateText(chunks[i], sourceLang, targetLang);
+        if (translation) {
+            translatedText += translation + ' ';
+        }
+        
+        const progress = Math.round(((i + 1) / chunks.length) * 100);
+        showFileStatus(`🔄 Translating... ${progress}%`, 'info');
+        await new Promise(resolve => setTimeout(resolve, 300));
+    }
+    
+    fileTranslatedText.textContent = translatedText.trim();
+    showFileStatus('✅ Translation complete!', 'success');
+});
+
+function splitTextIntoChunks(text, maxLength) {
+    const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
+    const chunks = [];
+    let currentChunk = '';
+    
+    for (const sentence of sentences) {
+        if ((currentChunk + sentence).length > maxLength && currentChunk) {
+            chunks.push(currentChunk.trim());
+            currentChunk = sentence;
+        } else {
+            currentChunk += sentence;
+        }
+    }
+    
+    if (currentChunk) chunks.push(currentChunk.trim());
+    return chunks;
+}
+
+speakFileBtn.addEventListener('click', () => {
+    const text = fileTranslatedText.textContent.trim();
+    if (!text) {
+        showFileStatus('❌ No translation to speak!', 'error');
+        return;
+    }
+    speakText(text, fileTargetLang.value, speakFileBtn);
+});
+
+copyFileBtn.addEventListener('click', () => {
+    const text = fileTranslatedText.textContent.trim();
+    if (!text) {
+        showFileStatus('❌ No translation to copy!', 'error');
+        return;
+    }
+    
+    navigator.clipboard.writeText(text).then(() => {
+        showFileStatus('✅ Copied to clipboard!', 'success');
+    }).catch(() => {
+        showFileStatus('❌ Failed to copy!', 'error');
+    });
+});
+
+downloadFileBtn.addEventListener('click', () => {
+    const original = fileOriginalText.textContent.trim();
+    const translated = fileTranslatedText.textContent.trim();
+    
+    if (!translated) {
+        showFileStatus('❌ No translation to download!', 'error');
+        return;
+    }
+    
+    const content = `DOCUMENT TRANSLATION\n${'='.repeat(60)}\n\n` +
+                   `Source Language: ${fileSourceLang.value.toUpperCase()}\n` +
+                   `Original Text:\n${original}\n\n` +
+                   `${'='.repeat(60)}\n\n` +
+                   `Target Language: ${fileTargetLang.value.toUpperCase()}\n` +
+                   `Translation:\n${translated}`;
+    
+    downloadFile(content, `translation_${new Date().toISOString().slice(0,10)}.txt`);
+    showFileStatus('✅ Downloaded successfully!', 'success');
+});
+
+function showFileStatus(message, type) {
+    fileStatus.textContent = message;
+    fileStatus.style.display = 'block';
+    fileStatus.className = 'status-message show';
+    
+    if (type !== 'info') {
+        setTimeout(() => hideFileStatus(), 3000);
+    }
+}
+
+function hideFileStatus() {
+    fileStatus.style.display = 'none';
+}
+
+// ==================== VIDEO UPLOAD TAB ====================
+
+const videoUploadInput = document.getElementById('videoUploadInput');
+const videoBrowseBtn = document.getElementById('videoBrowseBtn');
+const videoDragDrop = document.getElementById('videoDragDrop');
+const videoPreviewSection = document.getElementById('videoPreviewSection');
+const videoPlayer = document.getElementById('videoPlayer');
+const videoLanguage = document.getElementById('videoLanguage');
+const videoTargetLang = document.getElementById('videoTargetLang');
+const transcribeVideoBtn = document.getElementById('transcribeVideoBtn');
+const stopTranscribeBtn = document.getElementById('stopTranscribeBtn');
+const videoStatus = document.getElementById('videoStatus');
+const originalTranscript = document.getElementById('originalTranscript');
+const translatedTranscript = document.getElementById('translatedTranscript');
+const speakVideoBtn = document.getElementById('speakVideoBtn');
+const downloadVideoBtn = document.getElementById('downloadVideoBtn');
+const clearVideoBtn = document.getElementById('clearVideoBtn');
+
+let videoRecognition;
+let isVideoTranscribing = false;
+let audioContext;
+let mediaSource;
+
+videoBrowseBtn.addEventListener('click', () => videoUploadInput.click());
+videoDragDrop.addEventListener('click', () => videoUploadInput.click());
+
+videoDragDrop.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    videoDragDrop.classList.add('dragover');
+});
+
+videoDragDrop.addEventListener('dragleave', () => {
+    videoDragDrop.classList.remove('dragover');
+});
+
+videoDragDrop.addEventListener('drop', (e) => {
+    e.preventDefault();
+    videoDragDrop.classList.remove('dragover');
+    if (e.dataTransfer.files.length > 0) {
+        handleVideoUpload(e.dataTransfer.files[0]);
+    }
+});
+
+videoUploadInput.addEventListener('change', (e) => {
+    if (e.target.files[0]) handleVideoUpload(e.target.files[0]);
+});
+
+function handleVideoUpload(file) {
+    const maxSize = 100 * 1024 * 1024;
+    
+    if (file.size > maxSize) {
+        showVideoStatus('❌ Video too large! Maximum 100MB', 'error');
+        return;
+    }
+    
+    if (!file.type.startsWith('video/')) {
+        showVideoStatus('❌ Please select a video file!', 'error');
+        return;
+    }
+    
+    const videoURL = URL.createObjectURL(file);
+    videoPlayer.src = videoURL;
+    videoPreviewSection.style.display = 'block';
+    
+    originalTranscript.textContent = '';
+    translatedTranscript.textContent = '';
+    
+    showVideoStatus('✅ Video loaded successfully!', 'success');
+}
+
+if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    videoRecognition = new SpeechRecognition();
+    
+    videoRecognition.continuous = true;
+    videoRecognition.interimResults = true;
+    videoRecognition.maxAlternatives = 3;
+    
+    let videoFinalTranscript = '';
+    
+    videoRecognition.onstart = () => {
+        isVideoTranscribing = true;
+        transcribeVideoBtn.disabled = true;
+        stopTranscribeBtn.disabled = false;
+        showVideoStatus('🎤 Listening to video audio...', 'info');
+        videoPlayer.play();
+    };
+    
+    videoRecognition.onresult = async (event) => {
+        let interimTranscript = '';
+        
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+            const transcript = event.results[i][0].transcript;
+            
+            if (event.results[i].isFinal) {
+                videoFinalTranscript += transcript + ' ';
+                
+                const sourceLang = getTranslationCode(videoLanguage.value);
+                const targetLang = videoTargetLang.value;
+                
+                if (sourceLang !== targetLang) {
+                    const translation = await translateText(transcript, sourceLang, targetLang);
+                    if (translation) {
+                        translatedTranscript.textContent += translation + ' ';
+                    }
+                }
+            } else {
+                interimTranscript += transcript;
+            }
+        }
+        
+        originalTranscript.textContent = videoFinalTranscript + interimTranscript;
+    };
+    
+    videoRecognition.onerror = (event) => {
+        console.error('Video transcription error:', event.error);
+        showVideoStatus(`❌ Error: ${event.error}`, 'error');
+        stopVideoTranscription();
+    };
+    
+    videoRecognition.onend = () => {
+        if (isVideoTranscribing && !videoPlayer.paused) {
+            try {
+                videoRecognition.start();
+            } catch (e) {
+                stopVideoTranscription();
+            }
+        } else {
+            stopVideoTranscription();
+        }
+    };
+}
+
+function stopVideoTranscription() {
+    isVideoTranscribing = false;
+    transcribeVideoBtn.disabled = false;
+    stopTranscribeBtn.disabled = true;
+    showVideoStatus('⏹️ Transcription stopped', 'success');
+}
+
+transcribeVideoBtn.addEventListener('click', async () => {
+    if (!videoPlayer.src) {
+        showVideoStatus('❌ Please upload a video first!', 'error');
+        return;
+    }
+    
+    const permissionGranted = await ensureAudioPermission();
+    if (!permissionGranted) {
+        showVideoStatus('❌ Izin mikrofon diperlukan!', 'error');
+        return;
+    }
+    
+    if (videoRecognition && !isVideoTranscribing) {
+        videoRecognition.lang = videoLanguage.value;
+        
+        if (!audioContext) {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        
+        if (audioContext && audioContext.state === 'suspended') {
+            await audioContext.resume();
+        }
+        
+        if (!mediaSource) {
+            try {
+                mediaSource = audioContext.createMediaElementSource(videoPlayer);
+                mediaSource.connect(audioContext.destination);
+            } catch (e) {
+                console.log('Media source already connected');
+            }
+        }
+        
+        try {
+            videoRecognition.start();
+        } catch (e) {
+            showVideoStatus('❌ Failed to start transcription!', 'error');
+        }
+    }
+});
+
+stopTranscribeBtn.addEventListener('click', () => {
+    if (videoRecognition && isVideoTranscribing) {
+        videoRecognition.stop();
+        videoPlayer.pause();
+        stopVideoTranscription();
+    }
+});
+
+videoPlayer.addEventListener('ended', () => {
+    if (videoRecognition && isVideoTranscribing) {
+        videoRecognition.stop();
+        stopVideoTranscription();
+        showVideoStatus('✅ Video completed - Transcription finished', 'success');
+    }
+});
+
+speakVideoBtn.addEventListener('click', () => {
+    const text = translatedTranscript.textContent.trim();
+    if (!text) {
+        showVideoStatus('❌ No translation to speak!', 'error');
+        return;
+    }
+    speakText(text, videoTargetLang.value, speakVideoBtn);
+});
+
+downloadVideoBtn.addEventListener('click', () => {
+    const original = originalTranscript.textContent.trim();
+    const translated = translatedTranscript.textContent.trim();
+    
+    if (!original) {
+        showVideoStatus('❌ No transcript to download!', 'error');
+        return;
+    }
+    
+    const content = `VIDEO TRANSCRIPT\n${'='.repeat(60)}\n\n` +
+                   `Language: ${videoLanguage.value}\n` +
+                   `Original Transcript:\n${original}\n\n` +
+                   `${'='.repeat(60)}\n\n` +
+                   `Translation Language: ${videoTargetLang.value.toUpperCase()}\n` +
+                   `Translation:\n${translated || 'No translation'}`;
+    
+    downloadFile(content, `video-transcript_${new Date().toISOString().slice(0,10)}.txt`);
+    showVideoStatus('✅ Downloaded successfully!', 'success');
+});
+
+clearVideoBtn.addEventListener('click', () => {
+    videoPlayer.src = '';
+    videoUploadInput.value = '';
+    videoPreviewSection.style.display = 'none';
+    originalTranscript.textContent = '';
+    translatedTranscript.textContent = '';
+    
+    if (videoRecognition && isVideoTranscribing) {
+        videoRecognition.stop();
+        stopVideoTranscription();
+    }
+});
+
+function showVideoStatus(message, type) {
+    videoStatus.textContent = message;
+    videoStatus.style.display = 'block';
+    videoStatus.className = 'status-message show';
+    
+    if (type !== 'info') {
+        setTimeout(() => {
+            videoStatus.style.display = 'none';
+        }, 3000);
+    }
+}
+
+// ==================== TEXT TRANSLATION TAB ====================
+
+const sourceLanguage = document.getElementById('sourceLanguage');
+const targetLanguage = document.getElementById('targetLanguage');
+const sourceText = document.getElementById('sourceText');
+const targetText = document.getElementById('targetText');
+const sourceCharCount = document.getElementById('sourceCharCount');
+const targetCharCount = document.getElementById('targetCharCount');
+const swapBtn = document.getElementById('swapBtn');
+const translateBtn = document.getElementById('translateBtn');
+const speakTranslationBtn = document.getElementById('speakTranslationBtn');
+const clearSourceBtn = document.getElementById('clearSourceBtn');
+const copyBtn = document.getElementById('copyBtn');
+const downloadTranslationBtn = document.getElementById('downloadTranslationBtn');
+
+sourceText.addEventListener('input', () => {
+    const length = sourceText.value.length;
+    sourceCharCount.textContent = `${length} / 5000`;
+    
+    if (length > 5000) {
+        sourceText.value = sourceText.value.substring(0, 5000);
+        sourceCharCount.textContent = '5000 / 5000';
+    }
+});
+
+targetText.addEventListener('input', () => {
+    targetCharCount.textContent = targetText.value.length;
+});
+
+swapBtn.addEventListener('click', () => {
+    const tempLang = sourceLanguage.value;
+    sourceLanguage.value = targetLanguage.value;
+    targetLanguage.value = tempLang;
+    
+    const tempText = sourceText.value;
+    sourceText.value = targetText.value;
+    targetText.value = tempText;
+});
+
+translateBtn.addEventListener('click', async () => {
+    const text = sourceText.value.trim();
+    
+    if (!text) {
+        alert('Please enter text to translate!');
+        return;
+    }
+    
+    const sourceLang = sourceLanguage.value;
+    const targetLang = targetLanguage.value;
+    
+    if (sourceLang === targetLang) {
+        alert('Source and target languages must be different!');
+        return;
+    }
+    
+    targetText.value = 'Translating...';
+    
+    const translation = await translateText(text, sourceLang, targetLang);
+    
+    if (translation) {
+        targetText.value = translation;
+    } else {
+        targetText.value = '';
+        alert('Translation failed. Please try again!');
+    }
+});
+
+speakTranslationBtn.addEventListener('click', () => {
+    const text = targetText.value.trim();
+    if (!text) {
+        alert('No translation to speak!');
+        return;
+    }
+    speakText(text, targetLanguage.value, speakTranslationBtn);
+});
+
+clearSourceBtn.addEventListener('click', () => {
+    sourceText.value = '';
+    sourceCharCount.textContent = '0 / 5000';
+});
+
+copyBtn.addEventListener('click', () => {
+    const text = targetText.value.trim();
+    if (!text) {
+        alert('No translation to copy!');
+        return;
+    }
+    
+    navigator.clipboard.writeText(text).then(() => {
+        const originalHTML = copyBtn.innerHTML;
+        copyBtn.innerHTML = '✅';
+        setTimeout(() => {
+            copyBtn.innerHTML = originalHTML;
+        }, 2000);
+    });
+});
+
+downloadTranslationBtn.addEventListener('click', () => {
+    const text = targetText.value.trim();
+    
+    if (!text) {
+        alert('No translation to download!');
+        return;
+    }
+    
+    const content = `TEXT TRANSLATION\n${'='.repeat(60)}\n\n` +
+                   `Source Language: ${sourceLanguage.value.toUpperCase()}\n` +
+                   `Original: ${sourceText.value}\n\n` +
+                   `Target Language: ${targetLanguage.value.toUpperCase()}\n` +
+                   `Translation: ${text}`;
+    
+    downloadFile(content, `translation_${new Date().toISOString().slice(0,10)}.txt`);
+});
+
+sourceText.addEventListener('keydown', (e) => {
+    if (e.ctrlKey && e.key === 'Enter') {
+        translateBtn.click();
+    }
+});
+
+// ==================== VOICE RECORD TAB ====================
+
+const sttLanguageSelect = document.getElementById('sttLanguageSelect');
+const startBtn = document.getElementById('startBtn');
+const stopBtn = document.getElementById('stopBtn');
+const clearBtn = document.getElementById('clearBtn');
+const statusElement = document.getElementById('status');
+const resultElement = document.getElementById('result');
+const downloadBtn = document.getElementById('downloadBtn');
+
+let micRecognition;
+let isMicRecognizing = false;
+
+if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    micRecognition = new SpeechRecognition();
+    
+    micRecognition.continuous = true;
+    micRecognition.interimResults = true;
+    micRecognition.maxAlternatives = 3;
+    
+    let micFinalTranscript = '';
+    
+    micRecognition.onstart = () => {
+        isMicRecognizing = true;
+        startBtn.disabled = true;
+        stopBtn.disabled = false;
+        statusElement.textContent = '🎤 Listening... Speak now!';
+        statusElement.style.display = 'block';
+        statusElement.className = 'status-message show';
+    };
+    
+    micRecognition.onresult = (event) => {
+        let interimTranscript = '';
+        
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+            const transcript = event.results[i][0].transcript;
+            
+            if (event.results[i].isFinal) {
+                micFinalTranscript += transcript + ' ';
+            } else {
+                interimTranscript += transcript;
+            }
+        }
+        
+        resultElement.textContent = micFinalTranscript + interimTranscript;
+        
+        if (micFinalTranscript.trim().length > 0) {
+            downloadBtn.style.display = 'inline-flex';
+        }
+    };
+    
+    micRecognition.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+        
+        if (event.error === 'no-speech') {
+            statusElement.textContent = '❌ No speech detected. Try again!';
+        } else if (event.error === 'audio-capture') {
+            statusElement.textContent = '❌ Microphone not found!';
+        } else if (event.error === 'not-allowed') {
+            statusElement.textContent = '❌ Microphone permission denied!';
+        } else {
+            statusElement.textContent = `❌ Error: ${event.error}`;
+        }
+        
+        stopMicRecognition();
+    };
+    
+    micRecognition.onend = () => {
+        if (isMicRecognizing) {
+            try {
+                micRecognition.start();
+            } catch (e) {
+                stopMicRecognition();
+            }
+        }
+    };
+    
+    function stopMicRecognition() {
+        isMicRecognizing = false;
+        startBtn.disabled = false;
+        stopBtn.disabled = true;
+        statusElement.textContent = '⏹️ Recording stopped';
+        
+        setTimeout(() => {
+            statusElement.style.display = 'none';
+        }, 3000);
+    }
+    
+    startBtn.addEventListener('click', async () => {
+        if (!isMicRecognizing) {
+            const permissionGranted = await ensureAudioPermission();
+            if (!permissionGranted) {
+                statusElement.textContent = '❌ Izin mikrofon diperlukan!';
+                statusElement.style.display = 'block';
+                statusElement.className = 'status-message show';
+                return;
+            }
+            micRecognition.lang = sttLanguageSelect.value;
+            micFinalTranscript = resultElement.textContent.trim() ? resultElement.textContent + ' ' : '';
+            
+            try {
+                micRecognition.start();
+            } catch (e) {
+                alert('Failed to start recording!');
+            }
+        }
+    });
+    
+    stopBtn.addEventListener('click', () => {
+        if (isMicRecognizing) {
+            micRecognition.stop();
+            stopMicRecognition();
+        }
+    });
+    
+} else {
+    statusElement.textContent = '❌ Speech-to-Text not supported! Use Chrome or Edge.';
+    statusElement.style.display = 'block';
+    startBtn.disabled = true;
+}
+
+clearBtn.addEventListener('click', () => {
+    resultElement.textContent = '';
+    downloadBtn.style.display = 'none';
+});
+
+downloadBtn.addEventListener('click', () => {
+    const text = resultElement.textContent.trim();
+    
+    if (!text) {
+        alert('No transcript to download!');
+        return;
+    }
+    
+    downloadFile(text, `transcript_${new Date().toISOString().slice(0,10)}.txt`);
+});
+
+// ==================== UTILITY FUNCTIONS ====================
+
+async function translateText(text, sourceLang, targetLang) {
+    if (!text.trim()) return null;
+    
+    const apiUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${sourceLang}|${targetLang}`;
+    
+    try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        
+        if (data.responseStatus === 200) {
+            return data.responseData.translatedText;
+        } else {
+            throw new Error('Translation failed');
+        }
+    } catch (error) {
+        console.error('Translation error:', error);
+        return null;
+    }
+}
+
+function speakText(text, translationCode, button) {
+    if (!text) return;
+    
+    if ('speechSynthesis' in window) {
+        speechSynthesis.cancel();
+        
+        const utterance = new SpeechSynthesisUtterance(text);
+        const speechCode = getSpeechCode(translationCode);
+        utterance.lang = speechCode;
+        
+        const voices = speechSynthesis.getVoices();
+        const langPrefix = speechCode.split('-')[0];
+        const voice = voices.find(v => 
+            v.lang === speechCode || 
+            v.lang.startsWith(langPrefix) ||
+            v.lang.includes(langPrefix)
+        );
+        
+        if (voice) {
+            utterance.voice = voice;
+        }
+        
+        utterance.rate = 0.9;
+        utterance.pitch = 1.0;
+        
+        const originalHTML = button.innerHTML;
+        
+        utterance.onstart = () => {
+            button.innerHTML = '🔊 Speaking...';
+            button.disabled = true;
+        };
+        
+        utterance.onend = () => {
+            button.innerHTML = originalHTML;
+            button.disabled = false;
+        };
+        
+        utterance.onerror = () => {
+            button.innerHTML = originalHTML;
+            button.disabled = false;
+        };
+        
+        speechSynthesis.speak(utterance);
+    }
+}
+
+function downloadFile(content, filename) {
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+// ==================== INITIALIZATION ====================
+
+if (speechSynthesis.onvoiceschanged !== undefined) {
+    speechSynthesis.onvoiceschanged = () => {
+        speechSynthesis.getVoices();
+    };
+}
+
+if (typeof pdfjsLib !== 'undefined') {
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    populateLanguageSelect(document.getElementById('fileSourceLang'), false);
+    populateLanguageSelect(document.getElementById('fileTargetLang'), false);
+    populateLanguageSelect(document.getElementById('sourceLanguage'), false);
+    populateLanguageSelect(document.getElementById('targetLanguage'), false);
+    populateLanguageSelect(document.getElementById('videoTargetLang'), false);
+    populateLanguageSelect(document.getElementById('videoLanguage'), true);
+    populateLanguageSelect(document.getElementById('sttLanguageSelect'), true);
+});
+// ==================== FILE TRANSLATION WITH LIMITS ====================
+
+// Translation limits configuration
+const TRANSLATION_LIMITS = {
+    charsPerRequest: 500,          // MyMemory limit per request
+    dailyLimitAnonymous: 5000,     // Daily limit for anonymous users
+    dailyLimitWithEmail: 50000,    // Daily limit with email
+    maxFileSize: 10 * 1024 * 1024, // 10MB max file size
+    recommendedDelay: 500          // Delay between requests (ms)
+};
+
+// Track daily usage (stored in localStorage)
+function getDailyUsage() {
+    const today = new Date().toDateString();
+    const stored = localStorage.getItem('translationUsage');
+    
+    if (stored) {
+        const data = JSON.parse(stored);
+        if (data.date === today) {
+            return data.chars;
+        }
+    }
+    
+    return 0;
+}
+
+function updateDailyUsage(chars) {
+    const today = new Date().toDateString();
+    const current = getDailyUsage();
+    
+    localStorage.setItem('translationUsage', JSON.stringify({
+        date: today,
+        chars: current + chars
+    }));
+}
+
+function resetDailyUsage() {
+    localStorage.removeItem('translationUsage');
+}
+
+// Show translation limits info
+function showTranslationLimits() {
+    const currentUsage = getDailyUsage();
+    const remaining = TRANSLATION_LIMITS.dailyLimitAnonymous - currentUsage;
+    
+    return {
+        used: currentUsage,
+        remaining: remaining,
+        total: TRANSLATION_LIMITS.dailyLimitAnonymous,
+        percentage: Math.round((currentUsage / TRANSLATION_LIMITS.dailyLimitAnonymous) * 100)
+    };
+}
+
+// Update the translateFileBtn event listener
+translateFileBtn.addEventListener('click', async () => {
+    if (!currentFileContent && !fileOriginalText.textContent.trim()) {
+        showFileStatus('❌ No content to translate!', 'error');
+        return;
+    }
+    
+    const sourceLang = fileSourceLang.value;
+    const targetLang = fileTargetLang.value;
+    
+    if (sourceLang === targetLang) {
+        showFileStatus('❌ Source and target languages must be different!', 'error');
+        return;
+    }
+    
+    const textToTranslate = currentFileContent || fileOriginalText.textContent;
+    const textLength = textToTranslate.length;
+    
+    // Check daily limit
+    const usage = showTranslationLimits();
+    
+    if (usage.remaining <= 0) {
+        showFileStatus(
+            `❌ Daily limit reached! You've used ${usage.used}/${usage.total} characters today. ` +
+            `Limit resets at midnight. Consider upgrading or try again tomorrow.`,
+            'error'
+        );
+        showLimitWarning(usage);
+        return;
+    }
+    
+    if (textLength > usage.remaining) {
+        const canTranslate = confirm(
+            `⚠️ TEXT LENGTH WARNING\n\n` +
+            `Text length: ${textLength.toLocaleString()} characters\n` +
+            `Daily remaining: ${usage.remaining.toLocaleString()} characters\n\n` +
+            `Only the first ${usage.remaining.toLocaleString()} characters will be translated.\n` +
+            `Continue?`
+        );
+        
+        if (!canTranslate) return;
+    }
+    
+    // Show translation info
+    showFileStatus(
+        `🔄 Preparing translation...\n` +
+        `Text: ${Math.min(textLength, usage.remaining).toLocaleString()} chars | ` +
+        `Daily used: ${usage.used}/${usage.total} (${usage.percentage}%)`,
+        'info'
+    );
+    
+    // Limit text if necessary
+    const textToProcess = textLength > usage.remaining 
+        ? textToTranslate.substring(0, usage.remaining)
+        : textToTranslate;
+    
+    // Split into chunks
+    const chunks = splitTextIntoChunks(textToProcess, TRANSLATION_LIMITS.charsPerRequest);
+    let translatedText = '';
+    let totalProcessed = 0;
+    
+    try {
+        for (let i = 0; i < chunks.length; i++) {
+            const translation = await translateText(chunks[i], sourceLang, targetLang);
+            
+            if (translation) {
+                translatedText += translation + ' ';
+                totalProcessed += chunks[i].length;
+                
+                // Update usage
+                updateDailyUsage(chunks[i].length);
+                
+                // Update progress
+                const progress = Math.round(((i + 1) / chunks.length) * 100);
+                const newUsage = showTranslationLimits();
+                
+                showFileStatus(
+                    `🔄 Translating... ${progress}%\n` +
+                    `Processed: ${totalProcessed.toLocaleString()} / ${textToProcess.length.toLocaleString()} chars | ` +
+                    `Daily: ${newUsage.used.toLocaleString()}/${newUsage.total.toLocaleString()}`,
+                    'info'
+                );
+                
+                // Delay to avoid rate limiting
+                await new Promise(resolve => setTimeout(resolve, TRANSLATION_LIMITS.recommendedDelay));
+            } else {
+                throw new Error('Translation failed');
+            }
+        }
+        
+        fileTranslatedText.textContent = translatedText.trim();
+        
+        const finalUsage = showTranslationLimits();
+        showFileStatus(
+            `✅ Translation complete! Translated ${totalProcessed.toLocaleString()} characters.\n` +
+            `Daily usage: ${finalUsage.used.toLocaleString()}/${finalUsage.total.toLocaleString()} (${finalUsage.remaining.toLocaleString()} remaining)`,
+            'success'
+        );
+        
+        // Show warning if text was truncated
+        if (textLength > usage.remaining) {
+            setTimeout(() => {
+                alert(
+                    `⚠️ PARTIAL TRANSLATION\n\n` +
+                    `Only ${totalProcessed.toLocaleString()} of ${textLength.toLocaleString()} characters were translated due to daily limit.\n\n` +
+                    `Remaining ${(textLength - totalProcessed).toLocaleString()} characters will be available after limit reset.`
+                );
+            }, 1000);
+        }
+        
+    } catch (error) {
+        console.error('Translation error:', error);
+        showFileStatus(
+            `❌ Translation failed! Please try again later.\n` +
+            `Processed: ${totalProcessed.toLocaleString()} chars before error.`,
+            'error'
+        );
+    }
+});
+
+// Show limit warning dialog
+function showLimitWarning(usage) {
+    const warningDiv = document.createElement('div');
+    warningDiv.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        z-index: 10000;
+        max-width: 500px;
+        text-align: center;
+    `;
+    
+    warningDiv.innerHTML = `
+        <h2 style="color: #ef4444; margin-bottom: 20px;">⚠️ Daily Limit Reached</h2>
+        <div style="background: #fee; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+            <p style="font-size: 16px; margin-bottom: 10px;">
+                <strong>Used:</strong> ${usage.used.toLocaleString()} / ${usage.total.toLocaleString()} characters
+            </p>
+            <div style="background: #ddd; height: 20px; border-radius: 10px; overflow: hidden;">
+                <div style="background: linear-gradient(90deg, #ef4444, #dc2626); height: 100%; width: ${usage.percentage}%;"></div>
+            </div>
+        </div>
+        <h3 style="color: #333; margin-bottom: 15px;">Translation Limits (MyMemory API)</h3>
+        <ul style="text-align: left; line-height: 1.8; color: #555; margin-bottom: 20px;">
+            <li>📊 <strong>Per Request:</strong> 500 characters max</li>
+            <li>📅 <strong>Daily (Free):</strong> 5,000 characters</li>
+            <li>✉️ <strong>With Email:</strong> 50,000 characters/day</li>
+            <li>🔄 <strong>Resets:</strong> Every day at midnight</li>
+        </ul>
+        <p style="color: #666; margin-bottom: 20px; font-size: 14px;">
+            <strong>Tips:</strong><br>
+            • Split large files into smaller parts<br>
+            • Use VPN to get new daily quota (reset IP)<br>
+            • Consider using paid API for unlimited access
+        </p>
+        <button onclick="this.parentElement.remove()" style="
+            background: #6366f1;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        ">Got It</button>
+    `;
+    
+    document.body.appendChild(warningDiv);
+    
+    // Auto remove after 10 seconds
+    setTimeout(() => {
+        if (warningDiv.parentElement) {
+            warningDiv.remove();
+        }
+    }, 10000);
+}
+
+// Add usage indicator to file upload section
+function addUsageIndicator() {
+    const indicator = document.createElement('div');
+    indicator.id = 'usageIndicator';
+    indicator.style.cssText = `
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        padding: 15px;
+        border-radius: 10px;
+        margin: 20px 0;
+        text-align: center;
+        font-weight: 600;
+    `;
+    
+    const usage = showTranslationLimits();
+    indicator.innerHTML = `
+        📊 Daily Translation Usage: ${usage.used.toLocaleString()} / ${usage.total.toLocaleString()} chars 
+        (${usage.remaining.toLocaleString()} remaining)
+        <button onclick="resetDailyUsage(); location.reload();" style="
+            background: rgba(255,255,255,0.2);
+            border: 1px solid white;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 5px;
+            margin-left: 15px;
+            cursor: pointer;
+            font-size: 12px;
+        ">Reset (Dev Only)</button>
+    `;
+    
+    // Insert after file preview section
+    const fileSection = document.getElementById('file-upload');
+    if (fileSection && !document.getElementById('usageIndicator')) {
+        fileSection.insertBefore(indicator, fileSection.firstChild);
+    }
+}
+
+// Update usage indicator periodically
+function updateUsageIndicator() {
+    const indicator = document.getElementById('usageIndicator');
+    if (indicator) {
+        const usage = showTranslationLimits();
+        const percentage = usage.percentage;
+        const color = percentage > 80 ? '#ef4444' : percentage > 50 ? '#f59e0b' : '#10b981';
+        
+        indicator.innerHTML = `
+            📊 Daily Translation Usage: ${usage.used.toLocaleString()} / ${usage.total.toLocaleString()} chars 
+            (${usage.remaining.toLocaleString()} remaining)
+            <span style="
+                background: ${color};
+                padding: 3px 10px;
+                border-radius: 5px;
+                margin-left: 10px;
+                font-size: 12px;
+            ">${percentage}%</span>
+        `;
+    }
+}
+
+// Enhanced splitTextIntoChunks with sentence awareness
+function splitTextIntoChunks(text, maxLength) {
+    const chunks = [];
+    
+    // Try to split by paragraphs first
+    const paragraphs = text.split(/\n\n+/);
+    let currentChunk = '';
+    
+    for (const paragraph of paragraphs) {
+        // If single paragraph is too long, split by sentences
+        if (paragraph.length > maxLength) {
+            const sentences = paragraph.match(/[^.!?]+[.!?]+/g) || [paragraph];
+            
+            for (const sentence of sentences) {
+                if ((currentChunk + sentence).length > maxLength && currentChunk) {
+                    chunks.push(currentChunk.trim());
+                    currentChunk = sentence;
+                } else {
+                    currentChunk += sentence;
+                }
+            }
+        } else {
+            if ((currentChunk + '\n\n' + paragraph).length > maxLength && currentChunk) {
+                chunks.push(currentChunk.trim());
+                currentChunk = paragraph;
+            } else {
+                currentChunk += (currentChunk ? '\n\n' : '') + paragraph;
+            }
+        }
+    }
+    
+    if (currentChunk) {
+        chunks.push(currentChunk.trim());
+    }
+    
+    return chunks.length > 0 ? chunks : [text];
+}
+
+// Update file size display with character count
+async function handleFileUpload(file) {
+    const maxSize = TRANSLATION_LIMITS.maxFileSize;
+    
+    if (file.size > maxSize) {
+        showFileStatus(`❌ File too large! Maximum ${formatFileSize(maxSize)}`, 'error');
+        return;
+    }
+    
+    const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
+    const validTypes = ['.txt', '.pdf', '.doc', '.docx'];
+    
+    if (!validTypes.includes(fileExtension)) {
+        showFileStatus('❌ Invalid file type! Please upload TXT, PDF, DOC, or DOCX', 'error');
+        return;
+    }
+    
+    fileName.textContent = file.name;
+    fileSize.textContent = formatFileSize(file.size);
+    filePreviewSection.style.display = 'block';
+    
+    try {
+        if (fileExtension === '.txt') {
+            currentFileContent = await readTextFile(file);
+            fileOriginalText.textContent = currentFileContent;
+            
+            const charCount = currentFileContent.length;
+            const usage = showTranslationLimits();
+            
+            showFileStatus(
+                `✅ File loaded: ${charCount.toLocaleString()} characters\n` +
+                `${charCount > usage.remaining ? `⚠️ Exceeds daily limit! Only ${usage.remaining.toLocaleString()} chars can be translated.` : '✓ Within daily limit'}`,
+                charCount > usage.remaining ? 'warning' : 'success'
+            );
+        } else if (fileExtension === '.pdf') {
+            currentFileContent = await readPDFFile(file);
+            fileOriginalText.textContent = currentFileContent;
+            
+            const charCount = currentFileContent.length;
+            const usage = showTranslationLimits();
+            
+            showFileStatus(
+                `✅ PDF loaded: ${charCount.toLocaleString()} characters\n` +
+                `${charCount > usage.remaining ? `⚠️ Exceeds daily limit! Only ${usage.remaining.toLocaleString()} chars can be translated.` : '✓ Within daily limit'}`,
+                charCount > usage.remaining ? 'warning' : 'success'
+            );
+        } else {
+            showFileStatus('⚠️ DOC/DOCX preview not available. Convert to TXT or PDF first.', 'warning');
+            currentFileContent = '';
+        }
+    } catch (error) {
+        console.error('Error reading file:', error);
+        showFileStatus('❌ Error reading file!', 'error');
+    }
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', () => {
+    // ... existing initialization code ...
+    
+    // Add usage indicator
+    setTimeout(() => {
+        addUsageIndicator();
+        
+        // Update indicator every 5 seconds
+        setInterval(updateUsageIndicator, 5000);
+    }, 1000);
+    
+    // Show daily reset notification
+    const lastVisit = localStorage.getItem('lastVisit');
+    const today = new Date().toDateString();
+    
+    if (lastVisit && lastVisit !== today) {
+        const oldUsage = getDailyUsage();
+        if (oldUsage > 0) {
+            setTimeout(() => {
+                alert(`🔄 Daily Limit Reset!\n\nYour translation quota has been reset.\nYou now have ${TRANSLATION_LIMITS.dailyLimitAnonymous.toLocaleString()} characters available.`);
+            }, 2000);
+        }
+    }
+    
+    localStorage.setItem('lastVisit', today);
+});
+
+// ==================== LANGUAGE SEARCH FUNCTIONALITY ====================
+
+function setupLanguageSearch(searchInputId, selectId) {
+    const searchInput = document.getElementById(searchInputId);
+    const select = document.getElementById(selectId);
+    
+    if (!searchInput || !select) return;
+    
+    searchInput.addEventListener('input', (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        const options = select.querySelectorAll('option');
+        const optgroups = select.querySelectorAll('optgroup');
+        
+        if (!searchTerm) {
+            // Show all
+            options.forEach(opt => opt.style.display = '');
+            optgroups.forEach(grp => grp.style.display = '');
+            return;
+        }
+        
+        // Filter options
+        optgroups.forEach(optgroup => {
+            let hasVisibleOptions = false;
+            const groupOptions = optgroup.querySelectorAll('option');
+            
+            groupOptions.forEach(option => {
+                const text = option.textContent.toLowerCase();
+                const value = option.value.toLowerCase();
+                
+                if (text.includes(searchTerm) || value.includes(searchTerm)) {
+                    option.style.display = '';
+                    hasVisibleOptions = true;
+                } else {
+                    option.style.display = 'none';
+                }
+            });
+            
+            optgroup.style.display = hasVisibleOptions ? '' : 'none';
+        });
+        
+        // Handle auto-detect option
+        const autoOption = select.querySelector('option[value="auto"]');
+        if (autoOption) {
+            autoOption.style.display = '';
+        }
+    });
+    
+    // Clear search when select changes
+    select.addEventListener('change', () => {
+        searchInput.value = '';
+        const options = select.querySelectorAll('option');
+        const optgroups = select.querySelectorAll('optgroup');
+        options.forEach(opt => opt.style.display = '');
+        optgroups.forEach(grp => grp.style.display = '');
+    });
+}
+
+// ==================== EDITABLE TEXT FUNCTIONALITY ====================
+
+let isOriginalEditable = false;
+let isTranslationEditable = false;
+
+const editOriginalBtn = document.getElementById('editOriginalBtn');
+const editTranslationBtn = document.getElementById('editTranslationBtn');
+
+editOriginalBtn.addEventListener('click', () => {
+    isOriginalEditable = !isOriginalEditable;
+    fileOriginalText.disabled = !isOriginalEditable;
+    editOriginalBtn.textContent = isOriginalEditable ? '💾' : '✏️';
+    editOriginalBtn.title = isOriginalEditable ? 'Save' : 'Edit Text';
+    
+    if (isOriginalEditable) {
+        fileOriginalText.focus();
+        fileOriginalText.style.background = '#fffbeb';
+    } else {
+        fileOriginalText.style.background = 'white';
+        currentFileContent = fileOriginalText.value;
+    }
+});
+
+editTranslationBtn.addEventListener('click', () => {
+    isTranslationEditable = !isTranslationEditable;
+    fileTranslatedText.disabled = !isTranslationEditable;
+    editTranslationBtn.textContent = isTranslationEditable ? '💾' : '✏️';
+    editTranslationBtn.title = isTranslationEditable ? 'Save' : 'Edit Text';
+    
+    if (isTranslationEditable) {
+        fileTranslatedText.focus();
+        fileTranslatedText.style.background = '#fffbeb';
+    } else {
+        fileTranslatedText.style.background = 'white';
+    }
+});
+
+// ==================== FIXED TRANSLATION FUNCTION ====================
+
+async function translateTextChunk(text, sourceLang, targetLang) {
+    if (!text || !text.trim()) return null;
+    
+    // Handle auto-detect
+    const source = sourceLang === 'auto' ? 'en' : sourceLang;
+    
+    const apiUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${source}|${targetLang}`;
+    
+    try {
+        const response = await fetch(apiUrl);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (data.responseStatus === 200 && data.responseData) {
+            return data.responseData.translatedText;
+        } else {
+            console.error('Translation API error:', data);
+            return null;
+        }
+    } catch (error) {
+        console.error('Translation fetch error:', error);
+        return null;
+    }
+}
+
+// ==================== UPDATE TRANSLATE FILE BUTTON ====================
+
+translateFileBtn.addEventListener('click', async () => {
+    const textToTranslate = fileOriginalText.value.trim();
+    
+    if (!textToTranslate) {
+        showFileStatus('❌ No content to translate!', 'error');
+        return;
+    }
+    
+    let sourceLang = fileSourceLang.value;
+    const targetLang = fileTargetLang.value;
+    
+    // If auto-detect, try to detect or use 'en' as default
+    if (sourceLang === 'auto') {
+        sourceLang = 'id'; // Default to Indonesian, you can add language detection
+    }
+    
+    if (sourceLang === targetLang) {
+        showFileStatus('❌ Source and target languages must be different!', 'error');
+        return;
+    }
+    
+    const textLength = textToTranslate.length;
+    
+    // Check daily limit
+    const usage = showTranslationLimits();
+    
+    if (usage.remaining <= 0) {
+        showFileStatus(
+            `❌ Daily limit reached! Used ${usage.used}/${usage.total} characters.\nResets at midnight.`,
+            'error'
+        );
+        showLimitWarning(usage);
+        return;
+    }
+    
+    if (textLength > usage.remaining) {
+        const canTranslate = confirm(
+            `⚠️ TEXT LENGTH WARNING\n\n` +
+            `Text length: ${textLength.toLocaleString()} characters\n` +
+            `Daily remaining: ${usage.remaining.toLocaleString()} characters\n\n` +
+            `Only the first ${usage.remaining.toLocaleString()} characters will be translated.\n` +
+            `Continue?`
+        );
+        
+        if (!canTranslate) return;
+    }
+    
+    // Clear previous translation
+    fileTranslatedText.value = '';
+    
+    // Show progress
+    showFileStatus('🔄 Starting translation...', 'info');
+    
+    // Limit text if necessary
+    const textToProcess = textLength > usage.remaining 
+        ? textToTranslate.substring(0, usage.remaining)
+        : textToTranslate;
+    
+    // Split into chunks (500 chars max per request)
+    const chunks = splitTextIntoChunks(textToProcess, 450);
+    let translatedText = '';
+    let totalProcessed = 0;
+    let successCount = 0;
+    let errorCount = 0;
+    
+    try {
+        for (let i = 0; i < chunks.length; i++) {
+            showFileStatus(
+                `🔄 Translating chunk ${i + 1} of ${chunks.length}...\n` +
+                `Progress: ${Math.round(((i) / chunks.length) * 100)}%`,
+                'info'
+            );
+            
+            const translation = await translateTextChunk(chunks[i], sourceLang, targetLang);
+            
+            if (translation) {
+                translatedText += translation + ' ';
+                totalProcessed += chunks[i].length;
+                successCount++;
+                
+                // Update usage
+                updateDailyUsage(chunks[i].length);
+                
+                // Show partial result immediately
+                fileTranslatedText.value = translatedText.trim();
+                
+                // Update progress
+                const progress = Math.round(((i + 1) / chunks.length) * 100);
+                const newUsage = showTranslationLimits();
+                
+                showFileStatus(
+                    `🔄 Translating... ${progress}%\n` +
+                    `Processed: ${totalProcessed.toLocaleString()} chars | ` +
+                    `Daily: ${newUsage.used}/${newUsage.total}`,
+                    'info'
+                );
+            } else {
+                errorCount++;
+                console.error(`Failed to translate chunk ${i + 1}`);
+            }
+            
+            // Delay between requests (important!)
+            if (i < chunks.length - 1) {
+                await new Promise(resolve => setTimeout(resolve, 600));
+            }
+        }
+        
+        const finalUsage = showTranslationLimits();
+        
+        if (successCount > 0) {
+            showFileStatus(
+                `✅ Translation complete!\n` +
+                `Translated: ${totalProcessed.toLocaleString()} characters in ${successCount} chunks\n` +
+                `${errorCount > 0 ? `⚠️ ${errorCount} chunks failed\n` : ''}` +
+                `Daily usage: ${finalUsage.used}/${finalUsage.total} (${finalUsage.remaining} remaining)`,
+                errorCount > 0 ? 'warning' : 'success'
+            );
+        } else {
+            throw new Error('All translation chunks failed');
+        }
+        
+        // Update usage indicator
+        updateUsageIndicator();
+        
+        // Warning for truncated text
+        if (textLength > usage.remaining) {
+            setTimeout(() => {
+                alert(
+                    `⚠️ PARTIAL TRANSLATION\n\n` +
+                    `Translated: ${totalProcessed.toLocaleString()} characters\n` +
+                    `Original text: ${textLength.toLocaleString()} characters\n\n` +
+                    `${(textLength - totalProcessed).toLocaleString()} characters remaining (daily limit reached).`
+                );
+            }, 1000);
+        }
+        
+    } catch (error) {
+        console.error('Translation error:', error);
+        showFileStatus(
+            `❌ Translation failed!\n` +
+            `Error: ${error.message}\n` +
+            `Processed: ${totalProcessed.toLocaleString()} chars before error.`,
+            'error'
+        );
+    }
+});
+
+// ==================== UPDATE HANDLE FILE UPLOAD ====================
+
+async function handleFileUpload(file) {
+    const maxSize = 10 * 1024 * 1024;
+    
+    if (file.size > maxSize) {
+        showFileStatus('❌ File too large! Maximum 10MB', 'error');
+        return;
+    }
+    
+    const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
+    const validTypes = ['.txt', '.pdf'];
+    
+    if (!validTypes.includes(fileExtension)) {
+        showFileStatus('❌ Invalid file type! Please upload TXT or PDF', 'error');
+        return;
+    }
+    
+    fileName.textContent = file.name;
+    fileSize.textContent = formatFileSize(file.size);
+    filePreviewSection.style.display = 'block';
+    
+    // Clear previous content
+    fileOriginalText.value = '';
+    fileTranslatedText.value = '';
+    
+    try {
+        let content = '';
+        
+        if (fileExtension === '.txt') {
+            content = await readTextFile(file);
+        } else if (fileExtension === '.pdf') {
+            content = await readPDFFile(file);
+        }
+        
+        currentFileContent = content;
+        fileOriginalText.value = content;
+        
+        const charCount = content.length;
+        const usage = showTranslationLimits();
+        
+        showFileStatus(
+            `✅ File loaded: ${charCount.toLocaleString()} characters\n` +
+            `${charCount > usage.remaining ? `⚠️ Exceeds daily limit! Only ${usage.remaining.toLocaleString()} chars can be translated.` : '✓ Within daily limit'}`,
+            charCount > usage.remaining ? 'warning' : 'success'
+        );
+        
+    } catch (error) {
+        console.error('Error reading file:', error);
+        showFileStatus('❌ Error reading file: ' + error.message, 'error');
+    }
+}
+
+// ==================== INITIALIZE ====================
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Populate language selects
+    populateLanguageSelect(document.getElementById('fileSourceLang'), false);
+    populateLanguageSelect(document.getElementById('fileTargetLang'), false);
+    populateLanguageSelect(document.getElementById('sourceLanguage'), false);
+    populateLanguageSelect(document.getElementById('targetLanguage'), false);
+    populateLanguageSelect(document.getElementById('videoTargetLang'), false);
+    populateLanguageSelect(document.getElementById('videoLanguage'), true);
+    populateLanguageSelect(document.getElementById('sttLanguageSelect'), true);
+    
+    // Setup language search
+    setupLanguageSearch('fileSourceSearch', 'fileSourceLang');
+    setupLanguageSearch('fileTargetSearch', 'fileTargetLang');
+    
+    // Show usage indicator
+    setTimeout(() => {
+        const usage = showTranslationLimits();
+        const indicator = document.getElementById('usageIndicator');
+        
+        if (indicator) {
+            indicator.innerHTML = `
+                📊 Daily Translation: ${usage.used.toLocaleString()} / ${usage.total.toLocaleString()} chars 
+                (${usage.remaining.toLocaleString()} remaining)
+                <div class="usage-bar">
+                    <div class="usage-progress" style="width: ${usage.percentage}%"></div>
+                </div>
+            `;
+            indicator.classList.add('show');
+        }
+        
+        // Update every 5 seconds
+        setInterval(updateUsageIndicator, 5000);
+    }, 1000);
+    
+    // Load voices for speech synthesis
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = () => {
+            speechSynthesis.getVoices();
+        };
+    }
+});
+
+function updateUsageIndicator() {
+    const usage = showTranslationLimits();
+    const indicator = document.getElementById('usageIndicator');
+    
+    if (indicator) {
+        indicator.innerHTML = `
+            📊 Daily Translation: ${usage.used.toLocaleString()} / ${usage.total.toLocaleString()} chars 
+            (${usage.remaining.toLocaleString()} remaining)
+            <div class="usage-bar">
+                <div class="usage-progress" style="width: ${usage.percentage}%"></div>
+            </div>
+        `;
+    }
+}
+
+
+    </script>
+</body>
+</html>
+
+
+<!-- Footer modern dengan interaktivitas ekstra -->
+<footer style="background: linear-gradient(135deg, #0d4d4d 0%, #0a5f5f 70%, #0d4d4d 100%); color: #ffffff; padding: 50px 0 20px; position: relative; margin-top: 0; font-family: 'Inter', Arial, sans-serif;">
+    <style>
+      @keyframes gradientFlow {
+        0% { background-position: 0% 50%; }
+        100% { background-position: 100% 50%; }
+      }
+      @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px);}
+        to { opacity: 1; transform: translateY(0);}
+      }
+      .footer-animate { animation: fadeInUp 0.8s cubic-bezier(0.22, 1, 0.36, 1); }
+      .footer-social:hover, .footer-social:focus {
+        transform: scale(1.08) rotate(-8deg);
+        background: linear-gradient(120deg, #00e5d0, #14b8a6 60%);
+        color: #1e293b !important;
+        box-shadow: 0 6px 24px 0 rgba(20,184,166,0.20);
+      }
+      .input-active:focus, .input-active:active {
+        border-color: #14b8a6 !important; box-shadow: 0 2px 10px #14b8a650;
+      }
+      .submit-btn-inter {
+        transition: 0.3s cubic-bezier(.41,2.4,.64,.94);
+        box-shadow: 0 4px 15px 0 #14b8a650;
+      }
+      .submit-btn-inter:hover, .submit-btn-inter:focus {
+        background: linear-gradient(120deg,#06b6d4 40%,#14b8a6 100%);
+        color: #fff;
+        letter-spacing: 1px;
+        transform: translateY(-4px) scale(1.05);
+        box-shadow: 0 10px 40px 0 #14b8a650;
+      }
+      .snackbar {
+        opacity: 0;
+        min-width: 250px;
+        margin-left: -125px;
+        background: rgba(47,197,129,0.95);
+        color: white;
+        text-align: center;
+        border-radius: 8px;
+        padding: 16px;
+        position: fixed;
+        z-index: 1100;
+        left: 50%;
+        bottom: 40px;
+        font-size: 1rem;
+        box-shadow: 0 6px 24px 0 #14b8a680;
+        animation: none;
+        transition: opacity 0.3s;
+      }
+      .snackbar.show {
+        opacity: 1;
+        animation: fadeInUp 0.7s;
+      }
+      .snackbar.error { background: #ef4444; }
+      .snackbar .close { float:right; font-weight:bold; cursor:pointer; margin-left:16px;}
+      /* Responsive remains mostly same */
+    </style>
+  
+    <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #00b4a6 0%, #00e5d0 25%, #006b8c 50%, #00e5d0 75%, #00b4a6 100%); background-size: 300% 100%; animation: gradientFlow 4s linear infinite;"></div>
+  
+    <div style="max-width: 1400px; margin: 0 auto; padding: 0 30px; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 2fr; gap: 40px; align-items: start;">
+      <!-- LOGO & DESKRIPSI -->
+      <div class="footer-animate" style="animation-delay: .1s">
+        <div style="display: flex; align-items: center; gap: 22px; margin-bottom: 1rem;">
+          <img src="logob.png" alt="Logo" style="width: 170px; height: 170px; object-fit: contain; border-radius:20px; filter: drop-shadow(0 4px 20px #13fad580); background: #ffffff18;">
+          <h3 style="font-size: 1.7rem; color: #ffffff; margin: 0; font-weight: 700; letter-spacing: .7px;">Portal Ekosistem Laut</h3>
+        </div>
+        <p style="color: #b8e6e6; line-height: 1.8; font-size: 1.04rem; margin-bottom: 26px;">Platform digital terdepan untuk penelitian dan konservasi ekosistem laut Indonesia. Bergabunglah dengan kami dalam menjaga keberlanjutan laut untuk generasi mendatang.</p>
+        <div style="display: flex; gap: 16px;">
+          <a href="#" class="footer-social" style="width: 45px; height: 45px; background: rgba(255,255,255,0.15); border-radius: 50%; display: flex; align-items:center; justify-content:center; color:#fff; font-size:1.1rem; border: 2px solid rgba(0,229,208,0.16); transition:.3s;"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="footer-social" style="width: 45px; height: 45px; background: rgba(255,255,255,0.15); border-radius: 50%; display: flex; align-items:center; justify-content:center; color:#fff; font-size:1.1rem; border: 2px solid rgba(0,229,208,0.16); transition:.3s;"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="footer-social" style="width: 45px; height: 45px; background: rgba(255,255,255,0.15); border-radius: 50%; display: flex; align-items:center; justify-content:center; color:#fff; font-size:1.1rem; border: 2px solid rgba(0,229,208,0.16); transition:.3s;"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="footer-social" style="width: 45px; height: 45px; background: rgba(255,255,255,0.15); border-radius: 50%; display: flex; align-items:center; justify-content:center; color:#fff; font-size:1.1rem; border: 2px solid rgba(0,229,208,0.16); transition:.3s;"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      <!-- NAVIGASI -->
+      <div class="footer-animate" style="animation-delay: .2s">
+        <h4 style="font-size: 1.22rem; margin-bottom: 21px; color: #5eead4; font-weight: 700; letter-spacing: .7px;">Navigasi</h4>
+        <ul style="list-style:none; padding:0; margin:0; display: flex; flex-direction:column; gap:12px;">
+          <li><a href="/home" style="color:#b8e6e6; text-decoration:none; font-size:1rem; transition:.3s;">Home</a></li>
+          <li><a href="mangrove2019" style="color:#b8e6e6; text-decoration:none; font-size:1rem; transition:.3s;">Mangrove</a></li>
+          <li><a href="lamun2019" style="color:#b8e6e6; text-decoration:none; font-size:1rem; transition:.3s;">Lamun</a></li>
+          <li><a href="/Terumbu2019" style="color:#b8e6e6; text-decoration:none; font-size:1rem; transition:.3s;">Terumbu Karang</a></li>
+          <li><a href="zpi" style="color:#b8e6e6; text-decoration:none; font-size:1rem; transition:.3s;">Ikan</a></li>
+        </ul>
+      </div>
+      <!-- LAYANAN -->
+      <div class="footer-animate" style="animation-delay: .3s">
+        <h4 style="font-size: 1.22rem; margin-bottom: 21px; color: #5eead4; font-weight: 700; letter-spacing: .7px;">Layanan</h4>
+        <ul style="list-style:none; padding:0; margin:0; display: flex; flex-direction:column; gap:12px;">
+          <li><a href="prediksilamun" style="color:#b8e6e6; text-decoration:none; font-size:1rem; transition:.3s;">Prediksi</a></li>
+          <li><a href="kamera-ikan" style="color:#b8e6e6; text-decoration:none; font-size:1rem; transition:.3s;">Deteksi AI</a></li>
+          <li><a href="/faq" style="color:#b8e6e6; text-decoration:none; font-size:1rem; transition:.3s;">BADU AI</a></li>
+          <li><a href="/voice" style="color:#b8e6e6; text-decoration:none; font-size:1rem; transition:.3s;">Translate</a></li>
+        </ul>
+      </div>
+      <!-- KONTAK -->
+      <div class="footer-animate" style="animation-delay: .4s">
+        <h4 style="font-size: 1.22rem; margin-bottom: 21px; color: #5eead4; font-weight: 700; letter-spacing: .7px;">Kontak</h4>
+        <div style="display:flex; flex-direction:column; gap:15px;">
+          <div style="display:flex; align-items:flex-start; gap:11px; color:#b8e6e6; font-size:.97rem">
+            <i class="fas fa-map-marker-alt" style="color:#5eead4;"></i>
+            <span>Pulau Tunda, Banten, Indonesia</span>
+          </div>
+          <div style="display:flex; align-items:flex-start; gap:11px; color:#b8e6e6; font-size:.97rem">
+            <i class="fas fa-phone" style="color:#5eead4;"></i>
+            <span>+62 123 4567 890</span>
+          </div>
+          <div style="display:flex; align-items:flex-start; gap:11px; color:#b8e6e6; font-size:.97rem">
+            <i class="fas fa-envelope" style="color:#5eead4;"></i>
+            <span>info@pulauntunda.ac.id</span>
+          </div>
+          <div style="display:flex; align-items:flex-start; gap:11px; color:#b8e6e6; font-size:.97rem">
+            <i class="fas fa-clock" style="color:#5eead4;"></i>
+            <span>Senin - Jumat, 08:00 - 17:00</span>
+          </div>
+        </div>
+      </div>
+      <!-- UMPAN BALIK FORM (INTERAKTIF) -->
+      <div class="footer-animate" style="animation-delay:.5s; background:rgba(255,255,255,0.09); padding:28px 20px 17px; border-radius:16px; backdrop-filter:blur(9px); border:1px solid #b8e6e630;">
+        <h4 style="font-size: 1.18rem; margin-bottom: 22px; color: #5eead4;">Umpan Balik</h4>
+        <form action="https://api.web3forms.com/submit" method="POST" id="feedbackForm">
+          <input type="hidden" name="access_key" value="a1c331ee-714c-4409-8009-7dee4c452bce">
+          <input type="hidden" name="redirect" value="false">
+          <input type="hidden" name="subject" value="Umpan Balik dari Portal Ekosistem Laut">
+          <input type="hidden" name="from_name" value="Portal Ekosistem Laut">
+          <div style="margin-bottom: 16px;">
+            <input type="email" name="email" class="input-active" placeholder="📧 Email Anda" required style="width:100%; padding:13px 19px; border:1.7px solid #aaf6f6; border-radius:8px; background:rgb(255, 255, 255); color:#1c274c; font-size:1rem; font-family:inherit; transition:.24s;">
+          </div>
+          <div style="margin-bottom: 16px;">
+            <textarea name="message" class="input-active" placeholder="📝 Pesan Anda" required style="width:100%; padding:13px 19px; border:1.7px solid #aaf6f6; border-radius:8px; background:rgb(255, 255, 255); color:#1c274c; font-size:1rem; font-family:inherit; transition:.24s; resize:vertical; min-height:86px;"></textarea>
+          </div>
+          <button type="submit" id="submitBtn" class="submit-btn-inter" style="width:100%; padding:13px; background:linear-gradient(130deg,#14b8a6 70%,#00e5d0 100%); color:#fff; border:none; border-radius:8px; font-size:1.1rem; font-weight:700; cursor:pointer; transition:.3s;">
+            <span id="btnText">Kirim</span>
+            <span id="btnLoading" style="display:none;"><i class="fas fa-spinner fa-spin"></i> Mengirim...</span>
+          </button>
+        </form>
+        <div id="successMessage" style="display:none; padding:8px; margin-top:12px; background:rgba(34,197,94,0.17); border:1px solid #22c55e; border-radius:9px; color:#13c484; text-align:center; font-size:1rem;">
+          ✅ Pesan berhasil terkirim! Terima kasih atas umpan balik Anda.
+        </div>
+        <div id="errorMessage" style="display:none; padding:8px; margin-top:12px; background:rgba(239,68,68,0.16); border:1px solid #ef4444; border-radius:9px; color:#ef4444; text-align:center; font-size:1rem;">
+          ❌ Gagal mengirim pesan. Silakan coba lagi.
+        </div>
+      </div>
+    </div>
+  
+    <!-- Snackbar notification -->
+    <div id="snackbar" class="snackbar"></div>
+  
+    <!-- Footer Bottom -->
+    <div style="max-width:1400px; margin:42px auto 0; padding:15px 30px 0; border-top:1px solid rgba(255,255,255,0.13); display:flex; justify-content:space-between; align-items:center; color:#b8e6e6; font-size:1rem; flex-wrap:wrap; gap:1rem;">
+      <p style="margin:0;">© 2024 Portal Ekosistem Laut Pulau Tunda. All Rights Reserved.</p>
+      <div>
+        <a href="#" style="color:#b8e6e6; text-decoration:none; margin:0 8px;">Privacy Policy</a> |
+        <a href="#" style="color:#b8e6e6; text-decoration:none; margin:0 8px;">Terms of Service</a> |
+        <a href="#" style="color:#b8e6e6; text-decoration:none; margin:0 8px;">Sitemap</a>
+      </div>
+    </div>
+  
+    <script>
+      function showSnackbar(msg, error=false) {
+        var x = document.getElementById("snackbar");
+        x.textContent = msg;
+        x.className = "snackbar show" + (error ? " error" : "");
+        x.onclick = function(){x.className="snackbar";}
+        setTimeout(function(){ x.className = x.className.replace("show", ""); }, 4000);
+      }
+  
+      document.getElementById('feedbackForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const form = e.target;
+        const submitBtn = document.getElementById('submitBtn');
+        const btnText = document.getElementById('btnText');
+        const btnLoading = document.getElementById('btnLoading');
+        const successMsg = document.getElementById('successMessage');
+        const errorMsg = document.getElementById('errorMessage');
+        // Hide messages
+        successMsg.style.display = errorMsg.style.display = "none";
+        btnText.style.display = "none";
+        btnLoading.style.display = "inline";
+        submitBtn.disabled = true;
+        try {
+          const formData = new FormData(form);
+          const response = await fetch('https://api.web3forms.com/submit', {
+            method: 'POST', body: formData
+          });
+          const data = await response.json();
+          if (data.success) {
+            showSnackbar("✅ Pesan berhasil terkirim! Terima kasih.");
+            successMsg.style.display = "block";
+            form.reset();
+            setTimeout(() => { successMsg.style.display = "none"; }, 5000);
+          } else {
+            showSnackbar("❌ Gagal mengirim pesan.", true);
+            errorMsg.style.display = "block";
+          }
+        } catch (error) {
+          showSnackbar("❌ Gagal mengirim pesan. Silakan coba lagi.", true);
+          errorMsg.style.display = "block";
+        } finally {
+          btnText.style.display = "inline";
+          btnLoading.style.display = "none";
+          submitBtn.disabled = false;
+        }
+      });
+    </script>
+  </footer>

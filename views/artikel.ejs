@@ -1,0 +1,1544 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Artikel Pulau Tunda - Portal Ekosistem Laut</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700;900&family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+<style>
+:root {
+  --primary: #00b4a6;
+  --secondary: #006b8c;
+  --accent: #00e5d0;
+  --dark: #003d52;
+  --bg-primary: #ffffff;
+  --bg-secondary: rgba(224, 247, 245, 0.98);
+  --text-primary: #222;
+  --text-secondary: #333;
+}
+[data-theme="dark"] {
+  --bg-primary: #0a1128;
+  --bg-secondary: rgba(10, 17, 40, 0.98);
+  --text-primary: #e0e0e0;
+  --text-secondary: #b0b0b0;
+}
+body {
+  margin: 0;
+  font-family: 'Inter', Arial, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background 0.5s, color 0.5s;
+}
+
+/* ============================= */
+/* MAIN HEADER */
+/* ============================= */
+.main-header {
+  position: fixed;
+  top: 0; 
+  left: 0; 
+  right: 0;
+  width: 100%;
+  background: linear-gradient(135deg, #1a2332 0%, #0f1923 100%);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+  z-index: 10000;
+  height: 100px;
+  padding: 0 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(0, 180, 166, 0.2);
+}
+[data-theme="dark"] .main-header {
+  background: linear-gradient(135deg, #0a1128 0%, #05090f 100%);
+}
+.main-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0; 
+  left: 0; 
+  width: 100%; 
+  height: 3px;
+  background: linear-gradient(90deg, #00b4a6 0%, #00e5d0 50%, #00b4a6 100%);
+  background-size: 200% 100%;
+  animation: gradientFlow 3s linear infinite;
+}
+
+/* Logo Section - Left */
+.logo-section { 
+  display: flex; 
+  align-items: center; 
+  gap: 15px;
+  flex-shrink: 0;
+}
+.logo-icon { 
+  width: 50px; 
+  height: 50px; 
+  background: rgba(0, 180, 166, 0.1);
+  border: 2px solid rgba(0, 180, 166, 0.3);
+  border-radius: 12px;
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  padding: 8px;
+}
+.logo-icon img { 
+  width: 100%; 
+  height: 100%; 
+  object-fit: contain; 
+}
+.logo-text { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 2px; 
+}
+.logo-text .main-title { 
+  font-size: 1.4rem; 
+  font-weight: 900; 
+  color: #00e5d0; 
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 10px rgba(0, 229, 208, 0.3);
+}
+.logo-text .subtitle { 
+  font-size: 0.75rem; 
+  color: rgba(255, 255, 255, 0.6); 
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+/* Navigation - Right Side */
+.top-bar { 
+  display: flex; 
+  align-items: center; 
+  gap: 12px;
+  margin-left: auto;
+  flex-shrink: 0;
+  flex-wrap: nowrap;
+  padding-right: 10px;
+}
+
+/* User Greeting */
+.user-greeting { 
+  padding: 10px 18px; 
+  background: rgba(0, 180, 166, 0.15);
+  border: 1px solid rgba(0, 229, 208, 0.3);
+  border-radius: 25px; 
+  font-weight: 600; 
+  color: #00e5d0; 
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  margin-right: 5px;
+}
+.user-greeting::before {
+  content: '👋';
+  font-size: 1rem;
+}
+
+/* Menu Links */
+.top-bar a, 
+.top-bar details summary {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  padding: 10px 16px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 8px;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+  letter-spacing: 0.5px;
+  position: relative;
+  flex-shrink: 0;
+}
+.top-bar a:hover, 
+.top-bar details summary:hover {
+  color: #00e5d0;
+  background: rgba(0, 229, 208, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Theme Toggle Button */
+.theme-toggle-header {
+  background: rgba(0, 180, 166, 0.15);
+  border: 1px solid rgba(0, 229, 208, 0.3);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  font-size: 18px;
+  color: #00e5d0;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin: 0 5px;
+}
+.theme-toggle-header:hover {
+  transform: scale(1.1) rotate(180deg);
+  background: rgba(0, 229, 208, 0.25);
+  box-shadow: 0 0 20px rgba(0, 229, 208, 0.4);
+}
+
+/* Admin Link - Before Logout */
+.top-bar .admin-link {
+  background: linear-gradient(135deg, #00b4a6, #00e5d0) !important;
+  color: #0f1923 !important;
+  padding: 10px 22px !important;
+  border-radius: 25px;
+  font-weight: 700;
+  box-shadow: 0 4px 15px rgba(0, 229, 208, 0.3);
+  border: none;
+  font-size: 0.82rem !important;
+  margin-left: 5px;
+}
+.top-bar .admin-link:hover {
+  background: linear-gradient(135deg, #00e5d0, #00b4a6) !important;
+  box-shadow: 0 6px 20px rgba(0, 229, 208, 0.5);
+  transform: translateY(-2px);
+}
+
+/* Logout Button - Last Item */
+.logout {
+  background: linear-gradient(135deg, #dc3545, #c82333) !important;
+  color: white !important;
+  padding: 10px 22px !important;
+  border-radius: 25px;
+  font-weight: 700;
+  box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+  border: none;
+  font-size: 0.82rem !important;
+  margin-left: 5px;
+}
+.logout:hover {
+  background: linear-gradient(135deg, #c82333, #a71d2a) !important;
+  box-shadow: 0 6px 20px rgba(220, 53, 69, 0.5);
+  transform: translateY(-2px);
+}
+
+/* Dropdown Menu */
+.top-bar details { 
+  position: relative; 
+}
+.top-bar details summary { 
+  list-style: none; 
+  display: flex; 
+  align-items: center; 
+  gap: 6px; 
+}
+.top-bar details summary::after { 
+  content: '▼'; 
+  font-size: 0.65rem; 
+  margin-left: 4px; 
+  transition: transform 0.3s;
+  color: rgba(255, 255, 255, 0.5);
+}
+.top-bar details[open] summary::after { 
+  transform: rotate(180deg);
+  color: #00e5d0;
+}
+.top-bar details ul {
+  position: absolute; 
+  top: calc(100% + 12px); 
+  left: 0;
+  background: linear-gradient(135deg, #1a2332 0%, #0f1923 100%);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0, 229, 208, 0.2);
+  border-radius: 12px;
+  min-width: 200px;
+  overflow: hidden;
+  list-style: none;
+  padding: 8px;
+  animation: fadeInUp 0.3s;
+  z-index: 10001;
+  margin: 0;
+}
+.top-bar details ul li a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-size: 0.82rem;
+  transition: all 0.3s;
+  border-radius: 8px;
+  font-weight: 500;
+}
+.top-bar details ul li a:hover {
+  background: rgba(0, 229, 208, 0.15);
+  color: #00e5d0;
+  padding-left: 20px;
+}
+.top-bar details ul li a i {
+  width: 18px;
+  font-size: 1rem;
+  color: #00e5d0;
+}
+
+/* ============================= */
+/* HEADER HERO BANNER */
+/* ============================= */
+.hero-section {
+  position: relative;
+  background: linear-gradient(135deg, #003d52 0%, #006b8c 50%, #00b4a6 100%);
+  min-height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 15px 60px rgba(0, 180, 166, 0.4);
+  overflow: hidden;
+  margin-top: 80px;
+}
+.hero-section::before {
+  content:'';
+  position:absolute;
+  inset:0;
+  background: url('https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1500&h=600&fit=crop') center center / cover no-repeat;
+  opacity: 0.15;
+  z-index: 1;
+}
+.hero-section::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 50%, rgba(0, 229, 208, 0.3), transparent 50%),
+              radial-gradient(circle at 70% 50%, rgba(0, 107, 140, 0.3), transparent 50%);
+  z-index: 1;
+}
+.hero-content {
+  position: relative;
+  color: #fff;
+  text-align: center;
+  max-width: 1000px;
+  padding: 60px 40px;
+  animation: fadeInUp 1s cubic-bezier(.21,.98,.39,.99);
+  z-index: 2;
+}
+.hero-title {
+  font-size: clamp(2.8rem, 7vw, 5rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: 25px;
+  text-shadow: 0 5px 25px rgba(0, 180, 166, 0.6);
+  background: linear-gradient(135deg, #ffffff 0%, #00e5d0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-desc {
+  font-size: clamp(1.2rem, 3vw, 1.6rem);
+  line-height: 1.8;
+  font-weight: 400;
+  text-shadow: 2px 4px 20px rgba(0, 0, 0, 0.5);
+  max-width: 850px;
+  margin: 0 auto;
+}
+
+/* ============================= */
+/* ARTIKEL SECTION */
+/* ============================= */
+.articles-section {
+  max-width: 1280px;
+  margin: 80px auto;
+  padding: 0 20px;
+}
+.section-intro {
+  text-align: center;
+  margin-bottom: 60px;
+}
+.section-intro h2 {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 20px;
+  letter-spacing: 2px;
+}
+.section-intro p {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.8;
+}
+
+/* FILTER BAR - ENHANCED */
+.filter-bar {
+  background: var(--bg-secondary);
+  padding: 35px;
+  border-radius: 25px;
+  margin-bottom: 50px;
+  box-shadow: 0 10px 40px rgba(0, 180, 166, 0.15);
+  border: 2px solid var(--primary);
+}
+.filter-container {
+  display: grid;
+  grid-template-columns: 2fr 1.2fr 1fr auto;
+  gap: 20px;
+  align-items: end;
+}
+.filter-item {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.filter-item label {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.filter-item input,
+.filter-item select {
+  padding: 14px 18px;
+  border: 2px solid var(--primary);
+  border-radius: 15px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-family: 'Inter', Arial, sans-serif;
+  transition: all 0.3s ease;
+  outline: none;
+}
+.filter-item input:focus,
+.filter-item select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(0, 229, 208, 0.2);
+  transform: translateY(-2px);
+}
+.filter-btn {
+  padding: 14px 35px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  border: none;
+  border-radius: 15px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 6px 25px rgba(0, 180, 166, 0.4);
+}
+.filter-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 35px rgba(0, 180, 166, 0.6);
+}
+
+.articles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(380px,1fr));
+  gap: 40px;
+}
+.article-card {
+  background: var(--bg-secondary);
+  border-radius: 25px;
+  overflow: hidden;
+  box-shadow: 0 15px 50px rgba(0,180,166,0.2);
+  transition: all .5s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 2px solid transparent;
+}
+[data-theme="dark"] .article-card {
+  background: rgba(8, 50, 49, 0.85);
+  border: 2px solid var(--primary);
+}
+.article-card:hover {
+  transform: translateY(-12px) scale(1.02);
+  box-shadow: 0 25px 60px rgba(0,180,166,0.45);
+  border-color: var(--accent);
+}
+.article-image {
+  position: relative;
+  height: 260px;
+  overflow: hidden;
+}
+.article-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.9) contrast(1.1);
+  transition: all 0.6s ease;
+}
+.article-card:hover .article-image img {
+  transform: scale(1.2) rotate(2deg);
+  filter: brightness(1.1) contrast(1.2);
+}
+.article-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 30%, rgba(0, 180, 166, 0.8) 100%);
+  opacity: 0.9;
+  pointer-events: none;
+}
+.overlay-tag {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  font-weight: 800;
+  font-size: 0.9rem;
+  padding: 8px 22px;
+  border-radius: 30px;
+  background: linear-gradient(135deg, var(--accent), var(--primary));
+  color: white;
+  box-shadow: 0 4px 20px rgba(0, 229, 208, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.article-content {
+  padding: 30px;
+}
+.article-meta {
+  color: var(--text-secondary);
+  margin-bottom: 18px;
+  display: flex;
+  font-size: 0.92rem;
+  gap: 20px;
+  font-weight: 600;
+}
+.article-meta span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.article-meta i {
+  font-size: 1.1rem;
+  color: var(--primary);
+}
+.article-title {
+  font-size: 1.4rem;
+  font-weight: 900;
+  margin-bottom: 20px;
+  color: var(--text-primary);
+  transition: color 0.3s ease;
+  line-height: 1.4;
+}
+.article-card:hover .article-title {
+  color: var(--primary);
+}
+.article-excerpt {
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+  line-height: 1.8;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+.article-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 20px;
+  border-top: 2px solid var(--primary);
+}
+.read-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 13px 28px;
+  border-radius: 35px;
+  text-decoration: none;
+  box-shadow: 0 6px 30px rgba(0, 180, 166, 0.4);
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.read-more:hover {
+  box-shadow: 0 10px 40px rgba(0, 180, 166, 0.6);
+  transform: translateX(8px);
+}
+.article-stats {
+  font-size: 0.9rem;
+  font-weight: 600;
+  display: flex;
+  gap: 20px;
+  color: var(--text-secondary);
+}
+.article-stats span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.article-stats i {
+  font-size: 1.15rem;
+  color: var(--secondary);
+}
+/* Load More Button */
+.load-more-section {
+  text-align: center;
+  margin-top: 60px;
+  margin-bottom: 60px;
+}
+.load-more-btn {
+  background: linear-gradient(135deg, var(--accent), var(--primary));
+  border: none;
+  border-radius: 35px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 800;
+  padding: 18px 55px;
+  letter-spacing: 1.5px;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 35px rgba(0, 229, 208, 0.5);
+  text-transform: uppercase;
+}
+.load-more-btn:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 50px rgba(0, 229, 208, 0.7);
+}
+
+/* ============================= */
+/* ANIMATIONS */
+/* ============================= */
+@keyframes fadeInUp {
+  0% {opacity: 0;transform: translateY(40px);}
+  100% {opacity: 1;transform: translateY(0);}
+}
+@keyframes headerShimmer { 
+  0%, 100%{background-position:0% 50%;} 
+  50%{background-position:100% 50%;} 
+}
+@keyframes gradientFlow { 
+  0%{background-position:0% 0%;} 
+  100%{background-position:300% 0%;} 
+}
+
+/* ============================= */
+/* RESPONSIVE */
+/* ============================= */
+@media (max-width: 1400px) {
+  .main-header {
+    padding: 0 30px;
+  }
+  .top-bar {
+    gap: 8px;
+  }
+  .top-bar a, 
+  .top-bar details summary {
+    padding: 9px 14px;
+    font-size: 0.78rem;
+  }
+}
+
+@media (max-width: 1200px) {
+  .main-header {
+    padding: 0 25px;
+  }
+  .top-bar {
+    gap: 6px;
+  }
+  .top-bar a, 
+  .top-bar details summary {
+    padding: 8px 12px;
+    font-size: 0.75rem;
+  }
+  .user-greeting {
+    padding: 8px 14px;
+    font-size: 0.78rem;
+  }
+  .theme-toggle-header {
+    width: 38px;
+    height: 38px;
+    font-size: 17px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .main-header {
+    height: 70px;
+    padding: 0 20px;
+  }
+  .logo-icon {
+    width: 45px;
+    height: 45px;
+  }
+  .logo-text .main-title {
+    font-size: 1.2rem;
+  }
+  .logo-text .subtitle {
+    font-size: 0.7rem;
+  }
+  .top-bar {
+    gap: 5px;
+  }
+  .top-bar a, 
+  .top-bar details summary {
+    padding: 7px 10px;
+    font-size: 0.7rem;
+  }
+  .user-greeting {
+    padding: 7px 12px;
+    font-size: 0.72rem;
+  }
+  .theme-toggle-header {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+  }
+  .hero-section {
+    margin-top: 70px;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-header {
+    height: auto;
+    min-height: 65px;
+    padding: 12px 15px;
+    flex-wrap: wrap;
+  }
+  .logo-section {
+    order: 1;
+    flex: 1;
+  }
+  .logo-icon {
+    width: 40px;
+    height: 40px;
+  }
+  .logo-text .main-title {
+    font-size: 1rem;
+  }
+  .logo-text .subtitle {
+    font-size: 0.65rem;
+  }
+  .top-bar {
+    order: 2;
+    width: 100%;
+    justify-content: center;
+    margin-top: 10px;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+  .top-bar a, 
+  .top-bar details summary {
+    padding: 6px 8px;
+    font-size: 0.65rem;
+  }
+  .top-bar .admin-link,
+  .logout {
+    padding: 7px 12px !important;
+    font-size: 0.65rem !important;
+  }
+  .user-greeting {
+    font-size: 0.7rem;
+    padding: 6px 10px;
+  }
+  .theme-toggle-header {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+  .hero-section {
+    margin-top: 120px;
+    min-height: 350px;
+  }
+  .filter-container {
+    grid-template-columns: 1fr;
+  }
+  .articles-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-header {
+    padding: 10px 12px;
+  }
+  .logo-section {
+    gap: 10px;
+  }
+  .top-bar {
+    margin-top: 8px;
+    gap: 3px;
+  }
+  .top-bar a, 
+  .top-bar details summary {
+    padding: 5px 7px;
+    font-size: 0.6rem;
+  }
+  .top-bar .admin-link,
+  .logout {
+    padding: 6px 10px !important;
+    font-size: 0.6rem !important;
+  }
+  .user-greeting {
+    font-size: 0.65rem;
+    padding: 5px 8px;
+  }
+  .user-greeting::before {
+    font-size: 0.9rem;
+  }
+  .theme-toggle-header {
+    width: 30px;
+    height: 30px;
+    font-size: 13px;
+  }
+}
+
+/* ============================= */
+/* FOOTER STYLES */
+/* ============================= */
+.main-footer {
+  background: linear-gradient(135deg, #0d4d4d 0%, #0a5f5f 70%, #0d4d4d 100%); 
+  color: #ffffff; 
+  padding: 50px 0 20px; 
+  position: relative; 
+  margin-top: 0; 
+  font-family: 'Inter', Arial, sans-serif;
+}
+.main-footer::before {
+  content: '';
+  position: absolute; 
+  top: 0; 
+  left: 0; 
+  right: 0; 
+  height: 4px; 
+  background: linear-gradient(90deg, #00b4a6 0%, #00e5d0 25%, #006b8c 50%, #00e5d0 75%, #00b4a6 100%); 
+  background-size: 300% 100%; 
+  animation: gradientFlow 4s linear infinite;
+}
+.footer-content {
+  max-width: 1400px; 
+  margin: 0 auto; 
+  padding: 0 30px; 
+  display: grid; 
+  grid-template-columns: 2fr 1fr 1fr 1fr 2fr; 
+  gap: 40px; 
+  align-items: start;
+}
+.footer-animate { 
+  animation: fadeInUp 0.8s cubic-bezier(0.22, 1, 0.36, 1); 
+}
+.footer-logo-section {
+  animation-delay: .1s;
+}
+.footer-logo-container {
+  display: flex; 
+  align-items: center; 
+  gap: 22px; 
+  margin-bottom: 1rem;
+}
+.footer-logo-container img {
+  width: 170px; 
+  height: 170px; 
+  object-fit: contain; 
+  border-radius:20px; 
+  filter: drop-shadow(0 4px 20px #13fad580); 
+  background: #ffffff18;
+}
+.footer-logo-container h3 {
+  font-size: 1.7rem; 
+  color: #ffffff; 
+  margin: 0; 
+  font-weight: 700; 
+  letter-spacing: .7px;
+}
+.footer-description {
+  color: #b8e6e6; 
+  line-height: 1.8; 
+  font-size: 1.04rem; 
+  margin-bottom: 26px;
+}
+.footer-social-container {
+  display: flex; 
+  gap: 16px;
+}
+.footer-social {
+  width: 45px; 
+  height: 45px; 
+  background: rgba(255,255,255,0.15); 
+  border-radius: 50%; 
+  display: flex; 
+  align-items:center; 
+  justify-content:center; 
+  color:#fff; 
+  font-size:1.1rem; 
+  border: 2px solid rgba(0,229,208,0.16); 
+  transition:.3s;
+}
+.footer-social:hover {
+  transform: scale(1.08) rotate(-8deg);
+  background: linear-gradient(120deg, #00e5d0, #14b8a6 60%);
+  color: #1e293b !important;
+  box-shadow: 0 6px 24px 0 rgba(20,184,166,0.20);
+}
+.footer-section h4 {
+  font-size: 1.22rem; 
+  margin-bottom: 21px; 
+  color: #5eead4; 
+  font-weight: 700; 
+  letter-spacing: .7px;
+}
+.footer-section ul {
+  list-style:none; 
+  padding:0; 
+  margin:0; 
+  display: flex; 
+  flex-direction:column; 
+  gap:12px;
+}
+.footer-section ul li a {
+  color:#b8e6e6; 
+  text-decoration:none; 
+  font-size:1rem; 
+  transition:.3s;
+}
+.footer-section ul li a:hover {
+  color: #00e5d0;
+  padding-left: 5px;
+}
+.footer-contact-item {
+  display:flex; 
+  align-items:flex-start; 
+  gap:11px; 
+  color:#b8e6e6; 
+  font-size:.97rem;
+  margin-bottom: 15px;
+}
+.footer-contact-item i {
+  color:#5eead4;
+  margin-top: 3px;
+}
+.footer-feedback-form {
+  background:rgba(255,255,255,0.09); 
+  padding:28px 20px 17px; 
+  border-radius:16px; 
+  backdrop-filter:blur(9px); 
+  border:1px solid #b8e6e630;
+  animation-delay:.5s;
+}
+.footer-feedback-form input,
+.footer-feedback-form textarea {
+  width:100%; 
+  padding:10px; 
+  border:1.5px solid #aaf6f6; 
+  border-radius:8px; 
+  background:rgb(255, 255, 255); 
+  color:#1c274c; 
+  font-size:1rem; 
+  font-family:inherit; 
+  transition:.24s;
+  box-sizing: border-box;
+}
+.footer-feedback-form input:focus,
+.footer-feedback-form textarea:focus {
+  border-color: #14b8a6; 
+  box-shadow: 0 2px 10px #14b8a650;
+  outline: none;
+}
+.footer-feedback-form textarea {
+  resize:vertical; 
+  min-height:86px;
+}
+.footer-submit-btn {
+  width:100%; 
+  padding:13px; 
+  background:linear-gradient(130deg,#14b8a6 70%,#00e5d0 100%); 
+  color:#fff; 
+  border:none; 
+  border-radius:8px; 
+  font-size:1.1rem; 
+  font-weight:700; 
+  cursor:pointer; 
+  transition:0.3s cubic-bezier(.41,2.4,.64,.94);
+  box-shadow: 0 4px 15px 0 #14b8a650;
+}
+.footer-submit-btn:hover {
+  background: linear-gradient(120deg,#06b6d4 40%,#14b8a6 100%);
+  letter-spacing: 1px;
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 10px 40px 0 #14b8a650;
+}
+.footer-message {
+  display:none; 
+  padding:8px; 
+  margin-top:12px; 
+  border-radius:9px; 
+  text-align:center; 
+  font-size:1rem;
+}
+.footer-message.success {
+  background:rgba(34,197,94,0.17); 
+  border:1px solid #22c55e; 
+  color:#13c484;
+}
+.footer-message.error {
+  background:rgba(239,68,68,0.16); 
+  border:1px solid #ef4444; 
+  color:#ef4444;
+}
+.footer-bottom {
+  max-width:1400px; 
+  margin:42px auto 0; 
+  padding:15px 30px 0; 
+  border-top:1px solid rgba(255,255,255,0.13); 
+  display:flex; 
+  justify-content:space-between; 
+  align-items:center; 
+  color:#b8e6e6; 
+  font-size:1rem; 
+  flex-wrap:wrap; 
+  gap:1rem;
+}
+.footer-bottom p {
+  margin: 0;
+}
+.footer-bottom a {
+  color:#b8e6e6; 
+  text-decoration:none; 
+  margin:0 8px;
+  transition: color 0.3s;
+}
+.footer-bottom a:hover {
+  color: #00e5d0;
+}
+@media (max-width: 1024px) {
+  .footer-content {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .footer-logo-section {
+    grid-column: 1 / -1;
+  }
+  .footer-feedback-form {
+    grid-column: 1 / -1;
+  }
+}
+@media (max-width: 768px) {
+  .footer-content {
+    grid-template-columns: 1fr;
+  }
+  .footer-logo-container {
+    flex-direction: column;
+    text-align: center;
+  }
+  .footer-social-container {
+    justify-content: center;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="main-header" id="mainHeader">
+  <div class="logo-section">
+    <div class="logo-icon">
+      <img src="/logob.png" alt="Logo">
+    </div>
+    <div class="logo-text">
+      <span class="main-title">SeaNergy</span>
+      <span class="subtitle">Pulau Tunda, Banten</span>
+    </div>
+  </div>
+
+  <div class="top-bar" id="topBar">
+    <% if (typeof user !== 'undefined' && user) { %>
+      <div class="user-greeting">
+        <span class="greeting-text">Halo, <%= user.username %>!</span>
+      </div>
+    <% } %>
+    <a href="/home" class="menu-link">HOME</a>
+    <details id="ekosistemDetails" class="dropdown-menu">
+      <summary>EKOSISTEM</summary>
+      <ul>
+        <li><a href="/mangrove2019"><i class="fas fa-tree"></i> Mangrove</a></li>
+        <li><a href="/lamun2019"><i class="fas fa-leaf"></i> Lamun</a></li>
+        <li><a href="/terumbu2019"><i class="fas fa-gem"></i> Terumbu Karang</a></li>
+        <li><a href="/zpi"><i class="fas fa-fish"></i> Ikan</a></li>
+      </ul>
+    </details>
+    <details id="prediksiDetails" class="dropdown-menu">
+      <summary>PREDIKSI</summary>
+      <ul>
+        <li><a href="/prediksimangrove"><i class="fas fa-tree"></i> Mangrove</a></li>
+        <li><a href="/prediksilamun"><i class="fas fa-leaf"></i> Lamun</a></li>
+        <li><a href="/prediksiterumbu"><i class="fas fa-gem"></i> Terumbu Karang</a></li>
+        <li><a href="/zpi"><i class="fas fa-fish"></i> Ikan</a></li>
+      </ul>
+    </details>
+    <details id="faqDetails" class="dropdown-menu">
+      <summary>FAQ</summary>
+      <ul>
+        <li><a href="/faq"><i class="fas fa-robot"></i> BADU AI</a></li>
+        <li><a href="/voice"><i class="fas fa-language"></i> Translate</a></li>
+        <li><a href="/kamera-ikan"><i class="fas fa-camera"></i> Kamera</a></li>
+        <li><a href="/artikel"><i class="fas fa-newspaper"></i> Artikel Populer</a></li>
+      </ul>
+    </details>
+    <button class="theme-toggle-header" id="themeToggle">🌙</button>
+    <a href="/login-admin" class="admin-link menu-link">LOGIN ADMIN</a>
+    <a href="/logout" class="logout menu-link" onclick="return confirm('Apakah Anda yakin ingin logout?')" style="border: 1px solid #b8e6e6;">LOGOUT</a>
+  </div>
+</header>
+
+<!-- HERO SECTION -->
+<section class="hero-section">
+  <div class="hero-content">
+    <div class="hero-title">Kumpulan Artikel Pulau Tunda</div>
+    <div class="hero-desc">Eksplorasi ekosistem pesisir, inovasi teknologi, konservasi, ekowisata, dan segala hal keren tentang Pulau Tunda, Banten, dengan sentuhan visual masa depan!</div>
+  </div>
+</section>
+
+<!-- ARTICLES SECTION -->
+<section class="articles-section">
+  <div class="section-intro">
+    <h2>Jelajahi Artikel Terbaru</h2>
+    <p>Artikel terbaik, inspiratif, dan paling update seputar Pulau Tunda — dari ekosistem canggih, life underwater action, hingga riset teknologi pesisir masa depan!</p>
+  </div>
+
+  <!-- FILTER BAR -->
+  <div class="filter-bar">
+    <div class="filter-container">
+      <div class="filter-item">
+        <label>🔍 Cari Artikel</label>
+        <input type="text" placeholder="Kata kunci..." id="searchInput">
+      </div>
+      <div class="filter-item">
+        <label>📂 Kategori</label>
+        <select id="categoryFilter">
+          <option value="">Semua Kategori</option>
+          <option value="Ekosistem Laut">Ekosistem Laut</option>
+          <option value="Teknologi">Teknologi</option>
+          <option value="Konservasi">Konservasi</option>
+          <option value="Wisata Bahari">Wisata Bahari</option>
+        </select>
+      </div>
+      <div class="filter-item">
+        <label>📅 Tahun</label>
+        <select id="yearFilter">
+          <option value="">Semua Tahun</option>
+          <option value="2025">2025</option>
+          <option value="2024">2024</option>
+          <option value="2023">2023</option>
+        </select>
+      </div>
+      <button class="filter-btn" id="applyFilterBtn">Terapkan Filter</button>
+    </div>
+  </div>
+
+  <!-- ARTICLES GRID -->
+  <div class="articles-grid" id="articlesGrid"></div>
+
+  <!-- LOAD MORE -->
+  <div class="load-more-section">
+    <button class="load-more-btn" id="loadMoreBtn">Muat Lebih Banyak Artikel</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="main-footer">
+  <div class="footer-content">
+    <!-- LOGO & DESKRIPSI -->
+    <div class="footer-animate footer-logo-section">
+      <div class="footer-logo-container">
+        <img src="logob.png" alt="Logo">
+        <h3>Portal Ekosistem Laut</h3>
+      </div>
+      <p class="footer-description">Platform digital terdepan untuk penelitian dan konservasi ekosistem laut Indonesia. Bergabunglah dengan kami dalam menjaga keberlanjutan laut untuk generasi mendatang.</p>
+      <div class="footer-social-container">
+        <a href="#" class="footer-social"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="footer-social"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="footer-social"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="footer-social"><i class="fab fa-youtube"></i></a>
+      </div>
+    </div>
+
+    <!-- NAVIGASI -->
+    <div class="footer-animate footer-section" style="animation-delay: .2s">
+      <h4>Navigasi</h4>
+      <ul>
+        <li><a href="/home">Home</a></li>
+        <li><a href="/mangrove2019">Mangrove</a></li>
+        <li><a href="/lamun2019">Lamun</a></li>
+        <li><a href="/terumbu2019">Terumbu Karang</a></li>
+        <li><a href="/zpi">Ikan</a></li>
+      </ul>
+    </div>
+
+    <!-- LAYANAN -->
+    <div class="footer-animate footer-section" style="animation-delay: .3s">
+      <h4>Layanan</h4>
+      <ul>
+        <li><a href="/prediksilamun">Prediksi</a></li>
+        <li><a href="/kamera-ikan">Deteksi AI</a></li>
+        <li><a href="/faq">BADU AI</a></li>
+        <li><a href="/voice">Translate</a></li>
+      </ul>
+    </div>
+
+    <!-- KONTAK -->
+    <div class="footer-animate footer-section" style="animation-delay: .4s">
+      <h4>Kontak</h4>
+      <div class="footer-contact-item">
+        <i class="fas fa-map-marker-alt"></i>
+        <span>Pulau Tunda, Banten, Indonesia</span>
+      </div>
+      <div class="footer-contact-item">
+        <i class="fas fa-phone"></i>
+        <span>+62 123 4567 890</span>
+      </div>
+      <div class="footer-contact-item">
+        <i class="fas fa-envelope"></i>
+        <span>info@pulauntunda.ac.id</span>
+      </div>
+      <div class="footer-contact-item">
+        <i class="fas fa-clock"></i>
+        <span>Senin - Jumat, 08:00 - 17:00</span>
+      </div>
+    </div>
+
+    <!-- UMPAN BALIK FORM -->
+    <div class="footer-animate footer-feedback-form">
+      <h4>Umpan Balik</h4>
+      <form action="https://api.web3forms.com/submit" method="POST" id="feedbackForm">
+        <input type="hidden" name="access_key" value="a1c331ee-714c-4409-8009-7dee4c452bce">
+        <input type="hidden" name="redirect" value="false">
+        <input type="hidden" name="subject" value="Umpan Balik dari Portal Ekosistem Laut">
+        <input type="hidden" name="from_name" value="Portal Ekosistem Laut">
+        <div style="margin-bottom: 16px;">
+          <input type="email" name="email" placeholder="📧 Email Anda" required>
+        </div>
+        <div style="margin-bottom: 15px;">
+          <textarea name="message" placeholder="📝 Pesan Anda" required></textarea>
+        </div>
+        <button type="submit" class="footer-submit-btn" id="submitBtn">
+          <span id="btnText">Kirim</span>
+          <span id="btnLoading" style="display:none;"><i class="fas fa-spinner fa-spin"></i> Mengirim...</span>
+        </button>
+      </form>
+      <div id="successMessage" class="footer-message success">
+        ✅ Pesan berhasil terkirim! Terima kasih atas umpan balik Anda.
+      </div>
+      <div id="errorMessage" class="footer-message error">
+        ❌ Gagal mengirim pesan. Silakan coba lagi.
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER BOTTOM -->
+  <div class="footer-bottom">
+    <p>© 2024 Portal Ekosistem Laut Pulau Tunda. All Rights Reserved.</p>
+    <div>
+      <a href="#">Privacy Policy</a> |
+      <a href="#">Terms of Service</a> |
+      <a href="#">Sitemap</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ============================= 
+  // THEME TOGGLE
+  // ============================= 
+  const html = document.documentElement;
+  const themeToggle = document.getElementById('themeToggle');
+  const currentTheme = localStorage.getItem('theme') || 'light';
+  html.setAttribute('data-theme', currentTheme);
+  themeToggle.textContent = currentTheme === 'dark' ? '☀️' : '🌙';
+
+  themeToggle.addEventListener('click', () => {
+    let theme = html.getAttribute('data-theme');
+    let newTheme = theme === 'light' ? 'dark' : 'light';
+    html.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+  });
+
+  // ============================= 
+  // HEADER SCROLL & DROPDOWN
+  // ============================= 
+  const mainHeader = document.getElementById('mainHeader');
+  window.addEventListener('scroll', () => {
+    if (window.pageYOffset > 50) {
+      mainHeader.classList.add('scrolled');
+    } else {
+      mainHeader.classList.remove('scrolled');
+    }
+  });
+
+  const ekosistemDetails = document.getElementById('ekosistemDetails');
+  const prediksiDetails = document.getElementById('prediksiDetails');
+  const faqDetails = document.getElementById('faqDetails');
+  let closeTimer;
+
+  function closeDropdowns() {
+    ekosistemDetails.removeAttribute('open');
+    prediksiDetails.removeAttribute('open');
+    faqDetails.removeAttribute('open');
+  }
+
+  function setupDropdownHover(details) {
+    details.addEventListener('mouseleave', () => {
+      closeTimer = setTimeout(closeDropdowns, 300);
+    });
+    details.addEventListener('mouseenter', () => {
+      clearTimeout(closeTimer);
+    });
+  }
+
+  const dropdowns = document.querySelectorAll('.dropdown-menu');
+  document.addEventListener('click', (e) => {
+    dropdowns.forEach(details => {
+      if (!details.contains(e.target)) {
+        details.removeAttribute('open');
+      }
+    });
+  });
+
+  setupDropdownHover(ekosistemDetails);
+  setupDropdownHover(prediksiDetails);
+  setupDropdownHover(faqDetails);
+
+  // ============================= 
+  // ARTICLE DATA
+  // ============================= 
+  const artikelData = [
+    {
+      title: 'Pulau Tunda: Surga Snorkeling Tersembunyi di Banten',
+      img: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&h=400&fit=crop',
+      tag: 'Wisata Bahari',
+      date: '19 Agustus 2025',
+      author: 'bantenlife.com',
+      excerpt: 'Air laut jernih, terumbu karang berwarna-warni, dan ikan tropis yang menawan menjadikan Pulau Tunda sebagai destinasi snorkeling terbaik di Banten dengan pemandangan sunset yang memukau.',
+      link: 'https://www.greenpeace.org/indonesia/cerita/46427/menjelajah-pulau-tunda-serpihan-mutiara-di-utara-pulau-jawa/',
+      views: '2.5k',
+      likes: '342'
+    },
+    {
+      title: 'Ekosistem Mangrove: Benteng Alami Pesisir Pulau Tunda',
+      img: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&h=400&fit=crop',
+      tag: 'Ekosistem Laut',
+      date: '12 September 2025',
+      author: 'Ocean Guardian',
+      excerpt: 'Hutan mangrove Pulau Tunda memiliki keanekaragaman hayati luar biasa dengan 8 spesies mangrove yang berfungsi sebagai nursery ground bagi berbagai biota laut dan pelindung abrasi pantai.',
+      link: 'https://lautsehat.id/ham/iam-anastasia/melihat-kondisi-pulau-tunda-dari-sudut-pandang-internasional-seperti-apa-ya/',
+      views: '1.8k',
+      likes: '267'
+    },
+    {
+      title: 'Teknologi AI untuk Monitoring Terumbu Karang Real-Time',
+      img: 'https://images.unsplash.com/photo-1583212292454-1fe6229603b7?w=600&h=400&fit=crop',
+      tag: 'Teknologi',
+      date: '5 Oktober 2025',
+      author: 'Marine Tech',
+      excerpt: 'Implementasi sistem monitoring berbasis AI dan computer vision untuk melacak kesehatan terumbu karang secara real-time, mendeteksi bleaching, dan memprediksi ancaman ekosistem laut.',
+      link: 'https://drive.google.com/drive/folders/1id_7Jino6T3d9_KDBXhfq8z8NyBOifQJ?usp=sharing',
+      views: '3.2k',
+      likes: '485'
+    },
+    {
+      title: 'Program Konservasi Penyu di Pulau Tunda',
+      img: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&h=400&fit=crop',
+      tag: 'Konservasi',
+      date: '22 Agustus 2025',
+      author: 'Turtle Conservation',
+      excerpt: 'Sejak 2020, program konservasi telah berhasil melindungi lebih dari 5,000 telur penyu dan melepaskan 3,500 tukik ke laut dengan tingkat survival rate yang meningkat signifikan.',
+      link: 'https://drive.google.com/drive/folders/1id_7Jino6T3d9_KDBXhfq8z8NyBOifQJ?usp=sharing',
+      views: '2.1k',
+      likes: '398'
+    },
+    {
+      title: 'Padang Lamun: Pahlawan Tersembunyi Ekosistem Laut',
+      img: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&h=400&fit=crop',
+      tag: 'Ekosistem Laut',
+      date: '15 Juli 2025',
+      author: 'Marine Biology',
+      excerpt: 'Padang lamun di Pulau Tunda menyimpan carbon 40 kali lebih efektif dari hutan tropis, menjadi habitat 20+ spesies ikan, dan berperan vital dalam menjaga keseimbangan ekosistem pesisir.',
+      link: 'https://drive.google.com/drive/folders/1id_7Jino6T3d9_KDBXhfq8z8NyBOifQJ?usp=sharing',
+      views: '1.6k',
+      likes: '223'
+    },
+    {
+      title: 'Ekowisata Berkelanjutan: Model Wisata Pulau Tunda',
+      img: 'https://images.unsplash.com/photo-1583212292454-1fe6229603b7?w=600&h=400&fit=crop',
+      tag: 'Wisata Bahari',
+      date: '3 Juni 2025',
+      author: 'Sustainable Tourism',
+      excerpt: 'Pulau Tunda menerapkan konsep eco-resort dengan kapasitas terbatas, zero-waste management, dan program edukasi lingkungan yang melibatkan masyarakat lokal dalam pengembangan wisata berkelanjutan.',
+      link: 'https://drive.google.com/drive/folders/1id_7Jino6T3d9_KDBXhfq8z8NyBOifQJ?usp=sharing',
+      views: '2.9k',
+      likes: '412'
+    }
+  ];
+
+  // ============================= 
+  // ARTICLE RENDERING & FILTERING
+  // ============================= 
+  const articlesGrid = document.getElementById('articlesGrid');
+  const searchInput = document.getElementById('searchInput');
+  const categoryFilter = document.getElementById('categoryFilter');
+  const yearFilter = document.getElementById('yearFilter');
+  const applyFilterBtn = document.getElementById('applyFilterBtn');
+  const loadMoreBtn = document.getElementById('loadMoreBtn');
+
+  let allArticles = [...artikelData];
+  let displayedArticles = [];
+  let filteredArticles = [];
+
+  function renderArticles(arr) {
+    articlesGrid.innerHTML = '';
+    if (arr.length === 0) {
+      articlesGrid.innerHTML = `
+        <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px;">
+          <i class="fa-solid fa-search" style="font-size: 4rem; color: var(--primary); opacity: 0.3; margin-bottom: 20px;"></i>
+          <h3 style="color: var(--text-secondary); font-size: 1.5rem;">Tidak ada artikel yang ditemukan</h3>
+          <p style="color: var(--text-secondary);">Coba gunakan kata kunci atau filter yang berbeda</p>
+        </div>
+      `;
+      loadMoreBtn.style.display = 'none';
+      return;
+    }
+    
+    arr.forEach(({ title, img, tag, date, author, excerpt, link, views, likes }) => {
+      articlesGrid.innerHTML += `
+      <article class='article-card'>
+        <div class='article-image'><img src='${img}' alt='${title}'/>
+          <div class='article-overlay'><span class='overlay-tag'>${tag}</span></div>
+        </div>
+        <div class='article-content'>
+          <div class='article-meta'>
+            <span><i class='fa-solid fa-calendar-days'></i>${date}</span>
+            <span><i class='fa-solid fa-user'></i>${author}</span>
+          </div>
+          <h3 class='article-title'>${title}</h3>
+          <p class='article-excerpt'>${excerpt}</p>
+          <div class='article-footer'>
+            <a href='${link}' class='read-more' target='_blank'>Baca Lengkap <i class='fa-solid fa-arrow-right'></i></a>
+            <div class='article-stats'>
+              <span><i class='fa-solid fa-eye'></i>${views}</span>
+              <span><i class='fa-solid fa-heart'></i>${likes}</span>
+            </div>
+          </div>
+        </div>
+      </article>
+      `;
+    });
+    
+    loadMoreBtn.style.display = arr.length >= 6 ? 'inline-block' : 'none';
+  }
+
+  function filterArticles() {
+    const searchTerm = searchInput.value.toLowerCase().trim();
+    const category = categoryFilter.value;
+    const year = yearFilter.value;
+
+    filteredArticles = allArticles.filter(article => {
+      const matchSearch = searchTerm === '' || 
+                         article.title.toLowerCase().includes(searchTerm) ||
+                         article.excerpt.toLowerCase().includes(searchTerm) ||
+                         article.author.toLowerCase().includes(searchTerm);
+      
+      const matchCategory = category === '' || article.tag === category;
+      const matchYear = year === '' || article.date.includes(year);
+
+      return matchSearch && matchCategory && matchYear;
+    });
+
+    displayedArticles = filteredArticles;
+    renderArticles(displayedArticles);
+
+    if (searchTerm || category || year) {
+      setTimeout(() => {
+        articlesGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
+  }
+
+  applyFilterBtn.addEventListener('click', filterArticles);
+
+  searchInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      filterArticles();
+    }
+  });
+
+  searchInput.addEventListener('input', () => {
+    if (searchInput.value.length === 0 || searchInput.value.length >= 3) {
+      filterArticles();
+    }
+  });
+
+  categoryFilter.addEventListener('change', filterArticles);
+  yearFilter.addEventListener('change', filterArticles);
+
+  loadMoreBtn.addEventListener('click', () => {
+    displayedArticles = [...displayedArticles, ...filteredArticles];
+    renderArticles(displayedArticles);
+    window.scrollTo({ top: document.body.scrollHeight - 600, behavior: 'smooth' });
+  });
+
+  displayedArticles = allArticles;
+  filteredArticles = allArticles;
+  renderArticles(displayedArticles);
+
+  // ============================= 
+  // FOOTER FORM SUBMISSION
+  // ============================= 
+  document.getElementById('feedbackForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const form = e.target;
+    const submitBtn = document.getElementById('submitBtn');
+    const btnText = document.getElementById('btnText');
+    const btnLoading = document.getElementById('btnLoading');
+    const successMsg = document.getElementById('successMessage');
+    const errorMsg = document.getElementById('errorMessage');
+    
+    successMsg.style.display = errorMsg.style.display = "none";
+    btnText.style.display = "none";
+    btnLoading.style.display = "inline";
+    submitBtn.disabled = true;
+    
+    try {
+      const formData = new FormData(form);
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST', 
+        body: formData
+      });
+      const data = await response.json();
+      
+      if (data.success) {
+        successMsg.style.display = "block";
+        form.reset();
+        setTimeout(() => { successMsg.style.display = "none"; }, 5000);
+      } else {
+        errorMsg.style.display = "block";
+      }
+    } catch (error) {
+      errorMsg.style.display = "block";
+    } finally {
+      btnText.style.display = "inline";
+      btnLoading.style.display = "none";
+      submitBtn.disabled = false;
+    }
+  });
+</script>
+
+</body>
+</html>
