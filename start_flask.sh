@@ -13,24 +13,31 @@ if [ -z "$LD_LIBRARY_PATH" ]; then
 fi
 
 # Find and add libstdc++ (required by OpenCV)
-# Try multiple search methods
-STDCPP_LIB=""
-if [ -z "$STDCPP_LIB" ]; then
-    STDCPP_LIB=$(find /nix/store -name "libstdc++.so.6" -type f 2>/dev/null | head -1)
+# Try multiple search methods and add all found paths
+STDCPP_PATHS=$(find /nix/store -name "libstdc++.so.6" -type f 2>/dev/null)
+if [ -z "$STDCPP_PATHS" ]; then
+    STDCPP_PATHS=$(find /nix/store -path "*/gcc-*/lib/libstdc++.so.6" -type f 2>/dev/null)
 fi
-if [ -z "$STDCPP_LIB" ]; then
-    STDCPP_LIB=$(find /nix/store -path "*/gcc-*/lib/libstdc++.so.6" -type f 2>/dev/null | head -1)
-fi
-if [ -z "$STDCPP_LIB" ]; then
-    STDCPP_LIB=$(find /nix/store -path "*/stdenv-*/lib/libstdc++.so.6" -type f 2>/dev/null | head -1)
+if [ -z "$STDCPP_PATHS" ]; then
+    STDCPP_PATHS=$(find /nix/store -path "*/stdenv.cc.cc.lib-*/lib/libstdc++.so.6" -type f 2>/dev/null)
 fi
 
-if [ -n "$STDCPP_LIB" ]; then
-    STDCPP_DIR=$(dirname "$STDCPP_LIB")
-    export LD_LIBRARY_PATH="$STDCPP_DIR:$LD_LIBRARY_PATH"
-    echo "✅ Found libstdc++ at: $STDCPP_DIR"
+if [ -n "$STDCPP_PATHS" ]; then
+    for STDCPP_LIB in $STDCPP_PATHS; do
+        STDCPP_DIR=$(dirname "$STDCPP_LIB")
+        if [[ ":$LD_LIBRARY_PATH:" != *":$STDCPP_DIR:"* ]]; then
+            export LD_LIBRARY_PATH="$STDCPP_DIR:$LD_LIBRARY_PATH"
+            echo "✅ Added libstdc++ path: $STDCPP_DIR"
+        fi
+    done
 else
-    echo "⚠️ Warning: libstdc++.so.6 not found"
+    echo "⚠️ Warning: libstdc++.so.6 not found, trying to add gcc lib directory"
+    # Fallback: try to find gcc lib directory
+    GCC_LIB_DIR=$(find /nix/store -type d -path "*/gcc-*/lib" 2>/dev/null | head -1)
+    if [ -n "$GCC_LIB_DIR" ]; then
+        export LD_LIBRARY_PATH="$GCC_LIB_DIR:$LD_LIBRARY_PATH"
+        echo "✅ Added GCC lib directory: $GCC_LIB_DIR"
+    fi
 fi
 
 # Find GLib (required by OpenCV)
