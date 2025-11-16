@@ -1,38 +1,40 @@
 #!/bin/bash
 # Set LD_LIBRARY_PATH for OpenCV before starting Flask
-# Find libstdc++ in nix store and add to LD_LIBRARY_PATH
+# Collect all required library paths from nix store
+
+# Initialize LD_LIBRARY_PATH
 if [ -z "$LD_LIBRARY_PATH" ]; then
     export LD_LIBRARY_PATH=""
 fi
 
-# Add common nix library paths
-for lib_path in /nix/store/*/lib /nix/store/*/lib64; do
-    if [ -d "$lib_path" ] && [ -f "$lib_path/libstdc++.so.6" ] 2>/dev/null; then
-        export LD_LIBRARY_PATH="$lib_path:$LD_LIBRARY_PATH"
-        break
+# List of required libraries for OpenCV
+REQUIRED_LIBS=(
+    "libstdc++.so.6"
+    "libgthread-2.0.so.0"
+    "libglib-2.0.so.0"
+    "libgobject-2.0.so.0"
+    "libgmodule-2.0.so.0"
+)
+
+# Find and add library paths
+for lib_name in "${REQUIRED_LIBS[@]}"; do
+    LIB_PATH=$(find /nix/store -name "$lib_name" -type f 2>/dev/null | head -1)
+    if [ -n "$LIB_PATH" ]; then
+        LIB_DIR=$(dirname "$LIB_PATH")
+        # Only add if not already in LD_LIBRARY_PATH
+        if [[ ":$LD_LIBRARY_PATH:" != *":$LIB_DIR:"* ]]; then
+            export LD_LIBRARY_PATH="$LIB_DIR:$LD_LIBRARY_PATH"
+        fi
     fi
 done
 
-# Also add gcc lib path if available
-GCC_LIB=$(find /nix/store -name "libstdc++.so.6" -type f 2>/dev/null | head -1)
-if [ -n "$GCC_LIB" ]; then
-    GCC_LIB_DIR=$(dirname "$GCC_LIB")
-    export LD_LIBRARY_PATH="$GCC_LIB_DIR:$LD_LIBRARY_PATH"
-fi
-
-# Add GLib library path (for libgthread)
-GLIB_LIB=$(find /nix/store -name "libgthread-2.0.so.0" -type f 2>/dev/null | head -1)
-if [ -n "$GLIB_LIB" ]; then
-    GLIB_LIB_DIR=$(dirname "$GLIB_LIB")
-    export LD_LIBRARY_PATH="$GLIB_LIB_DIR:$LD_LIBRARY_PATH"
-fi
-
-# Add all glib related libraries
-for glib_lib in libglib-2.0.so.0 libgobject-2.0.so.0 libgmodule-2.0.so.0; do
-    GLIB_PATH=$(find /nix/store -name "$glib_lib" -type f 2>/dev/null | head -1)
-    if [ -n "$GLIB_PATH" ]; then
-        GLIB_DIR=$(dirname "$GLIB_PATH")
-        export LD_LIBRARY_PATH="$GLIB_DIR:$LD_LIBRARY_PATH"
+# Also add common library directories that might contain dependencies
+for lib_dir in /nix/store/*/lib /nix/store/*/lib64; do
+    if [ -d "$lib_dir" ] && [[ ":$LD_LIBRARY_PATH:" != *":$lib_dir:"* ]]; then
+        # Check if directory contains any .so files (to avoid adding empty dirs)
+        if [ -n "$(find "$lib_dir" -maxdepth 1 -name "*.so*" 2>/dev/null | head -1)" ]; then
+            export LD_LIBRARY_PATH="$lib_dir:$LD_LIBRARY_PATH"
+        fi
     fi
 done
 
