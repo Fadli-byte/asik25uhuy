@@ -33,32 +33,48 @@ git push -u origin main
 ### 3. Setup Database MySQL
 1. Di Railway dashboard, klik "New" → "Database" → "MySQL"
 2. Railway akan membuat MySQL service
-3. Copy connection details (akan muncul di Variables)
+3. **Variables otomatis ter-share** ke aplikasi di project yang sama
+4. **Tidak perlu copy manual** - kode sudah otomatis menggunakan Railway variables
 
 ### 4. Setup Environment Variables
-Di Railway dashboard, tambahkan environment variables berikut:
 
-#### Database Variables
-```
-DB_HOST=<dari Railway MySQL service>
-DB_USER=<dari Railway MySQL service>
-DB_PASSWORD=<dari Railway MySQL service>
-DB_NAME=<dari Railway MySQL service>
-DB_PORT=3306
-```
+#### ✅ Database Variables (OTOMATIS dari Railway)
+**TIDAK PERLU SETUP MANUAL!** Railway **otomatis** menambahkan MySQL variables ke aplikasi Anda jika MySQL service dan aplikasi berada di project yang sama.
 
-#### Application Variables
+Variables yang otomatis tersedia:
+- `MYSQLHOST` - Host database
+- `MYSQLUSER` - Username database
+- `MYSQLPASSWORD` - Password database
+- `MYSQLDATABASE` - Nama database
+- `MYSQLPORT` - Port database (biasanya 3306)
+- `MYSQL_URL` - Connection string lengkap
+- `MYSQL_PUBLIC_URL` - Public connection string
+
+**Kode sudah otomatis menggunakan variables ini!** Tidak perlu setup manual.
+
+#### Application Variables (Manual Setup)
+Jika perlu, tambahkan di Railway dashboard → Aplikasi service → Variables:
+
 ```
-PORT=<otomatis diset Railway>
 FLASK_PORT=5000
 FLASK_URL=http://localhost:5000
 FLASK_DEBUG=false
 GEMINI_API_KEY=<API key Google Gemini Anda>
 ```
 
+**Catatan:**
+- `PORT` - **Otomatis diset Railway**, tidak perlu tambahkan manual
+- `GEMINI_API_KEY` - Dapatkan dari https://makersuite.google.com/app/apikey
+
 #### Session Secret (opsional, untuk keamanan)
 ```
 SESSION_SECRET=<random string untuk session encryption>
+```
+
+**Cara Generate Session Secret:**
+```bash
+# Di terminal lokal
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
 
 ### 5. Setup Database Schema
