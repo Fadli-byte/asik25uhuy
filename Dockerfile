@@ -1,33 +1,20 @@
-# Multi-stage build untuk mengurangi ukuran image
-FROM python:3.11-slim as python-base
-
-# Install system dependencies yang diperlukan OpenCV
-RUN apt-get update && apt-get install -y \
-    libglib2.0-0 \
-    libgthread-2.0-0 \
-    libstdc++6 \
-    libgcc-s1 \
-    && rm -rf /var/lib/apt/lists/*
-
-# Stage untuk Node.js
-FROM node:18-slim as node-base
-
-# Final stage
+# Base image dengan Python dan Node.js
 FROM python:3.11-slim
 
-# Install system dependencies
+# Install system dependencies yang diperlukan OpenCV dan Node.js
 RUN apt-get update && apt-get install -y \
     libglib2.0-0 \
     libgthread-2.0-0 \
     libstdc++6 \
     libgcc-s1 \
     python3-venv \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Node.js
-COPY --from=node-base /usr/local/bin/node /usr/local/bin/
-COPY --from=node-base /usr/local/bin/npm /usr/local/bin/
-COPY --from=node-base /usr/local/lib/node_modules /usr/local/lib/node_modules
+# Install Node.js 18
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
