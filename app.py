@@ -1,17 +1,12 @@
 from flask import Flask, Response, request, jsonify, send_file
 from ultralytics import YOLO
 from datetime import datetime
-import os
-import warnings
-import threading
-
-# Set LD_LIBRARY_PATH for OpenCV before importing
-if 'LD_LIBRARY_PATH' not in os.environ:
-    os.environ['LD_LIBRARY_PATH'] = '/nix/store/*/lib:/nix/store/*/lib64'
-
 import cv2
 import numpy as np
 import base64
+import os
+import warnings
+import threading
 
 # Suppress warnings
 warnings.filterwarnings('ignore')

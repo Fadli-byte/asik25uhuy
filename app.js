@@ -24,25 +24,36 @@ const FLASK_PORT = process.env.FLASK_PORT || 5000;
 function startFlask() {
   console.log("🐍 Starting Flask API...");
   
-  // Gunakan venv Python jika venv ada (Railway/production), 
-  // atau python3 jika tersedia, fallback ke python
-  const venvPythonPath = process.platform === 'win32' 
-    ? path.join(__dirname, 'venv', 'Scripts', 'python.exe')
-    : path.join(__dirname, 'venv', 'bin', 'python3');
+  // Gunakan wrapper script jika di Linux (Railway), atau langsung Python
+  const startScript = path.join(__dirname, 'start_flask.sh');
+  let cmd, args;
   
-  let pythonCmd;
-  
-  if (fs.existsSync(venvPythonPath)) {
-    pythonCmd = venvPythonPath;
-    console.log("✅ Using virtual environment Python");
+  if (process.platform !== 'win32' && fs.existsSync(startScript)) {
+    // Use wrapper script on Linux (Railway)
+    cmd = '/bin/bash';
+    args = [startScript];
+    console.log("✅ Using Flask wrapper script (sets LD_LIBRARY_PATH)");
   } else {
-    pythonCmd = process.platform === 'win32' ? 'python' : 'python3';
-    console.log("✅ Using system Python");
+    // Use Python directly (Windows or if script not found)
+    const venvPythonPath = process.platform === 'win32' 
+      ? path.join(__dirname, 'venv', 'Scripts', 'python.exe')
+      : path.join(__dirname, 'venv', 'bin', 'python3');
+    
+    if (fs.existsSync(venvPythonPath)) {
+      cmd = venvPythonPath;
+      args = ['app.py'];
+      console.log("✅ Using virtual environment Python");
+    } else {
+      cmd = process.platform === 'win32' ? 'python' : 'python3';
+      args = ['app.py'];
+      console.log("✅ Using system Python");
+    }
   }
   
-  flaskProcess = spawn(pythonCmd, ['app.py'], {
+  flaskProcess = spawn(cmd, args, {
     cwd: __dirname,
-    env: { ...process.env, FLASK_PORT: FLASK_PORT }
+    env: { ...process.env, FLASK_PORT: FLASK_PORT },
+    shell: process.platform === 'win32'
   });
 
   flaskProcess.stdout.on('data', (data) => {
