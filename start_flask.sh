@@ -13,13 +13,20 @@ if [ -z "$LD_LIBRARY_PATH" ]; then
 fi
 
 # Find and add libstdc++ (required by OpenCV)
-# Try multiple search methods and add all found paths
+# First, try to find stdenv.cc.cc.lib directory (from nixPkgs)
+STDENV_LIB_DIR=$(find /nix/store -type d -name "stdenv.cc.cc.lib-*" 2>/dev/null | head -1)
+if [ -n "$STDENV_LIB_DIR" ] && [ -d "$STDENV_LIB_DIR/lib" ]; then
+    export LD_LIBRARY_PATH="$STDENV_LIB_DIR/lib:$LD_LIBRARY_PATH"
+    echo "✅ Added stdenv.cc.cc.lib path: $STDENV_LIB_DIR/lib"
+fi
+
+# Also try to find libstdc++ directly
 STDCPP_PATHS=$(find /nix/store -name "libstdc++.so.6" -type f 2>/dev/null)
 if [ -z "$STDCPP_PATHS" ]; then
     STDCPP_PATHS=$(find /nix/store -path "*/gcc-*/lib/libstdc++.so.6" -type f 2>/dev/null)
 fi
 if [ -z "$STDCPP_PATHS" ]; then
-    STDCPP_PATHS=$(find /nix/store -path "*/stdenv.cc.cc.lib-*/lib/libstdc++.so.6" -type f 2>/dev/null)
+    STDCPP_PATHS=$(find /nix/store -path "*stdenv.cc.cc.lib*/lib/libstdc++.so.6" -type f 2>/dev/null)
 fi
 
 if [ -n "$STDCPP_PATHS" ]; then
@@ -38,6 +45,13 @@ else
         export LD_LIBRARY_PATH="$GCC_LIB_DIR:$LD_LIBRARY_PATH"
         echo "✅ Added GCC lib directory: $GCC_LIB_DIR"
     fi
+    # Also try to add all gcc-related lib directories
+    for GCC_DIR in $(find /nix/store -type d -path "*/gcc-*/lib" 2>/dev/null); do
+        if [[ ":$LD_LIBRARY_PATH:" != *":$GCC_DIR:"* ]]; then
+            export LD_LIBRARY_PATH="$GCC_DIR:$LD_LIBRARY_PATH"
+            echo "✅ Added GCC lib directory: $GCC_DIR"
+        fi
+    done
 fi
 
 # Find GLib (required by OpenCV)
