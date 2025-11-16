@@ -10,7 +10,7 @@ cmds = [
 ]
 
 [variables]
-LD_LIBRARY_PATH = "/nix/store/*/lib:$LD_LIBRARY_PATH"
+LD_LIBRARY_PATH = "/nix/store/*/lib:/nix/store/*/lib64:$LD_LIBRARY_PATH"
 
 [start]
 cmd = "node app.js"
