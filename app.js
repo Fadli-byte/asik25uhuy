@@ -24,17 +24,19 @@ const FLASK_PORT = process.env.FLASK_PORT || 5000;
 function startFlask() {
   console.log("🐍 Starting Flask API...");
   
-  // Gunakan wrapper script jika di Linux (Railway), atau langsung Python
+  // Check if we're using Dockerfile (all libraries available in system)
+  // or Nixpacks (need wrapper script)
+  const isDockerfile = fs.existsSync('/.dockerenv') || process.env.RAILWAY_ENVIRONMENT;
   const startScript = path.join(__dirname, 'start_flask.sh');
   let cmd, args;
   
-  if (process.platform !== 'win32' && fs.existsSync(startScript)) {
-    // Use wrapper script on Linux (Railway)
+  if (process.platform !== 'win32' && !isDockerfile && fs.existsSync(startScript)) {
+    // Use wrapper script on Linux with Nixpacks (Railway)
     cmd = '/bin/bash';
     args = [startScript];
-    console.log("✅ Using Flask wrapper script (sets LD_LIBRARY_PATH)");
+    console.log("✅ Using Flask wrapper script (sets LD_LIBRARY_PATH for Nixpacks)");
   } else {
-    // Use Python directly (Windows or if script not found)
+    // Use Python directly (Dockerfile or Windows)
     const venvPythonPath = process.platform === 'win32' 
       ? path.join(__dirname, 'venv', 'Scripts', 'python.exe')
       : path.join(__dirname, 'venv', 'bin', 'python3');
@@ -42,11 +44,11 @@ function startFlask() {
     if (fs.existsSync(venvPythonPath)) {
       cmd = venvPythonPath;
       args = ['app.py'];
-      console.log("✅ Using virtual environment Python");
+      console.log("✅ Using virtual environment Python" + (isDockerfile ? " (Dockerfile)" : ""));
     } else {
       cmd = process.platform === 'win32' ? 'python' : 'python3';
       args = ['app.py'];
-      console.log("✅ Using system Python");
+      console.log("✅ Using system Python" + (isDockerfile ? " (Dockerfile)" : ""));
     }
   }
   
